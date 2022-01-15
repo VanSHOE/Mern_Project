@@ -10,24 +10,28 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const Register = (props) => {
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [age, setAge] = useState();
-  const [batch, setBatch] = useState();
+  const [age, setAge] = useState("");
+  const [batch, setBatch] = useState("");
 
-  const [s_name, setShop] = useState();
+  const [s_name, setShop] = useState("");
   const [start_time, setStart] = useState("");
-  const [end_time, setEnd] = useState();
+  const [end_time, setEnd] = useState("");
 
-  const [type, setType] = useState();
+  const [type, setType] = useState("");
   const onChangeUsername = (event) => {
     setName(event.target.value);
   };
 
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
+  };
+  const onChangePass = (event) => {
+    setPassword(event.target.value);
   };
 
   const onChangePhone = (event) => {
@@ -58,24 +62,40 @@ const Register = (props) => {
     setType(event.target.value);
   };
   const resetInputs = () => {
-    setName();
-    setEmail();
-    // setDate(null);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setPassword("");
+    setAge("");
+    setBatch("");
+    setShop("");
+    setStart("");
+    setEnd("");
+    setType("");
   };
 
   const onSubmit = (event) => {
     event.preventDefault();
 
     const newUser = {
+      type: type,
       name: name,
       email: email,
+      password: password,
+      phone: phone,
+      age: age,
+      batch: batch,
+
+      s_name: s_name,
+      start_time: start_time,
+      end_time: end_time,
       date: Date.now(),
     };
 
     axios
       .post("http://localhost:4000/user/register", newUser)
       .then((response) => {
-        alert("Created\t" + response.data.name);
+        alert("Created " + response.data.email);
         console.log(response.data);
       });
 
@@ -102,10 +122,19 @@ const Register = (props) => {
       </Grid>
       <Grid item xs={12}>
         <TextField
+          label="Password"
+          variant="outlined"
+          value={password}
+          type="password"
+          onChange={onChangePass}
+        />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField
           label="Contact"
           variant="outlined"
-          value={email}
-          onChange={onChangeEmail}
+          value={phone}
+          onChange={onChangePhone}
         />
       </Grid>
       <Grid item xs={12}>
@@ -126,85 +155,95 @@ const Register = (props) => {
           </FormControl>
         </Box>
       </Grid>
-      {type=="Buyer"?
-      <Grid item xs={12}>
-        <TextField
-          label="Age"
-          variant="outlined"
-          value={age}
-          onChange={onChangeAge}
-        />
-      </Grid>
-      :""}
-      {type=="Buyer"?
-      <Grid item xs={12}>
-        <Box sx={{ minWidth: 120 }}>
-          <FormControl sx={{ m: 1, minWidth: 80 }}>
-            <InputLabel id="demo-simple-select-label">Batch</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={batch}
-              label="Batch"
-              //autoWidth
-              onChange={onChangeBatch}
-            >
-              <MenuItem value={1}>UG1</MenuItem>
-              <MenuItem value={2}>UG2</MenuItem>
-              <MenuItem value={3}>UG3</MenuItem>
-              <MenuItem value={4}>UG4</MenuItem>
-              <MenuItem value={5}>UG5</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-      </Grid>
-      :""}
-      {type=="Vendor"?
-      <Grid item xs={12}>
-        <TextField
-          id="time"
-          label="Start"
-          type="time"
-          value={start_time}
-          onChange={onChangeStart}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{
-            step: 300, // 5 min
-          }}
-          sx={{ width: 150 }}
-        />
-      </Grid>
-      :""}
-      {type=="Vendor"?
-      <Grid item xs={12}>
-        <TextField
-          id="time"
-          label="End"
-          type="time"
-          value={end_time}
-          onChange={onChangeEnd}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{
-            step: 300, // 5 min
-          }}
-          sx={{ width: 150 }}
-        />
-      </Grid>
-      :""}
-      {type=="Vendor"?
-      <Grid item xs={12}>
-        <TextField
-          label="Shop name"
-          variant="outlined"
-          value={s_name}
-          onChange={onChangeShop}
-        />
-      </Grid>
-      :""}
+      {type == "Buyer" ? (
+        <Grid item xs={12}>
+          <TextField
+            label="Age"
+            variant="outlined"
+            value={age}
+            onChange={onChangeAge}
+          />
+        </Grid>
+      ) : (
+        ""
+      )}
+      {type == "Buyer" ? (
+        <Grid item xs={12}>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="demo-simple-select-label">Batch</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={batch}
+                label="Batch"
+                //autoWidth
+                onChange={onChangeBatch}
+              >
+                <MenuItem value={1}>UG1</MenuItem>
+                <MenuItem value={2}>UG2</MenuItem>
+                <MenuItem value={3}>UG3</MenuItem>
+                <MenuItem value={4}>UG4</MenuItem>
+                <MenuItem value={5}>UG5</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Grid>
+      ) : (
+        ""
+      )}
+      {type == "Vendor" ? (
+        <Grid item xs={12}>
+          <TextField
+            id="time"
+            label="Start"
+            type="time"
+            value={start_time}
+            onChange={onChangeStart}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            sx={{ width: 150 }}
+          />
+        </Grid>
+      ) : (
+        ""
+      )}
+      {type == "Vendor" ? (
+        <Grid item xs={12}>
+          <TextField
+            id="time"
+            label="End"
+            type="time"
+            value={end_time}
+            onChange={onChangeEnd}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            sx={{ width: 150 }}
+          />
+        </Grid>
+      ) : (
+        ""
+      )}
+      {type == "Vendor" ? (
+        <Grid item xs={12}>
+          <TextField
+            label="Shop name"
+            variant="outlined"
+            value={s_name}
+            onChange={onChangeShop}
+          />
+        </Grid>
+      ) : (
+        ""
+      )}
       <Grid item xs={12}>
         <Button variant="contained" onClick={onSubmit}>
           Register
