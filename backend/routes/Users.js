@@ -21,7 +21,7 @@ router.get("/", function (req, res) {
 // POST request
 // Add a user to db
 router.post("/register", (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   if (req.body.type == "Buyer") {
     const newUser = new Buyer({
       name: req.body.name,
@@ -29,7 +29,7 @@ router.post("/register", (req, res) => {
       contact: req.body.phone,
       age: req.body.age,
       batch: req.body.batch,
-      password: req.body.password
+      password: req.body.password,
     });
 
     newUser
@@ -48,7 +48,7 @@ router.post("/register", (req, res) => {
       shop_name: req.body.s_name,
       can_open: req.body.start_time,
       can_close: req.body.end_time,
-      password: req.body.password
+      password: req.body.password,
     });
 
     newUser
@@ -59,6 +59,8 @@ router.post("/register", (req, res) => {
       .catch((err) => {
         res.status(400).send(err);
       });
+  } else {
+    res.status(400).send("no");
   }
 });
 
@@ -67,15 +69,21 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const email = req.body.email;
   // Find user by email
-  Buyer.findOne({ email }).then((user) => {
+  Buyer.findOne({ email }).then((buyer) => {
     // Check if user email exists
-    if (!user) {
-      return res.status(404).json({
-        error: "Email not found",
+    if (!buyer) {
+      Vendor.findOne({ email }).then((vendor) => {
+        // Check if user email exists
+        if (!user) {
+          return res.status(404).json({
+            error: "Email not found",
+          });
+        } else {
+          return res.status(200).json(vendor);
+        }
       });
     } else {
-      res.send("Email Found");
-      return user;
+      return res.status(200).json(buyer);
     }
   });
 });

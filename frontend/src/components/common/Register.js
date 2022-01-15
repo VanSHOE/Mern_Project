@@ -96,6 +96,8 @@ const Register = (props) => {
       .post("http://localhost:4000/user/register", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
+        props.onAuth(response.data.email);
+        localStorage.setItem('Auth', response.data.email);
         console.log(response.data);
       });
 

@@ -5,7 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const navigate = useNavigate();
 
   return (
@@ -24,12 +24,24 @@ const Navbar = () => {
           <Button color="inherit" onClick={() => navigate("/users")}>
             Users
           </Button>
-          <Button color="inherit" onClick={() => navigate("/register")}>
-            Register
-          </Button>
+          {props.user ? null : (
+            <Button color="inherit" onClick={() => navigate("/register")}>
+              Register
+            </Button>
+          )}
+          {props.user ? (
+            <Button color="inherit" onClick={() => navigate("/logout")}>
+              Logout
+            </Button>
+          ) : (
+            <Button color="inherit" onClick={() => navigate("/login")}>
+              Login
+            </Button>
+          )}
           <Button color="inherit" onClick={() => navigate("/profile")}>
             My Profile
           </Button>
+          {props.user ? "Welcome " + props.user + "!" : null}
         </Toolbar>
       </AppBar>
     </Box>
