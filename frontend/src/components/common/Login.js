@@ -38,7 +38,9 @@ const Login = (props) => {
     axios.post("http://localhost:4000/user/login", newUser).then((response) => {
       alert("Logged as " + response.data.email);
       props.onAuth(response.data.email);
+      props.onAuthT(response.data.type);
       localStorage.setItem("Auth", response.data.email);
+      localStorage.setItem("AuthT", response.data.type);
       console.log(response.data);
     });
     resetInputs();

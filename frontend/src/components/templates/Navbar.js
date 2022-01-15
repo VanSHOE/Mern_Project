@@ -41,7 +41,9 @@ const Navbar = (props) => {
           <Button color="inherit" onClick={() => navigate("/profile")}>
             My Profile
           </Button>
-          {props.user ? "Welcome " + props.user + "!" : null}
+          {props.user
+            ? "Welcome " + props.user + "!, you are a " + props.userType
+            : null}
         </Toolbar>
       </AppBar>
     </Box>

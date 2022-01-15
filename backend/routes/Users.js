@@ -74,16 +74,24 @@ router.post("/login", (req, res) => {
     if (!buyer) {
       Vendor.findOne({ email }).then((vendor) => {
         // Check if user email exists
-        if (!user) {
+        if (!vendor) {
           return res.status(404).json({
             error: "Email not found",
           });
         } else {
-          return res.status(200).json(vendor);
+          return vendor.password == req.body.password
+            ? res.status(200).json({ email, type: "Vendor" })
+            : res.status(401).json({
+                error: "Invalid Credentials",
+              });
         }
       });
     } else {
-      return res.status(200).json(buyer);
+      return buyer.password == req.body.password
+        ? res.status(200).json({ email, type: "buyer" })
+        : res.status(401).json({
+            error: "Invalid Credentials",
+          });
     }
   });
 });

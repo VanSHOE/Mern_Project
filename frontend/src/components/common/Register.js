@@ -8,6 +8,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { refType } from "@mui/utils";
 
 const Register = (props) => {
   const [name, setName] = useState("");
@@ -96,8 +97,10 @@ const Register = (props) => {
       .post("http://localhost:4000/user/register", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
-        props.onAuth(response.data.email);
-        localStorage.setItem('Auth', response.data.email);
+        props.onAuth(email);
+        props.onAuthT(type);
+        localStorage.setItem("Auth", email);
+        localStorage.setItem("AuthT", type);
         console.log(response.data);
       });
 
@@ -151,8 +154,8 @@ const Register = (props) => {
               //autoWidth
               onChange={onChangeType}
             >
-              <MenuItem value={"Vendor"}>Vendor</MenuItem>
               <MenuItem value={"Buyer"}>Buyer</MenuItem>
+              <MenuItem value={"Vendor"}>Vendor</MenuItem>
             </Select>
           </FormControl>
         </Box>
