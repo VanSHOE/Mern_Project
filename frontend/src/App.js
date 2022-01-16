@@ -8,7 +8,6 @@ import Login from "./components/common/Login";
 import Logout from "./components/common/Logout";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
-import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 const Layout = (props) => {
   return (

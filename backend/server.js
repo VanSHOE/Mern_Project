@@ -8,6 +8,7 @@ const PORT = 4000;
 // routes
 var testAPIRouter = require("./routes/testAPI");
 var UserRouter = require("./routes/Users");
+var FoodRouter = require("./routes/Food");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -23,6 +24,7 @@ connection.once('open', function() {
 // setup API endpoints
 app.use("/testAPI", testAPIRouter);
 app.use("/user", UserRouter);
+app.use("/item", FoodRouter);
 
 app.listen(PORT, function() {
     console.log("Server is running on Port: " + PORT);

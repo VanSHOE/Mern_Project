@@ -96,4 +96,28 @@ router.post("/login", (req, res) => {
   });
 });
 
+router.post("/profile", (req, res) => {
+  console.log(req.body);
+  const email = req.body.email;
+  console.log(email);
+  // Find user by email
+  Buyer.findOne({ email }).then((buyer) => {
+    // Check if user email exists
+    if (!buyer) {
+      Vendor.findOne({ email }).then((vendor) => {
+        // Check if user email exists
+        if (!vendor) {
+          return res.status(404).json({
+            error: "Email not found",
+          });
+        } else {
+          return res.status(200).json({ email, type: "Vendor" });
+        }
+      });
+    } else {
+      return res.status(200).json({ email, type: "buyer" });
+    }
+  });
+});
+
 module.exports = router;
