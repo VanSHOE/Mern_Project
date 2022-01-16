@@ -17,8 +17,8 @@ import TextField from "@mui/material/TextField";
 import Switch from "@mui/material/Switch";
 import SendIcon from "@mui/icons-material/Send";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Paper from "@mui/material/Paper";
-import { styled } from "@mui/material/styles";
+import FormHelperText from "@mui/material/FormHelperText";
+
 const Profile = (props) => {
   const [details, setDetails] = useState([]);
   let email_cur = localStorage.getItem("Auth");
@@ -129,191 +129,146 @@ const Profile = (props) => {
     window.location.reload(true);
     resetInputs();
   };
-  const Item = styled(Paper)(({ theme }) => ({
-    ...theme.typography.body2,
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  }));
-
   return (
-    <Grid container align={"center"} spacing={0.2}>
-      <Grid item align={"center"} spacing={1}>
-        <Grid item xs={5}>
-          <Item>Name</Item>
-        </Grid>
-        <Grid item xs={5}>
-          <TextField
-            label={details.name}
-            variant="outlined"
-            value={name}
-            onChange={onChangeUsername}
-          />
-        </Grid>
+    <Grid container align={"center"} spacing={1}>
+      <Grid item xs={12}>
+        <TextField
+          helperText="Name"
+          id="element2"
+          label={details.name}
+          variant="outlined"
+          value={name}
+          onChange={onChangeUsername}
+        />
       </Grid>
-      <Grid container align={"center"} spacing={1}>
-        <Grid item xs={1}>
-          <Item>Email</Item>
-        </Grid>
-        <Grid item xs={1}>
-          <TextField
-            label={details.email}
-            variant="outlined"
-            value={email}
-            disabled
-            onChange={onChangeEmail}
-          />
-        </Grid>
+      <Grid item xs={12}>
+        <TextField
+          helperText="Email"
+          label={details.email}
+          variant="outlined"
+          value={email}
+          disabled
+          onChange={onChangeEmail}
+        />
       </Grid>
-      <Grid container align={"center"} spacing={1}>
-        <Grid item xs={1}>
-          <Item>Password</Item>
-        </Grid>
-        <Grid item xs={1}>
-          <TextField
-            label="Password"
-            variant="outlined"
-            value={password}
-            type="password"
-            onChange={onChangePass}
-          />
-        </Grid>
+      <Grid item xs={12}>
+        <TextField
+          label="Password"
+          variant="outlined"
+          value={password}
+          type="password"
+          onChange={onChangePass}
+        />
       </Grid>
-      <Grid container align={"center"} spacing={1}>
-        <Grid item xs={1}>
-          <Item>Contact</Item>
-        </Grid>
-        <Grid item xs={1}>
-          <TextField
-            label={details.contact}
-            variant="outlined"
-            value={phone}
-            onChange={onChangePhone}
-          />
-        </Grid>
+      <Grid item xs={12}>
+        <TextField
+          helperText="Phone"
+          label={details.contact}
+          variant="outlined"
+          value={phone}
+          onChange={onChangePhone}
+        />
       </Grid>
       {type == "Buyer" ? (
-        <Grid container align={"center"} spacing={1}>
-          <Grid item xs={1}>
-            <Item>Age</Item>
-          </Grid>
-          <Grid item xs={1}>
-            <TextField
-              label={details.age}
-              variant="outlined"
-              value={age}
-              onChange={onChangeAge}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            helperText="Age"
+            label={details.age}
+            variant="outlined"
+            value={age}
+            onChange={onChangeAge}
+          />
         </Grid>
       ) : (
         ""
       )}
       {type == "Buyer" ? (
-        <Grid container align={"center"} spacing={1}>
-          <Grid item xs={1}>
-            <Item>Batch</Item>
-          </Grid>
-          <Grid item xs={1}>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl sx={{ m: 1, minWidth: 80 }}>
-                <InputLabel id="demo-simple-select-label">
-                  {"UG" + details.batch}
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={batch}
-                  label={"UG" + details.batch}
-                  autoWidth
-                  onChange={onChangeBatch}
-                >
-                  <MenuItem value={1}>UG1</MenuItem>
-                  <MenuItem value={2}>UG2</MenuItem>
-                  <MenuItem value={3}>UG3</MenuItem>
-                  <MenuItem value={4}>UG4</MenuItem>
-                  <MenuItem value={5}>UG5</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-          </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl sx={{ m: 1, minWidth: 80 }}>
+              <InputLabel id="demo-simple-select-label">
+                {"UG" + details.batch}
+              </InputLabel>
+              <Select
+                helperText="Name"
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={batch}
+                label={"UG" + details.batch}
+                autoWidth
+                onChange={onChangeBatch}
+              >
+                <MenuItem value={1}>UG1</MenuItem>
+                <MenuItem value={2}>UG2</MenuItem>
+                <MenuItem value={3}>UG3</MenuItem>
+                <MenuItem value={4}>UG4</MenuItem>
+                <MenuItem value={5}>UG5</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
         </Grid>
       ) : (
         ""
       )}
       {type == "Vendor" ? (
-        <Grid container align={"center"} spacing={1}>
-          <Grid item xs={1}>
-            <Item>Start Time</Item>
-          </Grid>
-          <Grid item xs={1}>
-            <TextField
-              id="time"
-              label={details.can_open}
-              type="time"
-              value={start_time}
-              onChange={onChangeStart}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
-              }}
-              sx={{ width: 150 }}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            helperText="Opening time"
+            id="time"
+            label={details.can_open}
+            type="time"
+            value={start_time}
+            onChange={onChangeStart}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            sx={{ width: 150 }}
+          />
         </Grid>
       ) : (
         ""
       )}
       {type == "Vendor" ? (
-        <Grid container align={"center"} spacing={1}>
-          <Grid item xs={1}>
-            <Item>End Time</Item>
-          </Grid>
-          <Grid item xs={1}>
-            <TextField
-              id="time"
-              label={details.can_close}
-              type="time"
-              value={end_time}
-              onChange={onChangeEnd}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              inputProps={{
-                step: 300, // 5 min
-              }}
-              sx={{ width: 150 }}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            helperText="Closing time"
+            id="time"
+            label={details.can_close}
+            type="time"
+            value={end_time}
+            onChange={onChangeEnd}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            inputProps={{
+              step: 300, // 5 min
+            }}
+            sx={{ width: 150 }}
+          />
         </Grid>
       ) : (
         ""
       )}
       {type == "Vendor" ? (
-        <Grid container align={"center"} spacing={1}>
-          <Grid item xs={1}>
-            <Item>Shop Name</Item>
-          </Grid>
-          <Grid item xs={1}>
-            <TextField
-              label={details.shop_name}
-              variant="outlined"
-              value={s_name}
-              onChange={onChangeShop}
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            helperText="Shop Name"
+            label={details.shop_name}
+            variant="outlined"
+            value={s_name}
+            onChange={onChangeShop}
+          />
         </Grid>
       ) : (
         ""
       )}
-      <Grid container align={"center"} spacing={1}>
-        <Grid item xs={1}>
-          <Button variant="contained" onClick={onSubmit} endIcon={<SaveIcon />}>
-            Save
-          </Button>
-        </Grid>
+      <Grid item xs={12}>
+        <Button variant="contained" onClick={onSubmit} endIcon={<SaveIcon />}>
+          Save
+        </Button>
       </Grid>
     </Grid>
   );
