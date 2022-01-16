@@ -27,7 +27,7 @@ const BuyerSchema = new Schema({
     type: String,
     required: true,
   },
-  Wallet: {
+  wallet: {
     type: Number,
     default: 0,
   },

@@ -101,6 +101,7 @@ const Register = (props) => {
         props.onAuthT(type);
         localStorage.setItem("Auth", email);
         localStorage.setItem("AuthT", type);
+        if (type == "Buyer") localStorage.setItem("Wallet", 0);
         console.log(response.data);
       });
 

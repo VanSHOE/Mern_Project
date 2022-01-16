@@ -39,8 +39,13 @@ const Login = (props) => {
       alert("Logged as " + response.data.email);
       props.onAuth(response.data.email);
       props.onAuthT(response.data.type);
+
       localStorage.setItem("Auth", response.data.email);
       localStorage.setItem("AuthT", response.data.type);
+      if (response.data.type == "Buyer") {
+        props.onAuthW(response.data.wallet);
+        localStorage.setItem("Wallet", response.data.wallet);
+      }
       console.log(response.data);
     });
     resetInputs();

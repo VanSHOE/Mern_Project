@@ -134,7 +134,7 @@ router.post("/login", (req, res) => {
       });
     } else {
       return buyer.password == req.body.password
-        ? res.status(200).json({ email, type: "Buyer" })
+        ? res.status(200).json({ email, type: "Buyer", wallet: buyer.wallet })
         : res.status(401).json({
             error: "Invalid Credentials",
           });

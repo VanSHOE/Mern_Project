@@ -12,7 +12,11 @@ import { Navigate } from "react-router-dom";
 const Layout = (props) => {
   return (
     <div>
-      <Navbar user={props.user} userType={props.userType} />
+      <Navbar
+        user={props.user}
+        userType={props.userType}
+        money={props.Wallet}
+      />
       <div className="container">
         <Outlet />
       </div>
@@ -23,16 +27,21 @@ const Layout = (props) => {
 function App() {
   const [Authed, setAuthed] = useState("");
   const [AuthedType, setAuthedType] = useState("");
+  const [Money, setWallet] = useState(0);
   if (localStorage.getItem("Auth") && !Authed) {
     setAuthed(localStorage.getItem("Auth"));
     setAuthedType(localStorage.getItem("AuthT"));
+    setWallet(localStorage.getItem("Wallet"));
   }
+  console.log(Money);
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
-          element={<Layout user={Authed} userType={AuthedType} />}
+          element={
+            <Layout user={Authed} userType={AuthedType} Wallet={Money} />
+          }
         >
           <Route path="/" element={<Home />} />
           <Route path="users" element={<UsersList />} />
@@ -47,7 +56,13 @@ function App() {
           {Authed ? (
             <Route
               path="logout"
-              element={<Logout onAuth={setAuthed} onAuthT={setAuthedType} />}
+              element={
+                <Logout
+                  onAuthW={setWallet}
+                  onAuth={setAuthed}
+                  onAuthT={setAuthedType}
+                />
+              }
             />
           ) : (
             <Route path="logout" element={<Navigate to="/login" />} />
@@ -57,7 +72,13 @@ function App() {
           ) : (
             <Route
               path="login"
-              element={<Login onAuth={setAuthed} onAuthT={setAuthedType} />}
+              element={
+                <Login
+                  onAuthW={setWallet}
+                  onAuth={setAuthed}
+                  onAuthT={setAuthedType}
+                />
+              }
             />
           )}
 
