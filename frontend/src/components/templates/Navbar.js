@@ -18,7 +18,9 @@ const Navbar = (props) => {
             sx={{ cursor: "pointer" }}
             onClick={() => navigate("/")}
           >
-            Canteen Portal
+            {props.user
+              ? "Canteen Portal: " + props.userType
+              : "Canteen Portal: Please log in or register"}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Button color="inherit" onClick={() => navigate("/users")}>
@@ -34,6 +36,9 @@ const Navbar = (props) => {
               Logout
             </Button>
           ) : (
+            ""
+          )}
+          {props.user ? null : (
             <Button color="inherit" onClick={() => navigate("/login")}>
               Login
             </Button>

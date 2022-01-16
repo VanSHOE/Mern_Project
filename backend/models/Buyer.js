@@ -27,6 +27,10 @@ const BuyerSchema = new Schema({
     type: String,
     required: true,
   },
+  Wallet: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = User = mongoose.model("Buyer", BuyerSchema);
