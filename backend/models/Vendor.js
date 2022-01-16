@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const VendorSchema = new Schema({
-  m_name: {
+  name: {
     type: String,
     required: true,
   },

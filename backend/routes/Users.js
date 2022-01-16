@@ -42,7 +42,7 @@ router.post("/register", (req, res) => {
       });
   } else if (req.body.type == "Vendor") {
     const newUser = new Vendor({
-      m_name: req.body.name,
+      name: req.body.name,
       email: req.body.email,
       contact: req.body.phone,
       shop_name: req.body.s_name,
@@ -59,6 +59,52 @@ router.post("/register", (req, res) => {
       .catch((err) => {
         res.status(400).send(err);
       });
+  } else {
+    res.status(400).send("no");
+  }
+});
+
+router.post("/update", (req, res) => {
+  let email = req.body.email;
+  if (!email) return res.status(400).send("no");
+  console.log("Email is:" + email);
+  if (req.body.type == "Buyer") {
+    Buyer.findOne({ email }).then((buyer) => {
+      if (!buyer) return res.status(400).send("no");
+      if (req.body.name) buyer.name = req.body.name;
+      if (req.body.phone) buyer.contact = req.body.phone;
+      if (req.body.age) buyer.age = req.body.age;
+      if (req.body.batch) buyer.batch = req.body.batch;
+      if (req.body.password) buyer.password = req.body.password;
+      buyer
+        .save()
+        .then((user) => {
+          res.status(200).json(user);
+        })
+        .catch((err) => {
+          res.status(400).send(err);
+        });
+    });
+  } else if (req.body.type == "Vendor") {
+    Vendor.findOne({ email }).then((vendor) => {
+      if (!vendor) return res.status(400).send("no");
+
+      if (req.body.name) vendor.name = req.body.name;
+      if (req.body.email) vendor.email = req.body.email;
+      if (req.body.phone) vendor.contact = req.body.phone;
+      if (req.body.s_name) vendor.shop_name = req.body.s_name;
+      if (req.body.start_time) vendor.can_open = req.body.start_time;
+      if (req.body.end_time) vendor.can_close = req.body.end_time;
+      if (req.body.password) vendor.password = req.body.password;
+      vendor
+        .save()
+        .then((user) => {
+          res.status(200).json(user);
+        })
+        .catch((err) => {
+          res.status(400).send(err);
+        });
+    });
   } else {
     res.status(400).send("no");
   }
@@ -88,7 +134,7 @@ router.post("/login", (req, res) => {
       });
     } else {
       return buyer.password == req.body.password
-        ? res.status(200).json({ email, type: "buyer" })
+        ? res.status(200).json({ email, type: "Buyer" })
         : res.status(401).json({
             error: "Invalid Credentials",
           });
@@ -111,11 +157,11 @@ router.post("/profile", (req, res) => {
             error: "Email not found",
           });
         } else {
-          return res.status(200).json({ email, type: "Vendor" });
+          return res.status(200).json(vendor);
         }
       });
     } else {
-      return res.status(200).json({ email, type: "buyer" });
+      return res.status(200).json(buyer);
     }
   });
 });
