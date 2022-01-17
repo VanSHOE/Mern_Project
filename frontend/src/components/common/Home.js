@@ -14,23 +14,14 @@ import { styled } from "@mui/material/styles";
 const Home = (props) => {
   const [Items, setItems] = useState([]);
   const [details, setDetails] = useState([]);
-  let email_cur = localStorage.getItem("Auth");
+  let email_cur = props.user;
   useEffect(() => {
     axios
-      .post("http://localhost:4000/user/profile", { email: email_cur }) // unimplemented
-      .then((response) => {
-        //console.log(response.data);
-        axios
-          .get("http://localhost:4000/item", {
-            params: { vendor: response.data.name },
-          })
-          .then((response1) => {
-            setItems(response1.data);
-            // console.log(response1);
-          });
+      .get("http://localhost:4000/item", {
+        params: { vendor_email: email_cur },
       })
-      .catch(function (error) {
-        console.log(error);
+      .then((response) => {
+        setItems(response.data);
       });
   }, []);
   console.log(Items);
@@ -51,7 +42,10 @@ const Home = (props) => {
   }));
 
   return (
-    <Stack spacing={5}>
+    <Stack spacing={2}>
+      <Button variant="contained" color="success">
+        Add Item
+      </Button>
       {Items.map((item) => (
         <Box sx={{ minWidth: 275 }}>
           <Card variant="outlined">
@@ -67,8 +61,8 @@ const Home = (props) => {
                 <Typography variant="h5" component="div">
                   {item.name}
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {item.price}$
+                <Typography sx={{ mb: 1.5 }} color="green">
+                  <em>{item.price}$</em>
                 </Typography>
                 <Typography variant="body2">
                   <h4>Addons:</h4>

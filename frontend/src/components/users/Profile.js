@@ -151,6 +151,7 @@ const Profile = (props) => {
       .then((response) => {
         alert("Created " + response.data.email);
       });
+    window.location.reload(true);
     resetInputs();
   };
   return (

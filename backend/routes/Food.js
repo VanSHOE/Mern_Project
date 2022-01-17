@@ -9,8 +9,8 @@ const Food = require("../models/Food");
 // Getting all the users
 router.get("/", function (req, res) {
   console.log(req.query);
-  const vendor = req.query.vendor;
-  Food.find({ vendor }).then((items) => {
+  const vendor_email = req.query.vendor_email;
+  Food.find({ vendor_email }).then((items) => {
     if (!items) {
       return res.status(400).send();
     } else {

@@ -43,7 +43,7 @@ function App() {
             <Layout user={Authed} userType={AuthedType} Wallet={Money} />
           }
         >
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home user={Authed} />} />
           <Route path="users" element={<UsersList />} />
           {Authed ? (
             <Route path="register" element={<Navigate to="/" />} />
