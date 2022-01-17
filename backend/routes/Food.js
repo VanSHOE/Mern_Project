@@ -35,6 +35,7 @@ router.post("/add", (req, res) => {
     addons: req.body.addons,
     tags: req.body.tags,
     vendor: req.body.vendor,
+    vendor_email: req.body.vendor_email,
   });
   newFood
     .save()

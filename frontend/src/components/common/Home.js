@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Paper from "@mui/material/Paper";
@@ -12,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import Rating from "@mui/material/Rating";
 import { styled } from "@mui/material/styles";
 const Home = (props) => {
+  const navigate = useNavigate();
   const [Items, setItems] = useState([]);
   const [details, setDetails] = useState([]);
   let email_cur = props.user;
@@ -43,7 +45,11 @@ const Home = (props) => {
 
   return (
     <Stack spacing={2}>
-      <Button variant="contained" color="success">
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() => navigate("/item/add")}
+      >
         Add Item
       </Button>
       {Items.map((item) => (

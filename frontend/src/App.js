@@ -4,6 +4,7 @@ import { useState } from "react";
 import UsersList from "./components/users/UsersList";
 import Home from "./components/common/Home";
 import Register from "./components/common/Register";
+import AddFood from "./components/common/AddFood";
 import Login from "./components/common/Login";
 import Logout from "./components/common/Logout";
 import Navbar from "./components/templates/Navbar";
@@ -66,6 +67,11 @@ function App() {
             />
           ) : (
             <Route path="logout" element={<Navigate to="/login" />} />
+          )}
+          {Authed && AuthedType == "Vendor" ? (
+            <Route path="item/add" element={<AddFood />} />
+          ) : (
+            <Route path="item/add" element={<Navigate to="/" />} />
           )}
           {Authed ? (
             <Route path="login" element={<Navigate to="/" />} />
