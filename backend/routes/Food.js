@@ -8,11 +8,14 @@ const Food = require("../models/Food");
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
-  Buyer.find(function (err, users) {
-    if (err) {
-      console.log(err);
+  console.log(req.query);
+  const vendor = req.query.vendor;
+  Food.find({ vendor }).then((items) => {
+    if (!items) {
+      return res.status(400).send();
     } else {
-      res.json(users);
+      console.log(items);
+      return res.json(items);
     }
   });
 });

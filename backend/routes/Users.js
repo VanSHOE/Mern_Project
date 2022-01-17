@@ -143,9 +143,9 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/profile", (req, res) => {
-  console.log(req.body);
+  //  console.log(req.body);
   const email = req.body.email;
-  console.log(email);
+  //  console.log(email);
   // Find user by email
   Buyer.findOne({ email }).then((buyer) => {
     // Check if user email exists

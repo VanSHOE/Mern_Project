@@ -33,7 +33,7 @@ function App() {
     setAuthedType(localStorage.getItem("AuthT"));
     setWallet(localStorage.getItem("Wallet"));
   }
-  console.log(Money);
+  //console.log(Money);
   return (
     <BrowserRouter>
       <Routes>

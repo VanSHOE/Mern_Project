@@ -293,32 +293,36 @@ const Profile = (props) => {
           Save
         </Button>
       </Grid>
-      <Grid item xs={12}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            id="outlined-required"
-            label="Add Money"
-            value={money_in}
-            type="number"
-            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
-            onChange={onChangeDep}
-          />
-          <Button
-            size="large"
-            variant="contained"
-            color="success"
-            onClick={onAdd}
+      {localStorage.getItem("AuthT") == "Buyer" ? (
+        <Grid item xs={12}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            Deposit
-          </Button>
-        </div>
-      </Grid>
+            <TextField
+              id="outlined-required"
+              label="Add Money"
+              value={money_in}
+              type="number"
+              inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              onChange={onChangeDep}
+            />
+            <Button
+              size="large"
+              variant="contained"
+              color="success"
+              onClick={onAdd}
+            >
+              Deposit
+            </Button>
+          </div>
+        </Grid>
+      ) : (
+        ""
+      )}
     </Grid>
   );
 };
