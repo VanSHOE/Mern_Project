@@ -23,7 +23,9 @@ const Navbar = (props) => {
               : "Canteen Portal: Please log in or register"}
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          {props.user ? <h3>{props.money}$</h3> : ""}
+          <Button color="inherit" onClick={() => navigate("/profile")}>
+            {props.user ? <h3>{props.money}$</h3> : ""}
+          </Button>
           <Box sx={{ flexGrow: 1 }} />
           <Button color="inherit" onClick={() => navigate("/users")}>
             Users

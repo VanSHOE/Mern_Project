@@ -166,4 +166,24 @@ router.post("/profile", (req, res) => {
   });
 });
 
+router.post("/deposit", (req, res) => {
+  console.log(req.body);
+  const email = req.body.email;
+  // Find user by email
+  Buyer.findOne({ email }).then((buyer) => {
+    // Check if user email exists
+    if (!buyer) return res.status(400).send("no");
+    if (req.body.wallet)
+      buyer.wallet = parseInt(buyer.wallet, 10) + parseInt(req.body.wallet, 10);
+    buyer
+      .save()
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
+  });
+});
+
 module.exports = router;

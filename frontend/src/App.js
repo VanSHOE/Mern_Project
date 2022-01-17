@@ -82,7 +82,16 @@ function App() {
             />
           )}
 
-          <Route path="profile" element={<Profile />} />
+          <Route
+            path="profile"
+            element={
+              <Profile
+                onAuthW={setWallet}
+                onAuth={setAuthed}
+                onAuthT={setAuthedType}
+              />
+            }
+          />
         </Route>
       </Routes>
     </BrowserRouter>

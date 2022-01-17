@@ -32,7 +32,7 @@ const Profile = (props) => {
         console.log(error);
       });
   }, []);
-  console.log(details);
+  // console.log(details);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -44,6 +44,8 @@ const Profile = (props) => {
   const [s_name, setShop] = useState("");
   const [start_time, setStart] = useState("");
   const [end_time, setEnd] = useState("");
+
+  const [money_in, setDep] = useState("");
 
   const [type, setType] = useState("");
   if (!type) setType(localStorage.getItem("AuthT"));
@@ -86,6 +88,11 @@ const Profile = (props) => {
   const onChangeType = (event) => {
     setType(event.target.value);
   };
+
+  const onChangeDep = (event) => {
+    setDep(event.target.value);
+  };
+
   const resetInputs = () => {
     setName("");
     setPhone("");
@@ -97,11 +104,30 @@ const Profile = (props) => {
     setStart("");
     setEnd("");
     setType("");
+    setDep("");
   };
 
   if (!email_cur) {
     return <Navigate to="/login" />;
   }
+  const onAdd = (event) => {
+    event.preventDefault();
+    console.log(money_in);
+    const newUser = {
+      email: details.email,
+      wallet: money_in,
+    };
+
+    axios
+      .post("http://localhost:4000/user/deposit", newUser)
+      .then((response) => {
+        if (money_in) alert("Added " + money_in);
+        //console.log(response.data);
+        props.onAuthW(response.data.wallet);
+        localStorage.setItem("Wallet", response.data.wallet);
+      });
+    resetInputs();
+  };
   const onSubmit = (event) => {
     event.preventDefault();
 
@@ -124,9 +150,7 @@ const Profile = (props) => {
       .post("http://localhost:4000/user/update", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
-        console.log(response.data);
       });
-    window.location.reload(true);
     resetInputs();
   };
   return (
@@ -190,7 +214,6 @@ const Profile = (props) => {
                 {"UG" + details.batch}
               </InputLabel>
               <Select
-                helperText="Name"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={batch}
@@ -269,6 +292,32 @@ const Profile = (props) => {
         <Button variant="contained" onClick={onSubmit} endIcon={<SaveIcon />}>
           Save
         </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <TextField
+            id="outlined-required"
+            label="Add Money"
+            value={money_in}
+            type="number"
+            inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+            onChange={onChangeDep}
+          />
+          <Button
+            size="large"
+            variant="contained"
+            color="success"
+            onClick={onAdd}
+          >
+            Deposit
+          </Button>
+        </div>
       </Grid>
     </Grid>
   );
