@@ -69,7 +69,7 @@ function App() {
             <Route path="logout" element={<Navigate to="/login" />} />
           )}
           {Authed && AuthedType == "Vendor" ? (
-            <Route path="item/add" element={<AddFood />} />
+            <Route path="item/add" element={<AddFood user={Authed} />} />
           ) : (
             <Route path="item/add" element={<Navigate to="/" />} />
           )}

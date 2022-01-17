@@ -30,7 +30,6 @@ router.post("/add", (req, res) => {
   const newFood = new Food({
     name: req.body.name,
     price: req.body.price,
-    rating: req.body.rating,
     type: req.body.type,
     addons: req.body.addons,
     tags: req.body.tags,
