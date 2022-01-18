@@ -46,6 +46,28 @@ router.post("/add", (req, res) => {
     });
 });
 
+router.post("/del", (req, res) => {
+  console.log(req.body);
+
+  Food.deleteOne({
+    name: req.body.name,
+    vendor_email: req.body.vendor_email,
+  })
+    .then((result) => {
+      res.status(200).json({
+        message: "Address Deleted",
+        result,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        message: "Error Occured",
+        error: err,
+      });
+    });
+});
+
 // POST request
 // Login
 router.post("/login", (req, res) => {

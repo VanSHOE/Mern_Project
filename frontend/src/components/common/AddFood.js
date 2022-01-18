@@ -58,6 +58,7 @@ const AddFood = (props) => {
   const onAddAddons = () => {
     if (Addons.some((addon) => addon == cur_addon)) return;
     setAddons([...Addons, cur_addon]);
+    setCAddon("");
   };
   const onDelAddons = () => {
     setAddons([]);
@@ -65,6 +66,7 @@ const AddFood = (props) => {
   const onAddTags = () => {
     if (Tags.some((tag) => tag == cur_tag)) return;
     setTags([...Tags, cur_tag]);
+    setCTag("");
   };
   const onDelTags = () => {
     setTags([]);

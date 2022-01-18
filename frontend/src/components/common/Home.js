@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
@@ -43,6 +44,28 @@ const Home = (props) => {
     color: theme.palette.text.secondary,
   }));
 
+  const onDelete = (Name) => {
+    console.log(Name + " " + props.user);
+    let email_cur = props.user;
+    let vendor_cur;
+
+    const newFood = {
+      name: Name,
+      vendor_email: email_cur,
+    };
+    console.log(newFood);
+    axios.post("http://localhost:4000/item/del", newFood).then((response) => {
+      axios
+        .get("http://localhost:4000/item", {
+          params: { vendor_email: email_cur },
+        })
+        .then((response) => {
+          setItems(response.data);
+        });
+      console.log("Deleted");
+    });
+  };
+
   return (
     <Stack spacing={2}>
       <Button
@@ -74,24 +97,30 @@ const Home = (props) => {
                   <h4>Addons:</h4>
                   <Stack direction="row" spacing={1}>
                     {item.addons.map((addon) => (
-                      <Item>{addon}</Item>
+                      <Chip label={addon} />
                     ))}
                   </Stack>
                 </Typography>
                 <br />
-                <Rating name="read-only" value={item.rating} readOnly />
+                <Rating
+                  name="read-only"
+                  value={item.num_ratings ? item.rating / item.num_ratings : 0}
+                  readOnly
+                />
                 <Typography variant="body2">
                   <h4>Tags:</h4>
                   <Stack direction="row" spacing={1}>
                     {item.tags.map((tag) => (
-                      <Item>{tag}</Item>
+                      <Chip label={tag} />
                     ))}
                   </Stack>
                 </Typography>
               </CardContent>
               <CardActions>
                 <Button size="small">Edit</Button>
-                <Button size="small">Delete</Button>
+                <Button onClick={() => onDelete(item.name)} size="small">
+                  Delete
+                </Button>
               </CardActions>
             </React.Fragment>
           </Card>
