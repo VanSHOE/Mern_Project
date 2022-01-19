@@ -27,6 +27,8 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
+import StarIcon from "@mui/icons-material/Star";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
 
 const UsersList = (props) => {
   const [users, setUsers] = useState([]);
@@ -141,6 +143,9 @@ const UsersList = (props) => {
               />
             </ListItem>
           </List>
+          <Paper>
+            <h2>Favourites</h2>
+          </Paper>
         </Grid>
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
@@ -150,6 +155,15 @@ const UsersList = (props) => {
                 <Card variant="outlined">
                   <React.Fragment>
                     <CardContent>
+                      <Typography variant="h5" component="div">
+                        <IconButton aria-label="delete" size="large">
+                          <StarBorderIcon />
+                        </IconButton>
+                        {item.name}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }} color="green">
+                        <em>{item.price}$</em>
+                      </Typography>
                       <Typography
                         sx={{ fontSize: 14 }}
                         color="text.secondary"
@@ -163,12 +177,6 @@ const UsersList = (props) => {
                         gutterBottom
                       >
                         {item.type}
-                      </Typography>
-                      <Typography variant="h5" component="div">
-                        {item.name}
-                      </Typography>
-                      <Typography sx={{ mb: 1.5 }} color="green">
-                        <em>{item.price}$</em>
                       </Typography>
                       <Typography variant="body2">
                         <h4>Addons:</h4>
@@ -196,7 +204,7 @@ const UsersList = (props) => {
                       </Typography>
                     </CardContent>
                     <CardActions>
-                      <Button size="small">Edit</Button>
+                      <Button size="small">Buy</Button>
                       <Button size="small">Delete</Button>
                     </CardActions>
                   </React.Fragment>

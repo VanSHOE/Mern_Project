@@ -4,6 +4,7 @@ var router = express.Router();
 // Load User model
 const Buyer = require("../models/Buyer");
 const Vendor = require("../models/Vendor");
+const Food = require("../models/Food");
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
@@ -105,6 +106,14 @@ router.post("/update", (req, res) => {
         .save()
         .then((user) => {
           res.status(200).json(user);
+          console.log(vendor.email);
+          console.log("Updating?");
+          Food.updateMany(
+            { vendor_email: vendor.email },
+            { $set: { vendor: vendor.name, shop: vendor.shop_name } }
+          ).then((lol) => {
+            console.log(lol);
+          });
         })
         .catch((err) => {
           res.status(400).send(err);
