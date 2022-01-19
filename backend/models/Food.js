@@ -39,6 +39,10 @@ const FoodSchema = new Schema({
     type: Number,
     default: 0,
   },
+  shop: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = User = mongoose.model("Food", FoodSchema);

@@ -88,11 +88,13 @@ const AddFood = (props) => {
     event.preventDefault();
     let email_cur = props.user;
     let vendor_cur;
+    let shop_name;
     axios
       .post("http://localhost:4000/user/profile", { email: email_cur }) // unimplemented
       .then((response) => {
         // console.log(response.data);
         vendor_cur = response.data.name;
+        shop_name = response.data.shop_name;
         const newFood = {
           name: Name,
           price: Price,
@@ -101,6 +103,7 @@ const AddFood = (props) => {
           tags: Tags,
           vendor: vendor_cur,
           vendor_email: email_cur,
+          shop: shop_name,
         };
         console.log(newFood);
         axios

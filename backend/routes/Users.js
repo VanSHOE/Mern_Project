@@ -7,11 +7,16 @@ const Vendor = require("../models/Vendor");
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
-  Buyer.find(function (err, users) {
-    if (err) {
-      console.log(err);
+  console.log(req.query);
+  Vendor.findOne({ email: req.query.vendor_email }).then((vendor) => {
+    if (!vendor) {
+      console.log("no");
     } else {
-      res.json(users);
+      console.log(vendor);
+      res.json({
+        shop_name: vendor.shop_name,
+        vendor_email: req.query.vendor_email,
+      });
     }
   });
 });

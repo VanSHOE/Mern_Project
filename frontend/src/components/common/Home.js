@@ -192,206 +192,219 @@ const Home = (props) => {
   };
   console.log(EdN);
   console.log(EdV);
-  return (
-    <Stack spacing={2}>
-      <Button
-        variant="contained"
-        color="success"
-        onClick={() => navigate("/item/add")}
-      >
-        Add Item
-      </Button>
-      {Items.map((item) => (
-        <div>
-          {EdN && EdN == item.name && EdV == item.vendor_email ? (
-            <Box sx={{ minWidth: 275 }}>
-              <Card variant="outlined">
-                <React.Fragment>
-                  <CardContent>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <TextField
-                          label="Name"
-                          variant="outlined"
-                          value={Name}
-                          onChange={onChangeName}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          label="Price"
-                          variant="outlined"
-                          type="Number"
-                          value={Price}
-                          onChange={onChangePrice}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Box sx={{ minWidth: 120 }}>
-                          <FormControl sx={{ m: 1, minWidth: 80 }}>
-                            <InputLabel id="demo-simple-select-label">
-                              Type
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              label="Type"
-                              value={Type}
-                              onChange={onChangeType}
-                              //autoWidth
-                            >
-                              <MenuItem value={"veg"}>Veg</MenuItem>
-                              <MenuItem value={"non_veg"}>Non-Veg</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12}>
-                        {" "}
+  let cur_user = props.user;
+  let cur_user_type = props.userType;
+  return props.user ? (
+    props.userType == "Vendor" ? (
+      <Stack spacing={2}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => navigate("/item/add")}
+        >
+          Add Item
+        </Button>
+        {Items.map((item) => (
+          <div>
+            {EdN && EdN == item.name && EdV == item.vendor_email ? (
+              <Box sx={{ minWidth: 275 }}>
+                <Card variant="outlined">
+                  <React.Fragment>
+                    <CardContent>
+                      <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          <TextField
+                            label="Name"
+                            variant="outlined"
+                            value={Name}
+                            onChange={onChangeName}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            label="Price"
+                            variant="outlined"
+                            type="Number"
+                            value={Price}
+                            onChange={onChangePrice}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Box sx={{ minWidth: 120 }}>
+                            <FormControl sx={{ m: 1, minWidth: 80 }}>
+                              <InputLabel id="demo-simple-select-label">
+                                Type
+                              </InputLabel>
+                              <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Type"
+                                value={Type}
+                                onChange={onChangeType}
+                                //autoWidth
+                              >
+                                <MenuItem value={"veg"}>Veg</MenuItem>
+                                <MenuItem value={"non_veg"}>Non-Veg</MenuItem>
+                              </Select>
+                            </FormControl>
+                          </Box>
+                        </Grid>
                         <Grid item xs={12}>
                           {" "}
-                          {Addons.map((addon) => (
+                          <Grid item xs={12}>
+                            {" "}
+                            {Addons.map((addon) => (
+                              <Chip label={addon} />
+                            ))}
+                          </Grid>
+                        </Grid>
+
+                        <Grid item xs={12}>
+                          <div
+                            style={{
+                              display: "flex",
+                            }}
+                          >
+                            <TextField
+                              label="Addons"
+                              variant="outlined"
+                              value={cur_addon}
+                              onChange={onChangeCAddon}
+                            />
+                            <Button
+                              variant="contained"
+                              color="success"
+                              onClick={onAddAddons}
+                            >
+                              Add
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={onDelAddons}
+                            >
+                              Reset
+                            </Button>
+                          </div>
+                        </Grid>
+                        <Grid item xs={12}>
+                          {" "}
+                          <Grid item xs={12}>
+                            {" "}
+                            {Tags.map((tag) => (
+                              <Chip label={tag} />
+                            ))}
+                          </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <div
+                            style={{
+                              display: "flex",
+                            }}
+                          >
+                            <TextField
+                              label="Tags"
+                              variant="outlined"
+                              value={cur_tag}
+                              onChange={onChangeCTag}
+                            />
+                            <Button
+                              variant="contained"
+                              color="success"
+                              onClick={onAddTags}
+                            >
+                              Add
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              onClick={onDelTags}
+                            >
+                              Reset
+                            </Button>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </CardContent>
+                    <CardActions>
+                      <Button onClick={() => onEditSubmit(item)} size="small">
+                        Accept Changes
+                      </Button>
+                      <Button onClick={() => onCancel()} size="small">
+                        Cancel
+                      </Button>
+                    </CardActions>
+                  </React.Fragment>
+                </Card>
+              </Box>
+            ) : (
+              <Box sx={{ minWidth: 275 }}>
+                <Card variant="outlined">
+                  <React.Fragment>
+                    <CardContent>
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {item.type}
+                      </Typography>
+                      <Typography variant="h5" component="div">
+                        {item.name}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }} color="green">
+                        <em>{item.price}$</em>
+                      </Typography>
+                      <Typography variant="body2">
+                        <h4>Addons:</h4>
+                        <Stack direction="row" spacing={1}>
+                          {item.addons.map((addon) => (
                             <Chip label={addon} />
                           ))}
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <div
-                          style={{
-                            display: "flex",
-                          }}
-                        >
-                          <TextField
-                            label="Addons"
-                            variant="outlined"
-                            value={cur_addon}
-                            onChange={onChangeCAddon}
-                          />
-                          <Button
-                            variant="contained"
-                            color="success"
-                            onClick={onAddAddons}
-                          >
-                            Add
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={onDelAddons}
-                          >
-                            Reset
-                          </Button>
-                        </div>
-                      </Grid>
-                      <Grid item xs={12}>
-                        {" "}
-                        <Grid item xs={12}>
-                          {" "}
-                          {Tags.map((tag) => (
+                        </Stack>
+                      </Typography>
+                      <br />
+                      <Rating
+                        name="read-only"
+                        value={
+                          item.num_ratings ? item.rating / item.num_ratings : 0
+                        }
+                        readOnly
+                      />
+                      <Typography variant="body2">
+                        <h4>Tags:</h4>
+                        <Stack direction="row" spacing={1}>
+                          {item.tags.map((tag) => (
                             <Chip label={tag} />
                           ))}
-                        </Grid>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <div
-                          style={{
-                            display: "flex",
-                          }}
-                        >
-                          <TextField
-                            label="Tags"
-                            variant="outlined"
-                            value={cur_tag}
-                            onChange={onChangeCTag}
-                          />
-                          <Button
-                            variant="contained"
-                            color="success"
-                            onClick={onAddTags}
-                          >
-                            Add
-                          </Button>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={onDelTags}
-                          >
-                            Reset
-                          </Button>
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                  <CardActions>
-                    <Button onClick={() => onEditSubmit(item)} size="small">
-                      Accept Changes
-                    </Button>
-                    <Button onClick={() => onCancel()} size="small">
-                      Cancel
-                    </Button>
-                  </CardActions>
-                </React.Fragment>
-              </Card>
-            </Box>
-          ) : (
-            <Box sx={{ minWidth: 275 }}>
-              <Card variant="outlined">
-                <React.Fragment>
-                  <CardContent>
-                    <Typography
-                      sx={{ fontSize: 14 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      {item.type}
-                    </Typography>
-                    <Typography variant="h5" component="div">
-                      {item.name}
-                    </Typography>
-                    <Typography sx={{ mb: 1.5 }} color="green">
-                      <em>{item.price}$</em>
-                    </Typography>
-                    <Typography variant="body2">
-                      <h4>Addons:</h4>
-                      <Stack direction="row" spacing={1}>
-                        {item.addons.map((addon) => (
-                          <Chip label={addon} />
-                        ))}
-                      </Stack>
-                    </Typography>
-                    <br />
-                    <Rating
-                      name="read-only"
-                      value={
-                        item.num_ratings ? item.rating / item.num_ratings : 0
-                      }
-                      readOnly
-                    />
-                    <Typography variant="body2">
-                      <h4>Tags:</h4>
-                      <Stack direction="row" spacing={1}>
-                        {item.tags.map((tag) => (
-                          <Chip label={tag} />
-                        ))}
-                      </Stack>
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button onClick={() => onEdit(item)} size="small">
-                      Edit
-                    </Button>
-                    <Button onClick={() => onDelete(item.name)} size="small">
-                      Delete
-                    </Button>
-                  </CardActions>
-                </React.Fragment>
-              </Card>
-            </Box>
-          )}
-        </div>
-      ))}
-    </Stack>
+                        </Stack>
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button onClick={() => onEdit(item)} size="small">
+                        Edit
+                      </Button>
+                      <Button onClick={() => onDelete(item.name)} size="small">
+                        Delete
+                      </Button>
+                    </CardActions>
+                  </React.Fragment>
+                </Card>
+              </Box>
+            )}
+          </div>
+        ))}
+      </Stack>
+    ) : (
+      "Buyer"
+    )
+  ) : (
+    <div>
+      <h1>
+        Not Authenticated
+        <br /> Dashboard Unavailable
+      </h1>
+    </div>
   );
 };
 

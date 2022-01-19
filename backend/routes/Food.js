@@ -8,16 +8,27 @@ const Food = require("../models/Food");
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
-  console.log(req.query);
+  //  console.log(req.query);
   const vendor_email = req.query.vendor_email;
-  Food.find({ vendor_email }).then((items) => {
-    if (!items) {
-      return res.status(400).send();
-    } else {
-      console.log(items);
-      return res.json(items);
-    }
-  });
+  if (vendor_email) {
+    Food.find({ vendor_email }).then((items) => {
+      if (!items) {
+        return res.status(400).send();
+      } else {
+        // console.log(items);
+        return res.json(items);
+      }
+    });
+  } else {
+    Food.find().then((items) => {
+      if (!items) {
+        return res.status(400).send();
+      } else {
+        // console.log(items);
+        return res.json(items);
+      }
+    });
+  }
 });
 
 router.post("/update", (req, res) => {
@@ -31,8 +42,8 @@ router.post("/update", (req, res) => {
     if (req.body.name) food.name = req.body.name;
     if (req.body.price) food.price = req.body.price;
     if (req.body.type) food.type = req.body.type;
-    if (req.body.addons.length > 0) food.addons = req.body.addons;
-    if (req.body.tags.length > 0) food.tags = req.body.tags;
+    if (req.body.addons) food.addons = req.body.addons;
+    if (req.body.tags) food.tags = req.body.tags;
     food
       .save()
       .then((user) => {
@@ -67,6 +78,7 @@ router.post("/add", (req, res) => {
     tags: req.body.tags,
     vendor: req.body.vendor,
     vendor_email: req.body.vendor_email,
+    shop: req.body.shop,
   });
   newFood
     .save()
