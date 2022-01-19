@@ -161,10 +161,34 @@ const Home = (props) => {
     setEDN(item.name);
     setEDV(item.vendor_email);
   };
+
   const onCancel = () => {
     resetInputs();
     setEDN("");
     setEDV("");
+  };
+
+  const onEditSubmit = (item) => {
+    let email_cur = props.user;
+    const newFood = {
+      oldName: item.name,
+      name: Name,
+      price: Price,
+      type: Type,
+      addons: Addons,
+      tags: Tags,
+      vendor: item.vendor,
+      vendor_email: email_cur,
+    };
+
+    axios
+      .post("http://localhost:4000/item/update", newFood)
+      .then((response) => {
+        //alert("Edit " + response.data.email);
+        //console.log(response);
+        setItems(response.data);
+      });
+    onCancel();
   };
   console.log(EdN);
   console.log(EdV);
@@ -226,7 +250,7 @@ const Home = (props) => {
                         {" "}
                         <Grid item xs={12}>
                           {" "}
-                          {item.addons.map((addon) => (
+                          {Addons.map((addon) => (
                             <Chip label={addon} />
                           ))}
                         </Grid>
@@ -264,7 +288,7 @@ const Home = (props) => {
                         {" "}
                         <Grid item xs={12}>
                           {" "}
-                          {item.tags.map((tag) => (
+                          {Tags.map((tag) => (
                             <Chip label={tag} />
                           ))}
                         </Grid>
@@ -300,7 +324,9 @@ const Home = (props) => {
                     </Grid>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">Accept Changes</Button>
+                    <Button onClick={() => onEditSubmit(item)} size="small">
+                      Accept Changes
+                    </Button>
                     <Button onClick={() => onCancel()} size="small">
                       Cancel
                     </Button>
