@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 // Create Schema
 const OrderSchema = new Schema({
+  id: {
+    type: String,
+    default: "null",
+  },
   food_id: {
     type: String,
     required: true,
@@ -26,6 +30,10 @@ const OrderSchema = new Schema({
   time: {
     type: String,
     required: true,
+  },
+  status: {
+    type: Number,
+    default: 0,
   },
 });
 

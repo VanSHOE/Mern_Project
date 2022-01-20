@@ -29,6 +29,7 @@ import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { v4 as uuidv4 } from "uuid";
 
 const UsersList = (props) => {
   const [users, setUsers] = useState([]);
@@ -106,6 +107,20 @@ const UsersList = (props) => {
         setfavs(response.data.favs);
         console.log(response);
       });
+  };
+  const Buy = (item) => {
+    let qty = parseInt(+prompt("Please enter the quantity"));
+    console.log(qty);
+    const order = {
+      food_id: item.id,
+      add_ons: [],
+      b_email: props.user,
+      qty: qty,
+      id: uuidv4(),
+    };
+    axios.post("http://localhost:4000/order/add", order).then((response) => {
+      console.log(response);
+    });
   };
 
   return (
@@ -231,7 +246,7 @@ const UsersList = (props) => {
                           <h4>Addons:</h4>
 
                           {item.addons.map((addon) => (
-                            <Chip label={addon} />
+                            <Chip clickable color="primary" label={addon} />
                           ))}
                         </Typography>
                         <br />
@@ -252,7 +267,9 @@ const UsersList = (props) => {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Button size="small">Buy</Button>
+                        <Button size="small" onClick={() => Buy(item)}>
+                          Buy
+                        </Button>
                         <Button size="small">Delete</Button>
                       </CardActions>
                     </React.Fragment>
@@ -339,7 +356,9 @@ const UsersList = (props) => {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Button size="small">Buy</Button>
+                        <Button size="small" onClick={() => Buy(item)}>
+                          Buy
+                        </Button>
                         <Button size="small">Delete</Button>
                       </CardActions>
                     </React.Fragment>
