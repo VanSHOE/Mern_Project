@@ -180,6 +180,36 @@ router.post("/profile", (req, res) => {
   });
 });
 
+router.post("/add_fav", (req, res) => {
+  console.log(req.body);
+  const email = req.body.email;
+  let f = req.body.name;
+  let ve = req.body.ve;
+  let to_add = { f, ve };
+  //  console.log(email);
+  // Find user by email
+  Buyer.findOne({ email }).then((buyer) => {
+    // Check if user email exists
+    if (!buyer) {
+      return res.status(404).json({
+        error: "Email not found",
+      });
+    } else {
+      if (!buyer.favs.some((item) => item.f == f && item.ve == ve)) {
+        buyer.favs.push(to_add);
+      }
+    }
+    buyer
+      .save()
+      .then((user) => {
+        res.status(200).json(user);
+      })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
+  });
+});
+
 router.post("/deposit", (req, res) => {
   console.log(req.body);
   const email = req.body.email;

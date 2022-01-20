@@ -31,6 +31,10 @@ const BuyerSchema = new Schema({
     type: Number,
     default: 0,
   },
+  favs: {
+    type: Array,
+    default: [],
+  },
 });
 
 module.exports = User = mongoose.model("Buyer", BuyerSchema);

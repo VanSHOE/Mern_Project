@@ -79,6 +79,7 @@ router.post("/add", (req, res) => {
     vendor: req.body.vendor,
     vendor_email: req.body.vendor_email,
     shop: req.body.shop,
+    old_name: req.body.name,
   });
   newFood
     .save()
