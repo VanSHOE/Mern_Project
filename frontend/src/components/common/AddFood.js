@@ -16,6 +16,7 @@ import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Chip from "@mui/material/Chip";
+import { v4 as uuidv4 } from "uuid";
 const AddFood = (props) => {
   const [Name, setName] = useState("");
   const [Price, setPrice] = useState("");
@@ -104,6 +105,7 @@ const AddFood = (props) => {
           vendor: vendor_cur,
           vendor_email: email_cur,
           shop: shop_name,
+          id: uuidv4(),
         };
         console.log(newFood);
         axios

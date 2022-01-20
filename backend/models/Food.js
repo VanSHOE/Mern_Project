@@ -43,8 +43,9 @@ const FoodSchema = new Schema({
     type: String,
     required: true,
   },
-  old_name: {
+  id: {
     type: String,
+    default: "null",
   },
 });
 

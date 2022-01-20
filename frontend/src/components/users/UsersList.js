@@ -82,11 +82,10 @@ const UsersList = (props) => {
     console.log(event.target.value);
     setSearchText(event.target.value);
   };
-  const onFav = (oldName, ve) => {
+  const onFav = (id, ve) => {
     const fav_food = {
       email: props.user,
-      ve: ve,
-      name: oldName,
+      id: id,
     };
     axios
       .post("http://localhost:4000/user/add_fav", fav_food)
@@ -96,11 +95,10 @@ const UsersList = (props) => {
       });
   };
 
-  const onDelFav = (oldName, ve) => {
+  const onDelFav = (id, ve) => {
     const fav_food = {
       email: props.user,
-      ve: ve,
-      name: oldName,
+      id: id,
     };
     axios
       .post("http://localhost:4000/user/del_fav", fav_food)
@@ -184,22 +182,16 @@ const UsersList = (props) => {
           <Paper>
             <h2>Favourites</h2>
             {Items.map((item) =>
-              favs.some(
-                (fav) => item.old_name == fav.f && item.vendor_email == fav.ve
-              ) ? (
+              favs.some((fav) => item.id == fav) ? (
                 <Box sx={{ minWidth: 275 }}>
                   <Card variant="outlined">
                     <React.Fragment>
                       <CardContent>
                         <Typography variant="h5" component="div">
-                          {favs.some(
-                            (fav) =>
-                              item.old_name == fav.f &&
-                              item.vendor_email == fav.ve
-                          ) ? (
+                          {favs.some((fav) => item.id == fav) ? (
                             <IconButton
                               onClick={() =>
-                                onDelFav(item.old_name, item.vendor_email)
+                                onDelFav(item.id, item.vendor_email)
                               }
                               aria-label="delete"
                               size="large"
@@ -208,9 +200,7 @@ const UsersList = (props) => {
                             </IconButton>
                           ) : (
                             <IconButton
-                              onClick={() =>
-                                onFav(item.old_name, item.vendor_email)
-                              }
+                              onClick={() => onFav(item.id, item.vendor_email)}
                               aria-label="delete"
                               size="large"
                             >
@@ -278,9 +268,7 @@ const UsersList = (props) => {
           <Paper>
             {" "}
             {Items.map((item) =>
-              favs.some(
-                (fav) => item.old_name == fav.f && item.vendor_email == fav.ve
-              ) ? (
+              favs.some((fav) => item.id == fav) ? (
                 ""
               ) : (
                 <Box sx={{ minWidth: 275 }}>
@@ -288,15 +276,9 @@ const UsersList = (props) => {
                     <React.Fragment>
                       <CardContent>
                         <Typography variant="h5" component="div">
-                          {favs.some(
-                            (fav) =>
-                              item.old_name == fav.f &&
-                              item.vendor_email == fav.ve
-                          ) ? (
+                          {favs.some((fav) => item.id == fav) ? (
                             <IconButton
-                              onClick={() =>
-                                onFav(item.old_name, item.vendor_email)
-                              }
+                              onClick={() => onFav(item.id, item.vendor_email)}
                               aria-label="delete"
                               size="large"
                             >
@@ -304,9 +286,7 @@ const UsersList = (props) => {
                             </IconButton>
                           ) : (
                             <IconButton
-                              onClick={() =>
-                                onFav(item.old_name, item.vendor_email)
-                              }
+                              onClick={() => onFav(item.id, item.vendor_email)}
                               aria-label="delete"
                               size="large"
                             >

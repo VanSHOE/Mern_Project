@@ -10,6 +10,7 @@ import Logout from "./components/common/Logout";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
 import { Navigate } from "react-router-dom";
+
 const Layout = (props) => {
   return (
     <div>

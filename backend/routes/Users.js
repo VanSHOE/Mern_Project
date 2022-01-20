@@ -196,9 +196,7 @@ router.get("/get_fav", function (req, res) {
 router.post("/add_fav", (req, res) => {
   console.log(req.body);
   const email = req.body.email;
-  let f = req.body.name;
-  let ve = req.body.ve;
-  let to_add = { f, ve };
+  let to_add = req.body.id;
   //  console.log(email);
   // Find user by email
   Buyer.findOne({ email }).then((buyer) => {
@@ -208,7 +206,7 @@ router.post("/add_fav", (req, res) => {
         error: "Email not found",
       });
     } else {
-      if (!buyer.favs.some((item) => item.f == f && item.ve == ve)) {
+      if (!buyer.favs.some((item) => item == to_add)) {
         buyer.favs.push(to_add);
       }
     }
@@ -226,9 +224,8 @@ router.post("/add_fav", (req, res) => {
 router.post("/del_fav", (req, res) => {
   console.log(req.body);
   const email = req.body.email;
-  let f = req.body.name;
-  let ve = req.body.ve;
-  let to_del = { f, ve };
+  let to_del = req.body.id;
+
   //  console.log(email);
   // Find user by email
   Buyer.findOne({ email }).then((buyer) => {
@@ -238,7 +235,7 @@ router.post("/del_fav", (req, res) => {
         error: "Email not found",
       });
     } else {
-      buyer.favs = buyer.favs.filter((item) => item.f != f || item.ve != ve);
+      buyer.favs = buyer.favs.filter((item) => item != to_del);
     }
     buyer
       .save()
