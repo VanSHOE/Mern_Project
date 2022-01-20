@@ -38,6 +38,7 @@ const UsersList = (props) => {
   const [searchText, setSearchText] = useState("");
   const [Items, setItems] = useState([]);
   const [favs, setfavs] = useState([]);
+  const [a_sels, setasels] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
@@ -63,8 +64,9 @@ const UsersList = (props) => {
         console.log(error);
       });
   }, []);
-  console.log(Items);
-  console.log(favs);
+  //  console.log(Items);
+  //  console.log(favs);
+  console.log(a_sels);
   const sortChange = () => {
     let usersTemp = users;
     const flag = sortName;
@@ -111,16 +113,33 @@ const UsersList = (props) => {
   const Buy = (item) => {
     let qty = parseInt(+prompt("Please enter the quantity"));
     console.log(qty);
+
+    let add = a_sels.filter((i) => i.id == item.id);
+    add = add.map((el) => el.name);
+    console.log(add);
     const order = {
       food_id: item.id,
-      add_ons: [],
+      add_ons: add,
       b_email: props.user,
       qty: qty,
       id: uuidv4(),
     };
     axios.post("http://localhost:4000/order/add", order).then((response) => {
+      setasels([]);
       console.log(response);
     });
+  };
+
+  const AddAddonBuy = (item, addon) => {
+    let item_id = item.id;
+    if (!a_sels.some((i) => i.id == item_id && i.name == addon))
+      setasels([...a_sels, { id: item_id, name: addon }]);
+  };
+
+  const RemoveAddonBuy = (item, addon) => {
+    let item_id = item.id;
+    console.log("?");
+    setasels(a_sels.filter((i) => i.id != item_id || i.name != addon));
   };
 
   return (
@@ -245,9 +264,23 @@ const UsersList = (props) => {
                         <Typography variant="body2">
                           <h4>Addons:</h4>
 
-                          {item.addons.map((addon) => (
-                            <Chip clickable color="primary" label={addon} />
-                          ))}
+                          {item.addons.map((addon) =>
+                            a_sels.some(
+                              (i) => i.id == item.id && i.name == addon
+                            ) ? (
+                              <Chip
+                                onClick={() => RemoveAddonBuy(item, addon)}
+                                color="success"
+                                label={addon}
+                              />
+                            ) : (
+                              <Chip
+                                onClick={() => AddAddonBuy(item, addon)}
+                                color="primary"
+                                label={addon}
+                              />
+                            )
+                          )}
                         </Typography>
                         <br />
                         <Rating
@@ -333,9 +366,23 @@ const UsersList = (props) => {
                         <Typography variant="body2">
                           <h4>Addons:</h4>
 
-                          {item.addons.map((addon) => (
-                            <Chip label={addon} />
-                          ))}
+                          {item.addons.map((addon) =>
+                            a_sels.some(
+                              (i) => i.id == item.id && i.name == addon
+                            ) ? (
+                              <Chip
+                                onClick={() => RemoveAddonBuy(item, addon)}
+                                color="success"
+                                label={addon}
+                              />
+                            ) : (
+                              <Chip
+                                onClick={() => AddAddonBuy(item, addon)}
+                                color="primary"
+                                label={addon}
+                              />
+                            )
+                          )}
                         </Typography>
                         <br />
                         <Rating
