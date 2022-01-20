@@ -36,13 +36,24 @@ const UsersList = (props) => {
   const [sortName, setSortName] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [Items, setItems] = useState([]);
+  const [favs, setfavs] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
         params: {},
       })
       .then((response) => {
-        setItems(response.data);
+        axios
+          .get("http://localhost:4000/user/get_fav", {
+            params: { email: props.user },
+          })
+          .then((response2) => {
+            setItems(response.data);
+            setfavs(response2.data.favs);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
 
         setSortedUsers(response.data);
         setSearchText("");
@@ -52,7 +63,7 @@ const UsersList = (props) => {
       });
   }, []);
   console.log(Items);
-
+  console.log(favs);
   const sortChange = () => {
     let usersTemp = users;
     const flag = sortName;
@@ -70,6 +81,33 @@ const UsersList = (props) => {
   const customFunction = (event) => {
     console.log(event.target.value);
     setSearchText(event.target.value);
+  };
+  const onFav = (oldName, ve) => {
+    const fav_food = {
+      email: props.user,
+      ve: ve,
+      name: oldName,
+    };
+    axios
+      .post("http://localhost:4000/user/add_fav", fav_food)
+      .then((response) => {
+        setfavs(response.data.favs);
+        console.log(response);
+      });
+  };
+
+  const onDelFav = (oldName, ve) => {
+    const fav_food = {
+      email: props.user,
+      ve: ve,
+      name: oldName,
+    };
+    axios
+      .post("http://localhost:4000/user/del_fav", fav_food)
+      .then((response) => {
+        setfavs(response.data.favs);
+        console.log(response);
+      });
   };
 
   return (
@@ -145,72 +183,190 @@ const UsersList = (props) => {
           </List>
           <Paper>
             <h2>Favourites</h2>
+            {Items.map((item) =>
+              favs.some(
+                (fav) => item.old_name == fav.f && item.vendor_email == fav.ve
+              ) ? (
+                <Box sx={{ minWidth: 275 }}>
+                  <Card variant="outlined">
+                    <React.Fragment>
+                      <CardContent>
+                        <Typography variant="h5" component="div">
+                          {favs.some(
+                            (fav) =>
+                              item.old_name == fav.f &&
+                              item.vendor_email == fav.ve
+                          ) ? (
+                            <IconButton
+                              onClick={() =>
+                                onDelFav(item.old_name, item.vendor_email)
+                              }
+                              aria-label="delete"
+                              size="large"
+                            >
+                              <StarIcon />
+                            </IconButton>
+                          ) : (
+                            <IconButton
+                              onClick={() =>
+                                onFav(item.old_name, item.vendor_email)
+                              }
+                              aria-label="delete"
+                              size="large"
+                            >
+                              <StarBorderIcon />
+                            </IconButton>
+                          )}
+
+                          {item.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="green">
+                          <em>{item.price}$</em>
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.shop}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.type}
+                        </Typography>
+                        <Typography variant="body2">
+                          <h4>Addons:</h4>
+
+                          {item.addons.map((addon) => (
+                            <Chip label={addon} />
+                          ))}
+                        </Typography>
+                        <br />
+                        <Rating
+                          name="read-only"
+                          value={
+                            item.num_ratings
+                              ? item.rating / item.num_ratings
+                              : 0
+                          }
+                          readOnly
+                        />
+                        <Typography variant="body2">
+                          <h4>Tags:</h4>
+                          {item.tags.map((tag) => (
+                            <Chip label={tag} />
+                          ))}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small">Buy</Button>
+                        <Button size="small">Delete</Button>
+                      </CardActions>
+                    </React.Fragment>
+                  </Card>
+                </Box>
+              ) : (
+                ""
+              )
+            )}
           </Paper>
         </Grid>
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
-            {Items.map((item) => (
-              <Box sx={{ minWidth: 275 }}>
-                <Card variant="outlined">
-                  <React.Fragment>
-                    <CardContent>
-                      <Typography variant="h5" component="div">
-                        <IconButton aria-label="delete" size="large">
-                          <StarBorderIcon />
-                        </IconButton>
-                        {item.name}
-                      </Typography>
-                      <Typography sx={{ mb: 1.5 }} color="green">
-                        <em>{item.price}$</em>
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {item.shop}
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {item.type}
-                      </Typography>
-                      <Typography variant="body2">
-                        <h4>Addons:</h4>
-                        <Stack direction="row" spacing={1}>
+            {Items.map((item) =>
+              favs.some(
+                (fav) => item.old_name == fav.f && item.vendor_email == fav.ve
+              ) ? (
+                ""
+              ) : (
+                <Box sx={{ minWidth: 275 }}>
+                  <Card variant="outlined">
+                    <React.Fragment>
+                      <CardContent>
+                        <Typography variant="h5" component="div">
+                          {favs.some(
+                            (fav) =>
+                              item.old_name == fav.f &&
+                              item.vendor_email == fav.ve
+                          ) ? (
+                            <IconButton
+                              onClick={() =>
+                                onFav(item.old_name, item.vendor_email)
+                              }
+                              aria-label="delete"
+                              size="large"
+                            >
+                              <StarIcon />
+                            </IconButton>
+                          ) : (
+                            <IconButton
+                              onClick={() =>
+                                onFav(item.old_name, item.vendor_email)
+                              }
+                              aria-label="delete"
+                              size="large"
+                            >
+                              <StarBorderIcon />
+                            </IconButton>
+                          )}
+
+                          {item.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="green">
+                          <em>{item.price}$</em>
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.shop}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.type}
+                        </Typography>
+                        <Typography variant="body2">
+                          <h4>Addons:</h4>
+
                           {item.addons.map((addon) => (
                             <Chip label={addon} />
                           ))}
-                        </Stack>
-                      </Typography>
-                      <br />
-                      <Rating
-                        name="read-only"
-                        value={
-                          item.num_ratings ? item.rating / item.num_ratings : 0
-                        }
-                        readOnly
-                      />
-                      <Typography variant="body2">
-                        <h4>Tags:</h4>
-                        <Stack direction="row" spacing={1}>
+                        </Typography>
+                        <br />
+                        <Rating
+                          name="read-only"
+                          value={
+                            item.num_ratings
+                              ? item.rating / item.num_ratings
+                              : 0
+                          }
+                          readOnly
+                        />
+                        <Typography variant="body2">
+                          <h4>Tags:</h4>
+
                           {item.tags.map((tag) => (
                             <Chip label={tag} />
                           ))}
-                        </Stack>
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button size="small">Buy</Button>
-                      <Button size="small">Delete</Button>
-                    </CardActions>
-                  </React.Fragment>
-                </Card>
-              </Box>
-            ))}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <Button size="small">Buy</Button>
+                        <Button size="small">Delete</Button>
+                      </CardActions>
+                    </React.Fragment>
+                  </Card>
+                </Box>
+              )
+            )}
           </Paper>
         </Grid>
       </Grid>
