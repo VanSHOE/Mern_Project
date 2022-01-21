@@ -30,6 +30,7 @@ import Chip from "@mui/material/Chip";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { v4 as uuidv4 } from "uuid";
+import Fuse from "fuse.js";
 
 const UsersList = (props) => {
   const [users, setUsers] = useState([]);
@@ -39,6 +40,16 @@ const UsersList = (props) => {
   const [Items, setItems] = useState([]);
   const [favs, setfavs] = useState([]);
   const [a_sels, setasels] = useState([]);
+
+  const [selectText, setSelect] = useState("");
+  const fuse = new Fuse(Items, {
+    keys: ["name"],
+    includeScore: true,
+  });
+
+  let SelectedFood = fuse.search(selectText);
+  SelectedFood = SelectedFood.map((item) => item.item);
+  console.log(SelectedFood);
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
@@ -66,7 +77,7 @@ const UsersList = (props) => {
   }, []);
   //  console.log(Items);
   //  console.log(favs);
-  console.log(a_sels);
+  // console.log(a_sels);
   const sortChange = () => {
     let usersTemp = users;
     const flag = sortName;
@@ -110,6 +121,10 @@ const UsersList = (props) => {
         console.log(response);
       });
   };
+  const onChangeSel = (event) => {
+    setSelect(event.target.value);
+  };
+
   const Buy = (item) => {
     let qty = parseInt(+prompt("Please enter the quantity"));
     console.log(qty);
@@ -169,6 +184,8 @@ const UsersList = (props) => {
               id="standard-basic"
               label="Search"
               fullWidth={true}
+              value={selectText}
+              onChange={onChangeSel}
               InputProps={{
                 endAdornment: (
                   <InputAdornment>
@@ -328,7 +345,7 @@ const UsersList = (props) => {
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
-            {Items.map((item) => (
+            {(SelectedFood.length ? SelectedFood : Items).map((item) => (
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
                   <React.Fragment>

@@ -20,8 +20,10 @@
     "concurrently": "^7.0.0",
     "config": "^3.0.1",
     "express": "^4.16.3",
+    "fuse.js": "^6.5.3",
     "jsonwebtoken": "^8.5.0",
-    "mongoose": "^5.1.6"
+    "mongoose": "^5.1.6",
+    "react-jwt": "^1.1.4"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"
