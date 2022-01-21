@@ -268,4 +268,15 @@ router.post("/deposit", (req, res) => {
   });
 });
 
+router.get("/getWallet", (req, res) => {
+  console.log("wallet");
+  console.log(req.query);
+  const email = req.query.email;
+  // Find user by email
+  Buyer.findOne({ email }).then((buyer) => {
+    // Check if user email exists
+    if (!buyer) return res.status(400).send("no");
+    return res.status(200).json({ money: buyer.wallet });
+  });
+});
 module.exports = router;

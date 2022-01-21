@@ -134,14 +134,9 @@ const Home = (props) => {
     color: theme.palette.text.secondary,
   }));
 
-  const onDelete = (Name) => {
-    console.log(Name + " " + props.user);
-    let email_cur = props.user;
-    let vendor_cur;
-
+  const onDelete = (item) => {
     const newFood = {
-      name: Name,
-      vendor_email: email_cur,
+      id: item.id,
     };
     console.log(newFood);
     axios.post("http://localhost:4000/item/del", newFood).then((response) => {
@@ -384,7 +379,7 @@ const Home = (props) => {
                       <Button onClick={() => onEdit(item)} size="small">
                         Edit
                       </Button>
-                      <Button onClick={() => onDelete(item.name)} size="small">
+                      <Button onClick={() => onDelete(item)} size="small">
                         Delete
                       </Button>
                     </CardActions>

@@ -127,7 +127,17 @@ const UsersList = (props) => {
     };
     axios.post("http://localhost:4000/order/add", order).then((response) => {
       setasels([]);
-      console.log(response);
+      axios
+        .get("http://localhost:4000/user/getWallet", {
+          params: { email: props.user },
+        })
+        .then((response1) => {
+          setasels([]);
+          console.log(response1);
+          props.onWalletChange(response1.data.money);
+          localStorage.setItem("Wallet", response1.data.money);
+          console.log(response);
+        });
     });
   };
 

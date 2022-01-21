@@ -119,10 +119,12 @@ router.post("/del", (req, res) => {
   console.log(req.body);
 
   Food.deleteOne({
-    name: req.body.name,
-    vendor_email: req.body.vendor_email,
+    id: req.body.id,
   })
     .then((result) => {
+      Order.deleteMany({ food_id: req.body.id }).then((resp) => {
+        console.log(resp);
+      });
       res.status(200).json({
         message: "Address Deleted",
         result,

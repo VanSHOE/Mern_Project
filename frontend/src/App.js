@@ -51,7 +51,10 @@ function App() {
             path="/"
             element={<Home user={Authed} userType={AuthedType} />}
           />
-          <Route path="users" element={<UsersList user={Authed} />} />
+          <Route
+            path="users"
+            element={<UsersList user={Authed} onWalletChange={setWallet} />}
+          />
           {Authed ? (
             <Route path="register" element={<Navigate to="/" />} />
           ) : (

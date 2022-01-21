@@ -104,16 +104,28 @@ router.post("/add", (req, res) => {
       today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds(),
     id: req.body.id,
   });
-
-  newOrder
-    .save()
-    .then((user) => {
-      console.log(user);
-      res.status(200).json(user);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
+  Buyer.findOne({ email: req.body.b_email }).then((buyer) => {
+    var wallet = buyer.wallet;
+    Food.findOne({ id: req.body.food_id }).then((food) => {
+      var price = food.price;
+      if (parseInt(price) > parseInt(wallet)) {
+        return res.status(400).send("Insufficient funds");
+      }
+      buyer.wallet = parseInt(buyer.wallet) - parseInt(price);
+      buyer.save().then((user) => {
+        console.log("Money deducted");
+      });
+      newOrder
+        .save()
+        .then((user) => {
+          console.log(user);
+          res.status(200).json(user);
+        })
+        .catch((err) => {
+          res.status(400).send(err);
+        });
     });
+  });
 });
 
 router.post("/del", (req, res) => {
