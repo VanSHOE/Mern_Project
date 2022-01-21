@@ -17,8 +17,39 @@ const Order = require("../models/Order");
 router.get("/", function (req, res) {
   console.log(req.query);
   const b_email = req.query.b_email;
+  const v_email = req.query.v_email;
   if (b_email) {
     Order.find({ b_email }).then((orders) => {
+      if (!orders) {
+        return res.status(400).send();
+      } else {
+        // console.log(items);
+        if (orders.length == 0) {
+          return res.status(200).send([]);
+        }
+        let temp = [];
+        var done = 0;
+        for (var i = 0; i < orders.length; i++) {
+          Food.findOne({ id: orders[i].food_id }).then((items) => {
+            if (!items) {
+              return res.status(400).send();
+            } else {
+              console.log("Just item" + done);
+              console.log(items);
+              temp.push({ order: orders[done], items: items });
+              if (done == orders.length - 1) {
+                console.log("This is temp");
+                console.log(temp);
+                return res.status(200).send(temp);
+              }
+              done++;
+            }
+          });
+        }
+      }
+    });
+  } else if (v_email) {
+    Order.find({ vendor_email: v_email }).then((orders) => {
       if (!orders) {
         return res.status(400).send();
       } else {

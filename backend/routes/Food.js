@@ -5,6 +5,7 @@ var router = express.Router();
 const Buyer = require("../models/Buyer");
 const Vendor = require("../models/Vendor");
 const Food = require("../models/Food");
+const Order = require("../models/Order");
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
@@ -60,6 +61,29 @@ router.post("/update", (req, res) => {
       .catch((err) => {
         res.status(400).send(err);
       });
+  });
+});
+
+router.post("/next", (req, res) => {
+  let id = req.body.id;
+  console.log(req.body);
+  if (!id) return res.status(400).send("no");
+
+  Order.findOne({ id: id }).then((order) => {
+    console.log(order);
+
+    if (!order) return res.status(400).send("no");
+    if (parseInt(order.status) < 4) {
+      order.status = parseInt(order.status) + 1;
+      order
+        .save()
+        .then((user) => {
+          return res.status(200).json(user);
+        })
+        .catch((err) => {
+          return res.status(400).send(err);
+        });
+    } else return res.status(400).send("Order is already finished");
   });
 });
 
