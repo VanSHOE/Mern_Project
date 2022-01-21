@@ -73,6 +73,9 @@ router.post("/next", (req, res) => {
     console.log(order);
 
     if (!order) return res.status(400).send("no");
+    if (parseInt(order.status) == -1) {
+      return res.status(400).send("Order has been rejected");
+    }
     if (parseInt(order.status) < 4) {
       order.status = parseInt(order.status) + 1;
       order
@@ -87,6 +90,28 @@ router.post("/next", (req, res) => {
   });
 });
 
+router.post("/reject", (req, res) => {
+  let id = req.body.id;
+  console.log(req.body);
+  if (!id) return res.status(400).send("no");
+
+  Order.findOne({ id: id }).then((order) => {
+    console.log(order);
+
+    if (!order) return res.status(400).send("no");
+    if (parseInt(order.status) < 4) {
+      order.status = -1;
+      order
+        .save()
+        .then((user) => {
+          return res.status(200).json(user);
+        })
+        .catch((err) => {
+          return res.status(400).send(err);
+        });
+    } else return res.status(400).send("Order is already finished");
+  });
+});
 // NOTE: Below functions are just sample to show you API endpoints working, for the assignment you may need to edit them
 
 // POST request

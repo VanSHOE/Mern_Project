@@ -114,6 +114,25 @@ const Manage = (props) => {
     return text;
   };
 
+  const onReject = (item) => {
+    let request = {
+      id: item.order.id,
+    };
+    console.log(request);
+    axios
+      .post("http://localhost:4000/item/reject", request)
+      .then((response) => {
+        axios
+          .get("http://localhost:4000/order", {
+            params: { v_email: email_cur },
+          })
+          .then((response2) => {
+            setItems(response2.data);
+          });
+        console.log(response.data);
+      });
+  };
+
   const onMove = (item) => {
     let request = {
       id: item.order.id,
@@ -227,6 +246,13 @@ const Manage = (props) => {
                       size="large"
                     >
                       MOVE TO NEXT STAGE
+                    </Button>
+                    <Button
+                      onClick={() => onReject(item)}
+                      color="error"
+                      size="large"
+                    >
+                      Reject
                     </Button>
                   </CardActions>
                 </React.Fragment>
