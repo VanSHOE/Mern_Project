@@ -31,7 +31,13 @@ const Navbar = (props) => {
             ""
           )}
           <Box sx={{ flexGrow: 1 }} />
-
+          {props.userType == "Buyer" ? (
+            <Button color="inherit" onClick={() => navigate("/orders")}>
+              Orders
+            </Button>
+          ) : (
+            ""
+          )}
           {props.user ? null : (
             <Button color="inherit" onClick={() => navigate("/register")}>
               Register

@@ -89,17 +89,29 @@ const Orders = (props) => {
     setAddons([]);
     setTags([]);
   };
-  const setInputs = (item) => {
-    setName(item.name);
-    setPrice(item.price);
-    setRating(item.ratings);
-    setType(item.type);
-    setVendor(item.vendor);
-    setVEmail(item.vendor_email);
-    setCAddon("");
-    setCTag("");
-    setAddons(item.addons);
-    setTags(item.tags);
+  const toStatus = (val) => {
+    let text = "";
+    switch (val) {
+      case 0:
+        text = "PLACED";
+        break;
+      case 1:
+        text = "ACCEPTED";
+        break;
+      case 2:
+        text = "COOKING";
+        break;
+      case 3:
+        text = "READY FOR PICKUP";
+        break;
+      case 4:
+        text = "COMPLETED";
+        break;
+      case -1:
+        text = "REJECTED";
+        break;
+    }
+    return text;
   };
 
   const navigate = useNavigate();
@@ -169,6 +181,18 @@ const Orders = (props) => {
                       </Stack>
                     </Typography>
                     <br />
+                    <Typography variant="h9">
+                      Vendor Name: {item.items.vendor}
+                    </Typography>
+                    <br /> <br />
+                    <Typography variant="h9">
+                      Quantity: {item.order.qty}
+                    </Typography>
+                    <br /> <br />
+                    <Typography variant="h9">
+                      Status: {toStatus(item.order.status)}
+                    </Typography>
+                    <br /> <br />
                     <Rating
                       name="read-only"
                       value={
@@ -178,11 +202,6 @@ const Orders = (props) => {
                       }
                       readOnly
                     />
-                    <Typography variant="body2">
-                      {item.items.vendor_name}
-                    </Typography>
-                    <Typography variant="body2">{item.order.qty}</Typography>
-                    <Typography variant="body2">{item.order.status}</Typography>
                   </CardContent>
                 </React.Fragment>
               </Card>
