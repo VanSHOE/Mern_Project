@@ -328,102 +328,96 @@ const UsersList = (props) => {
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
-            {Items.map((item) =>
-              favs.some((fav) => item.id == fav) ? (
-                ""
-              ) : (
-                <Box sx={{ minWidth: 275 }}>
-                  <Card variant="outlined">
-                    <React.Fragment>
-                      <CardContent>
-                        <Typography variant="h5" component="div">
-                          {favs.some((fav) => item.id == fav) ? (
-                            <IconButton
-                              onClick={() => onFav(item.id, item.vendor_email)}
-                              aria-label="delete"
-                              size="large"
-                            >
-                              <StarIcon />
-                            </IconButton>
+            {Items.map((item) => (
+              <Box sx={{ minWidth: 275 }}>
+                <Card variant="outlined">
+                  <React.Fragment>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {favs.some((fav) => item.id == fav) ? (
+                          <IconButton
+                            onClick={() => onDelFav(item.id, item.vendor_email)}
+                            aria-label="delete"
+                            size="large"
+                          >
+                            <StarIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            onClick={() => onFav(item.id, item.vendor_email)}
+                            aria-label="delete"
+                            size="large"
+                          >
+                            <StarBorderIcon />
+                          </IconButton>
+                        )}
+
+                        {item.name}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }} color="green">
+                        <em>{item.price}$</em>
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {item.shop}
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {item.type}
+                      </Typography>
+                      <Typography variant="body2">
+                        <h4>Addons:</h4>
+
+                        {item.addons.map((addon) =>
+                          a_sels.some(
+                            (i) => i.id == item.id && i.name == addon
+                          ) ? (
+                            <Chip
+                              onClick={() => RemoveAddonBuy(item, addon)}
+                              color="success"
+                              label={addon}
+                            />
                           ) : (
-                            <IconButton
-                              onClick={() => onFav(item.id, item.vendor_email)}
-                              aria-label="delete"
-                              size="large"
-                            >
-                              <StarBorderIcon />
-                            </IconButton>
-                          )}
+                            <Chip
+                              onClick={() => AddAddonBuy(item, addon)}
+                              color="primary"
+                              label={addon}
+                            />
+                          )
+                        )}
+                      </Typography>
+                      <br />
+                      <Rating
+                        name="read-only"
+                        value={
+                          item.num_ratings ? item.rating / item.num_ratings : 0
+                        }
+                        readOnly
+                      />
+                      <Typography variant="body2">
+                        <h4>Tags:</h4>
 
-                          {item.name}
-                        </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="green">
-                          <em>{item.price}$</em>
-                        </Typography>
-                        <Typography
-                          sx={{ fontSize: 14 }}
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          {item.shop}
-                        </Typography>
-                        <Typography
-                          sx={{ fontSize: 14 }}
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          {item.type}
-                        </Typography>
-                        <Typography variant="body2">
-                          <h4>Addons:</h4>
-
-                          {item.addons.map((addon) =>
-                            a_sels.some(
-                              (i) => i.id == item.id && i.name == addon
-                            ) ? (
-                              <Chip
-                                onClick={() => RemoveAddonBuy(item, addon)}
-                                color="success"
-                                label={addon}
-                              />
-                            ) : (
-                              <Chip
-                                onClick={() => AddAddonBuy(item, addon)}
-                                color="primary"
-                                label={addon}
-                              />
-                            )
-                          )}
-                        </Typography>
-                        <br />
-                        <Rating
-                          name="read-only"
-                          value={
-                            item.num_ratings
-                              ? item.rating / item.num_ratings
-                              : 0
-                          }
-                          readOnly
-                        />
-                        <Typography variant="body2">
-                          <h4>Tags:</h4>
-
-                          {item.tags.map((tag) => (
-                            <Chip label={tag} />
-                          ))}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button size="small" onClick={() => Buy(item)}>
-                          Buy
-                        </Button>
-                        <Button size="small">Delete</Button>
-                      </CardActions>
-                    </React.Fragment>
-                  </Card>
-                </Box>
-              )
-            )}
+                        {item.tags.map((tag) => (
+                          <Chip label={tag} />
+                        ))}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button size="small" onClick={() => Buy(item)}>
+                        Buy
+                      </Button>
+                      <Button size="small">Delete</Button>
+                    </CardActions>
+                  </React.Fragment>
+                </Card>
+              </Box>
+            ))}
           </Paper>
         </Grid>
       </Grid>
