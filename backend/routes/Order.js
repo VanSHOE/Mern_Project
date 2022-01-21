@@ -13,6 +13,52 @@ const Order = require("../models/Order");
 
 // POST request
 // Add a user to db
+
+router.get("/", function (req, res) {
+  console.log(req.query);
+  const b_email = req.query.b_email;
+  if (b_email) {
+    Order.find({ b_email }).then((orders) => {
+      if (!orders) {
+        return res.status(400).send();
+      } else {
+        // console.log(items);
+        if (orders.length == 0) {
+          return res.status(200).send([]);
+        }
+        let temp = [];
+        var done = 0;
+        for (var i = 0; i < orders.length; i++) {
+          Food.findOne({ id: orders[i].food_id }).then((items) => {
+            if (!items) {
+              return res.status(400).send();
+            } else {
+              console.log("Just item" + done);
+              console.log(items);
+              temp.push({ order: orders[done], items: items });
+              if (done == orders.length - 1) {
+                console.log("This is temp");
+                console.log(temp);
+                return res.status(200).send(temp);
+              }
+              done++;
+            }
+          });
+        }
+      }
+    });
+  } else {
+    Order.find().then((items) => {
+      if (!items) {
+        return res.status(400).send();
+      } else {
+        // console.log(items);
+        return res.json(items);
+      }
+    });
+  }
+});
+
 router.post("/add", (req, res) => {
   console.log(req.body);
   var today = new Date();
@@ -20,6 +66,7 @@ router.post("/add", (req, res) => {
     food_id: req.body.food_id,
     add_ons: req.body.add_ons,
     b_email: req.body.b_email,
+    vendor_email: req.body.vendor_email,
     qty: req.body.qty,
     date: Date.now(),
     time:

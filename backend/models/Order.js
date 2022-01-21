@@ -11,6 +11,10 @@ const OrderSchema = new Schema({
     type: String,
     required: true,
   },
+  vendor_email: {
+    type: String,
+    required: true,
+  },
   add_ons: {
     type: Array,
     required: true,

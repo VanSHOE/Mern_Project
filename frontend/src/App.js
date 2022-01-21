@@ -7,6 +7,7 @@ import Register from "./components/common/Register";
 import AddFood from "./components/common/AddFood";
 import Login from "./components/common/Login";
 import Logout from "./components/common/Logout";
+import OrderPage from "./components/common/Order_page";
 import Navbar from "./components/templates/Navbar";
 import Profile from "./components/users/Profile";
 import { Navigate } from "react-router-dom";
@@ -101,6 +102,10 @@ function App() {
                 onAuthT={setAuthedType}
               />
             }
+          />
+          <Route
+            path="orders"
+            element={<OrderPage user={Authed} userType={AuthedType} />}
           />
         </Route>
       </Routes>

@@ -122,6 +122,7 @@ const UsersList = (props) => {
       add_ons: add,
       b_email: props.user,
       qty: qty,
+      vendor_email: item.vendor_email,
       id: uuidv4(),
     };
     axios.post("http://localhost:4000/order/add", order).then((response) => {
