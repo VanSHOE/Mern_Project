@@ -345,7 +345,7 @@ const UsersList = (props) => {
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
-            {(SelectedFood.length ? SelectedFood : Items).map((item) => (
+            {(selectText ? SelectedFood : Items).map((item) => (
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
                   <React.Fragment>

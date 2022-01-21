@@ -107,7 +107,7 @@ router.post("/add", (req, res) => {
   Buyer.findOne({ email: req.body.b_email }).then((buyer) => {
     var wallet = buyer.wallet;
     Food.findOne({ id: req.body.food_id }).then((food) => {
-      var price = food.price;
+      var price = parseInt(req.body.qty) * parseInt(food.price);
       if (parseInt(price) > parseInt(wallet)) {
         return res.status(400).send("Insufficient funds");
       }
