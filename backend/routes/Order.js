@@ -34,7 +34,13 @@ router.get("/stats", function (req, res) {
         parseInt(result.num_comp) -
         parseInt(result.num_rej);
 
-      return res.status(200).json(result);
+      Food.find({ vendor_email: v_email })
+        .sort({ sold: -1 })
+        .then((foods) => {
+          result.sorted = foods;
+          if (result.sorted.length > 5) result.sorted.length = 5;
+          return res.status(200).json(result);
+        });
     });
   } else {
     return res.status(400).send();
@@ -83,26 +89,6 @@ router.get("/", function (req, res) {
         if (orders.length == 0) {
           return res.status(200).send([]);
         }
-        // let temp = [];
-        // var done = 0;
-        // for (var i = 0; i < orders.length; i++) {
-        //   Food.findOne({ id: orders[i].food_id }).then((items) => {
-        //     if (!items) {
-        //       return res.status(400).send();
-        //     }
-        //     // ELEMENTS COMING IN THE WRONG ORDER
-        //     console.log("Just item" + done);
-        //     console.log(items);
-        //     temp.push({ order: orders[done], items: items });
-        //     if (done == orders.length - 1) {
-        //       console.log("This is temp");
-        //       console.log(temp);
-        //       return res.status(200).send(temp);
-
-        //       done++;
-        //     }
-        //   });
-        // }
         Order.aggregate([
           {
             $lookup: {
