@@ -25,6 +25,7 @@ const AddFood = (props) => {
   const [Vendor, setVendor] = useState("");
   const [Vendor_email, setVEmail] = useState("");
   const [cur_addon, setCAddon] = useState("");
+  const [cur_addonP, setCAddonP] = useState("");
   const [Addons, setAddons] = useState([]);
   const [cur_tag, setCTag] = useState("");
   const [Tags, setTags] = useState([]);
@@ -55,17 +56,22 @@ const AddFood = (props) => {
   const onChangeCAddon = (event) => {
     setCAddon(event.target.value);
   };
-
+  const onChangeCAddonP = (event) => {
+    setCAddonP(event.target.value);
+  };
   const onAddAddons = () => {
     if (Addons.some((addon) => addon == cur_addon)) return;
-    setAddons([...Addons, cur_addon]);
+    if (!cur_addon || !cur_addonP) return;
+    setAddons([...Addons, { name: cur_addon, price: cur_addonP }]);
     setCAddon("");
+    setCAddonP("");
   };
   const onDelAddons = () => {
     setAddons([]);
   };
   const onAddTags = () => {
     if (Tags.some((tag) => tag == cur_tag)) return;
+
     setTags([...Tags, cur_tag]);
     setCTag("");
   };
@@ -166,7 +172,7 @@ const AddFood = (props) => {
       </Grid>
       <Grid item xs={12}>
         {Addons.map((addon) => (
-          <Chip label={addon} />
+          <Chip label={addon.name + ", " + addon.price + "$"} />
         ))}
       </Grid>
       <Grid item xs={12}>
@@ -182,6 +188,12 @@ const AddFood = (props) => {
             variant="outlined"
             value={cur_addon}
             onChange={onChangeCAddon}
+          />
+          <TextField
+            label="Price"
+            variant="outlined"
+            value={cur_addonP}
+            onChange={onChangeCAddonP}
           />
           <Button variant="contained" color="success" onClick={onAddAddons}>
             Add

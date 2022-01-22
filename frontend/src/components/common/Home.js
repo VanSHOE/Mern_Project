@@ -33,6 +33,7 @@ const Home = (props) => {
   const [Addons, setAddons] = useState([]);
   const [cur_tag, setCTag] = useState("");
   const [Tags, setTags] = useState([]);
+  const [cur_addonP, setCAddonP] = useState("");
 
   const onChangeName = (event) => {
     setName(event.target.value);
@@ -63,7 +64,8 @@ const Home = (props) => {
 
   const onAddAddons = () => {
     if (Addons.some((addon) => addon == cur_addon)) return;
-    setAddons([...Addons, cur_addon]);
+    if (!cur_addon || !cur_addonP) return;
+    setAddons([...Addons, { name: cur_addon, price: cur_addonP }]);
     setCAddon("");
   };
   const onDelAddons = () => {
@@ -99,9 +101,10 @@ const Home = (props) => {
     setCAddon("");
     setCTag("");
     setAddons(item.addons);
+    console.log(item.addons);
     setTags(item.tags);
   };
-
+  console.log(Addons);
   const navigate = useNavigate();
   const [Items, setItems] = useState([]);
   const [cur_edit, setCEdit] = useState("");
@@ -150,7 +153,9 @@ const Home = (props) => {
       console.log("Deleted");
     });
   };
-
+  const onChangeCAddonP = (event) => {
+    setCAddonP(event.target.value);
+  };
   const onEdit = (item) => {
     setInputs(item);
     setEDN(item.name);
@@ -249,7 +254,9 @@ const Home = (props) => {
                           <Grid item xs={12}>
                             {" "}
                             {Addons.map((addon) => (
-                              <Chip label={addon} />
+                              <Chip
+                                label={addon.name + ", " + addon.price + "$"}
+                              />
                             ))}
                           </Grid>
                         </Grid>
@@ -265,6 +272,12 @@ const Home = (props) => {
                               variant="outlined"
                               value={cur_addon}
                               onChange={onChangeCAddon}
+                            />
+                            <TextField
+                              label="Price"
+                              variant="outlined"
+                              value={cur_addonP}
+                              onChange={onChangeCAddonP}
                             />
                             <Button
                               variant="contained"
@@ -303,6 +316,7 @@ const Home = (props) => {
                               value={cur_tag}
                               onChange={onChangeCTag}
                             />
+
                             <Button
                               variant="contained"
                               color="success"
@@ -354,7 +368,9 @@ const Home = (props) => {
                         <h4>Addons:</h4>
                         <Stack direction="row" spacing={1}>
                           {item.addons.map((addon) => (
-                            <Chip label={addon} />
+                            <Chip
+                              label={addon.name + ", " + addon.price + "$"}
+                            />
                           ))}
                         </Stack>
                       </Typography>

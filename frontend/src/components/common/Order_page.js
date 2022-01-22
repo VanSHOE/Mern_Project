@@ -176,7 +176,7 @@ const Orders = (props) => {
                       <h4>Addons:</h4>
                       <Stack direction="row" spacing={1}>
                         {item.order.add_ons.map((addon) => (
-                          <Chip label={addon} />
+                          <Chip label={addon.name + ", " + addon.price + "$"} />
                         ))}
                       </Stack>
                     </Typography>

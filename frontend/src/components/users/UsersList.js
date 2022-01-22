@@ -130,7 +130,7 @@ const UsersList = (props) => {
     console.log(qty);
 
     let add = a_sels.filter((i) => i.id == item.id);
-    add = add.map((el) => el.name);
+    add = add.map((el) => el.addon);
     console.log(add);
     const order = {
       food_id: item.id,
@@ -158,14 +158,16 @@ const UsersList = (props) => {
 
   const AddAddonBuy = (item, addon) => {
     let item_id = item.id;
-    if (!a_sels.some((i) => i.id == item_id && i.name == addon))
-      setasels([...a_sels, { id: item_id, name: addon }]);
+    if (!a_sels.some((i) => i.id == item_id && i.addon.name == addon.name))
+      setasels([...a_sels, { id: item_id, addon: addon }]);
   };
 
   const RemoveAddonBuy = (item, addon) => {
     let item_id = item.id;
     console.log("?");
-    setasels(a_sels.filter((i) => i.id != item_id || i.name != addon));
+    setasels(
+      a_sels.filter((i) => i.id != item_id || i.addon.name != addon.name)
+    );
   };
 
   return (
@@ -294,18 +296,18 @@ const UsersList = (props) => {
 
                           {item.addons.map((addon) =>
                             a_sels.some(
-                              (i) => i.id == item.id && i.name == addon
+                              (i) => i.id == item.id && i.addon == addon
                             ) ? (
                               <Chip
                                 onClick={() => RemoveAddonBuy(item, addon)}
                                 color="success"
-                                label={addon}
+                                label={addon.name + ", " + addon.price + "$"}
                               />
                             ) : (
                               <Chip
                                 onClick={() => AddAddonBuy(item, addon)}
                                 color="primary"
-                                label={addon}
+                                label={addon.name + ", " + addon.price + "$"}
                               />
                             )
                           )}
@@ -393,18 +395,18 @@ const UsersList = (props) => {
 
                         {item.addons.map((addon) =>
                           a_sels.some(
-                            (i) => i.id == item.id && i.name == addon
+                            (i) => i.id == item.id && i.addon == addon
                           ) ? (
                             <Chip
                               onClick={() => RemoveAddonBuy(item, addon)}
                               color="success"
-                              label={addon}
+                              label={addon.name + ", " + addon.price + "$"}
                             />
                           ) : (
                             <Chip
                               onClick={() => AddAddonBuy(item, addon)}
                               color="primary"
-                              label={addon}
+                              label={addon.name + ", " + addon.price + "$"}
                             />
                           )
                         )}
