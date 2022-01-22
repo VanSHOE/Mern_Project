@@ -13,6 +13,33 @@ const Order = require("../models/Order");
 
 // POST request
 // Add a user to db
+router.get("/stats", function (req, res) {
+  console.log(req.query);
+  const v_email = req.query.v_email;
+  let result = {};
+  if (v_email) {
+    Order.find({ vendor_email: v_email }).then((orders) => {
+      if (!orders) {
+        result.num_orders = 0;
+      } else {
+        result.num_orders = orders.length;
+      }
+      let completed_orders = orders.filter((order) => order.status == 4);
+      result.num_comp = completed_orders.length;
+
+      let rejected_orders = orders.filter((order) => order.status == -1);
+      result.num_rej = rejected_orders.length;
+      result.num_pen =
+        parseInt(result.num_orders) -
+        parseInt(result.num_comp) -
+        parseInt(result.num_rej);
+
+      return res.status(200).json(result);
+    });
+  } else {
+    return res.status(400).send();
+  }
+});
 
 router.get("/", function (req, res) {
   console.log(req.query);
@@ -27,25 +54,7 @@ router.get("/", function (req, res) {
         if (orders.length == 0) {
           return res.status(200).send([]);
         }
-        // let temp = [];
-        //var done = 0;
-        // for (var i = 0; i < orders.length; i++) {
-        //   // Food.findOne({ id: orders[i].food_id }).then((items) => {
-        //   //   if (!items) {
-        //   //     return res.status(400).send();
-        //   //   } else {
-        //   //     console.log("Just item" + done);
-        //   //     console.log(items);
-        //   //     temp.push({ order: orders[done], items: items });
-        //   //     if (done == orders.length - 1) {
-        //   //       console.log("This is temp");
-        //   //       console.log(temp);
-        //   //       return res.status(200).send(temp);
-        //   //     }
-        //   //     done++;
-        //   //   }
-        //   // });
-        // }
+
         Order.aggregate([
           {
             $lookup: {

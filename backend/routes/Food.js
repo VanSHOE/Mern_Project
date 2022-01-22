@@ -78,6 +78,14 @@ router.post("/next", (req, res) => {
     }
     if (parseInt(order.status) < 4) {
       order.status = parseInt(order.status) + 1;
+      if (parseInt(order.status) == 4) {
+        Food.findOne({ id: order.food_id }).then((food) => {
+          food.sold = parseInt(food.sold) + 1;
+          food.save().then((user) => {
+            console.log("Food sold");
+          });
+        });
+      }
       order
         .save()
         .then((user) => {
