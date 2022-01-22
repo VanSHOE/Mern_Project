@@ -99,7 +99,23 @@ router.post("/reject", (req, res) => {
     console.log(order);
 
     if (!order) return res.status(400).send("no");
+    if (order.status == -1) return res.status(400).send("no");
     if (parseInt(order.status) < 4) {
+      Buyer.findOne({ email: order.b_email }).then((buyer) => {
+        var wallet = buyer.wallet;
+        Food.findOne({ id: order.food_id }).then((food) => {
+          var price = parseInt(food.price);
+          for (var i = 0; i < order.add_ons.length; i++) {
+            price = parseInt(price) + parseInt(order.add_ons[i].price);
+          }
+          price = parseInt(order.qty) * parseInt(price);
+          buyer.wallet = parseInt(buyer.wallet) + parseInt(price);
+          buyer.save().then((user) => {
+            console.log("Refunded");
+          });
+        });
+      });
+
       order.status = -1;
       order
         .save()
