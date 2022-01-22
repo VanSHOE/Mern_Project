@@ -32,7 +32,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { v4 as uuidv4 } from "uuid";
 import Fuse from "fuse.js";
 
-const UsersList = (props) => {
+const Stat = (props) => {
   const [users, setUsers] = useState([]);
   const [Items, setItems] = useState([]);
 
@@ -40,124 +40,140 @@ const UsersList = (props) => {
   const [PO, setPO] = useState("");
   const [CO, setCO] = useState("");
 
-  // console.log(a_sels);
+  //console.log(props.user);
   useEffect(() => {
     axios
       .get("http://localhost:4000/order/stats", {
-        params: { v_email: props.user },
+        params: { v_email: "q" },
       })
       .then((response) => {
+        console.log("test");
         setItems(response.data);
+        setOP(response.data.num_orders);
+        setPO(response.data.num_pen);
+        setCO(response.data.num_comp);
       })
       .catch((error) => {
+        console.log(":(");
         console.log(error);
       });
   }, []);
+  console.log(Items);
+  if (Items) {
+    return (
+      <div>
+        <Grid container>
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Orders Placed"
+                variant="filled"
+                value={OP}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Pending Orders"
+                variant="filled"
+                value={PO}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Completed Orders"
+                variant="filled"
+                value={CO}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+        </Grid>
+        <Grid container>
+          <Grid item xs={12} md={9} lg={9}>
+            <Paper>
+              {" "}
+              {Items.sorted.map((item) => (
+                <Box sx={{ minWidth: 275 }}>
+                  <Card variant="outlined">
+                    <React.Fragment>
+                      <CardContent>
+                        <Typography variant="h5" component="div">
+                          {item.name}
+                        </Typography>
+                        <Typography sx={{ mb: 1.5 }} color="green">
+                          <em>{item.price}$</em>
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.shop}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          {item.type}
+                        </Typography>
+                        <Typography variant="body2">
+                          <h4>Addons:</h4>
 
-  return (
-    <div>
-      <Grid container>
-        <Grid item xs={4}>
-          <List component="nav" aria-label="mailbox folders">
-            <TextField
-              id="filled-basic"
-              label="Orders Placed"
-              variant="filled"
-              value={OP}
-              disabled
-              fullWidth
-            />
-          </List>
-        </Grid>
-        <Grid item xs={4}>
-          <List component="nav" aria-label="mailbox folders">
-            <TextField
-              id="filled-basic"
-              label="Pending Orders"
-              variant="filled"
-              value={PO}
-              disabled
-              fullWidth
-            />
-          </List>
-        </Grid>
-        <Grid item xs={4}>
-          <List component="nav" aria-label="mailbox folders">
-            <TextField
-              id="filled-basic"
-              label="Completed Orders"
-              variant="filled"
-              value={CO}
-              disabled
-              fullWidth
-            />
-          </List>
-        </Grid>
-      </Grid>
-      <Grid container>
-        <Grid item xs={12} md={9} lg={9}>
-          <Paper>
-            {" "}
-            {Items.map((item) => (
-              <Box sx={{ minWidth: 275 }}>
-                <Card variant="outlined">
-                  <React.Fragment>
-                    <CardContent>
-                      <Typography variant="h5" component="div">
-                        {item.name}
-                      </Typography>
-                      <Typography sx={{ mb: 1.5 }} color="green">
-                        <em>{item.price}$</em>
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {item.shop}
-                      </Typography>
-                      <Typography
-                        sx={{ fontSize: 14 }}
-                        color="text.secondary"
-                        gutterBottom
-                      >
-                        {item.type}
-                      </Typography>
-                      <Typography variant="body2">
-                        <h4>Addons:</h4>
+                          {item.addons.map((addon) => (
+                            <Chip
+                              color="primary"
+                              label={addon.name + ", " + addon.price + "$"}
+                            />
+                          ))}
+                        </Typography>
+                        <br />
+                        <Rating
+                          name="read-only"
+                          value={
+                            item.num_ratings
+                              ? item.rating / item.num_ratings
+                              : 0
+                          }
+                          readOnly
+                        />
+                        <Typography variant="body2">
+                          <h4>Tags:</h4>
 
-                        {item.addons.map((addon) => (
-                          <Chip
-                            color="primary"
-                            label={addon.name + ", " + addon.price + "$"}
-                          />
-                        ))}
-                      </Typography>
-                      <br />
-                      <Rating
-                        name="read-only"
-                        value={
-                          item.num_ratings ? item.rating / item.num_ratings : 0
-                        }
-                        readOnly
-                      />
-                      <Typography variant="body2">
-                        <h4>Tags:</h4>
-
-                        {item.tags.map((tag) => (
-                          <Chip label={tag} />
-                        ))}
-                      </Typography>
-                    </CardContent>
-                  </React.Fragment>
-                </Card>
-              </Box>
-            ))}
-          </Paper>
+                          {item.tags.map((tag) => (
+                            <Chip label={tag} />
+                          ))}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: 14 }}
+                          color="text.primary"
+                          gutterBottom
+                        >
+                          Times sold:{item.sold}
+                        </Typography>
+                      </CardContent>
+                    </React.Fragment>
+                  </Card>
+                </Box>
+              ))}
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
-  );
+      </div>
+    );
+  } else return "";
 };
 
-export default UsersList;
+export default Stat;
