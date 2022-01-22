@@ -164,40 +164,38 @@ const Orders = (props) => {
                       color="text.secondary"
                       gutterBottom
                     >
-                      {item.order.time}, {item.order.date}
+                      {item.time}, {item.date}
                     </Typography>
                     <Typography variant="h5" component="div">
-                      {item.items.name}
+                      {item.items[0].name}
                     </Typography>
                     <Typography sx={{ mb: 1.5 }} color="green">
-                      <em>{item.items.price}$</em>
+                      <em>{item.items[0].price}$</em>
                     </Typography>
                     <Typography variant="body2">
                       <h4>Addons:</h4>
                       <Stack direction="row" spacing={1}>
-                        {item.order.add_ons.map((addon) => (
+                        {item.add_ons.map((addon) => (
                           <Chip label={addon.name + ", " + addon.price + "$"} />
                         ))}
                       </Stack>
                     </Typography>
                     <br />
                     <Typography variant="h9">
-                      Vendor Name: {item.items.vendor}
+                      Vendor Name: {item.items[0].vendor}
                     </Typography>
                     <br /> <br />
-                    <Typography variant="h9">
-                      Quantity: {item.order.qty}
-                    </Typography>
+                    <Typography variant="h9">Quantity: {item.qty}</Typography>
                     <br /> <br />
                     <Typography variant="h9">
-                      Status: {toStatus(item.order.status)}
+                      Status: {toStatus(item.status)}
                     </Typography>
                     <br /> <br />
                     <Rating
                       name="read-only"
                       value={
-                        item.items.num_ratings
-                          ? item.items.rating / item.items.num_ratings
+                        item.items[0].num_ratings
+                          ? item.items[0].rating / item.items[0].num_ratings
                           : 0
                       }
                       readOnly

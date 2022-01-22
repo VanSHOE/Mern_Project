@@ -49,7 +49,9 @@ const UsersList = (props) => {
 
   let SelectedFood = fuse.search(selectText);
   SelectedFood = SelectedFood.map((item) => item.item);
+  if (!selectText) SelectedFood = Items;
   console.log(SelectedFood);
+  // console.log(a_sels);
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
@@ -347,7 +349,7 @@ const UsersList = (props) => {
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
-            {(selectText ? SelectedFood : Items).map((item) => (
+            {SelectedFood.map((item) => (
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
                   <React.Fragment>
