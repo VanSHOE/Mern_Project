@@ -212,7 +212,7 @@ const Orders = (props) => {
                     {item.status == 4 ? (
                       <Rating
                         name="Rate"
-                        value={2}
+                        value={0}
                         precision={0.1}
                         size="large"
                         onChange={(event) => onChangeRating(item, event)}

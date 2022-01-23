@@ -231,6 +231,7 @@ const Manage = (props) => {
                     <br /> <br />
                     <Rating
                       name="read-only"
+                      precision={0.1}
                       value={
                         item.items[0].num_ratings
                           ? item.items[0].rating / item.items[0].num_ratings

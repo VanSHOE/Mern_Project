@@ -142,6 +142,7 @@ const Stat = (props) => {
                         <br />
                         <Rating
                           name="read-only"
+                          precision={0.1}
                           value={
                             item.num_ratings
                               ? item.rating / item.num_ratings
