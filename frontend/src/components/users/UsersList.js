@@ -35,7 +35,36 @@ import Fuse from "fuse.js";
 import Checkbox from "@mui/material/Checkbox";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
+];
 const UsersList = (props) => {
   const Input = styled(MuiInput)`
     width: 42px;
@@ -54,10 +83,15 @@ const UsersList = (props) => {
     keys: ["name"],
     includeScore: true,
   });
+  const [SelectedFood, setself] = useState([]);
+  useEffect(() => {
+    console.log("huh");
+    if (!selectText) setself(Items);
+    else {
+      setself(fuse.search(selectText).map((item) => item.item));
+    }
+  }, [selectText]);
 
-  let SelectedFood = fuse.search(selectText);
-  SelectedFood = SelectedFood.map((item) => item.item);
-  if (!selectText) SelectedFood = Items;
   // console.log(SelectedFood);
   // console.log(a_sels);
   useEffect(() => {
@@ -221,7 +255,32 @@ const UsersList = (props) => {
   const OnSliderInputR = (event) => {
     setValue([value[0], FromTimeString(event.target.value)]);
   };
+  const [personName, setPersonName] = React.useState([]);
+  console.log(SelectedFood);
 
+  const PriceAsc = () => {
+    const myData = []
+      .concat(SelectedFood)
+      .sort((a, b) => (a.itemM > b.itemM ? 1 : -1));
+    setself(myData);
+  };
+
+  const PriceDesc = () => {
+    const myData = []
+      .concat(SelectedFood)
+      .sort((a, b) => (a.itemM < b.itemM ? 1 : -1));
+    setself(myData);
+  };
+
+  const handleChangeShop = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
   return (
     <div>
       <Grid container>
@@ -312,6 +371,149 @@ const UsersList = (props) => {
                     fullWidth={true}
                     value={toTimeString(value[1])}
                     type="time"
+                    onChange={OnSliderInputR}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <SearchIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-multiple-checkbox-label">
+                      Tag
+                    </InputLabel>
+                    <Select
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      multiple
+                      value={personName}
+                      onChange={handleChangeShop}
+                      input={<OutlinedInput label="Tag" />}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {names.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={personName.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </ListItem>
+            <ListItem divider>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-multiple-checkbox-label">
+                      Shops
+                    </InputLabel>
+                    <Select
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      multiple
+                      value={personName}
+                      onChange={handleChangeShop}
+                      input={<OutlinedInput label="Tag" />}
+                      renderValue={(selected) => selected.join(", ")}
+                      MenuProps={MenuProps}
+                    >
+                      {names.map((name) => (
+                        <MenuItem key={name} value={name}>
+                          <Checkbox checked={personName.indexOf(name) > -1} />
+                          <ListItemText primary={name} />
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </ListItem>
+            <ListItem>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <h2>Price Sort</h2>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button onClick={PriceAsc} fullWidth variant="contained">
+                    Ascending
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button onClick={PriceDesc} fullWidth variant="contained">
+                    Descending
+                  </Button>
+                </Grid>
+              </Grid>
+            </ListItem>
+            <ListItem divider>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <h2>Rating Sort</h2>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button fullWidth variant="contained">
+                    Ascending
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button fullWidth variant="contained">
+                    Descending
+                  </Button>
+                </Grid>
+              </Grid>
+            </ListItem>
+            <Divider />
+            <ListItem divider>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <Slider
+                    getAriaLabel={() => "Temperature range"}
+                    value={value}
+                    onChange={handleChange}
+                    min={0}
+                    max={1439}
+                    valueLabelFormat={valueLabelFormat}
+                    valueLabelDisplay="auto"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-basic"
+                    label="Minimum Price"
+                    fullWidth={true}
+                    value={value[0]}
+                    onChange={OnSliderInputL}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <SearchIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-basic"
+                    label="Maximum Price"
+                    fullWidth={true}
+                    value={value[1]}
                     onChange={OnSliderInputR}
                     InputProps={{
                       endAdornment: (
