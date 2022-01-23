@@ -39,6 +39,10 @@ const OrderSchema = new Schema({
     type: Number,
     default: 0,
   },
+  rating: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = User = mongoose.model("Order", OrderSchema);

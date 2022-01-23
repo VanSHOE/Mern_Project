@@ -33,7 +33,7 @@ const Orders = (props) => {
   const [Addons, setAddons] = useState([]);
   const [cur_tag, setCTag] = useState("");
   const [Tags, setTags] = useState([]);
-
+  const [cur_rating, setRat] = useState(0);
   const onChangeName = (event) => {
     setName(event.target.value);
   };
@@ -105,6 +105,7 @@ const Orders = (props) => {
         text = "READY FOR PICKUP";
         break;
       case 4:
+      case 5:
         text = "COMPLETED";
         break;
       case -1:
@@ -138,18 +139,35 @@ const Orders = (props) => {
       •
     </Box>
   );
-
+  const onChangeRating = (item, event) => {
+    const sendRateObj = {
+      id: item.id,
+      rating: event.target.value,
+      food_id: item.food_id,
+    };
+    axios
+      .post("http://localhost:4000/order/rate", sendRateObj)
+      .then((response_outer) => {
+        axios
+          .get("http://localhost:4000/order", {
+            params: { b_email: email_cur },
+          })
+          .then((response) => {
+            setItems(response.data);
+          });
+      });
+  };
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
     padding: theme.spacing(1),
     textAlign: "center",
     color: theme.palette.text.secondary,
   }));
+  console.log(cur_rating);
 
-  console.log(EdN);
-  console.log(EdV);
   let cur_user = props.user;
   let cur_user_type = props.userType;
+
   return props.user ? (
     props.userType == "Buyer" ? (
       <Stack spacing={2}>
@@ -191,15 +209,28 @@ const Orders = (props) => {
                       Status: {toStatus(item.status)}
                     </Typography>
                     <br /> <br />
-                    <Rating
-                      name="read-only"
-                      value={
-                        item.items[0].num_ratings
-                          ? item.items[0].rating / item.items[0].num_ratings
-                          : 0
-                      }
-                      readOnly
-                    />
+                    {item.status == 4 ? (
+                      <Rating
+                        name="Rate"
+                        value={2}
+                        precision={0.1}
+                        size="large"
+                        onChange={(event) => onChangeRating(item, event)}
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {item.status != 4 ? (
+                      <Rating
+                        name="read-only"
+                        value={item.rating}
+                        precision={0.1}
+                        size="small"
+                        readOnly
+                      />
+                    ) : (
+                      ""
+                    )}
                   </CardContent>
                 </React.Fragment>
               </Card>

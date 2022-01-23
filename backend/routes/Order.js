@@ -184,4 +184,36 @@ router.post("/del", (req, res) => {
     });
 });
 
+router.post("/rate", (req, res) => {
+  console.log(req.body);
+  Order.findOne({ id: req.body.id }).then((order) => {
+    console.log(order);
+    if (order.status != 4)
+      return res.status(401).send("Not in position to be rated");
+
+    order.status = 5;
+    order.rating = req.body.rating;
+    order
+      .save()
+      .then((user) => {
+        Food.findOne({ id: req.body.food_id }).then((food) => {
+          food.num_ratings = parseInt(food.num_ratings) + 1;
+          food.rating = parseFloat(food.rating) + parseFloat(req.body.rating);
+          food
+            .save()
+            .then((user) => {
+              console.log(user);
+              res.status(200).send("Finished");
+            })
+            .catch((err) => {
+              res.status(400).send(err);
+            });
+        });
+      })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
+  });
+});
+
 module.exports = router;

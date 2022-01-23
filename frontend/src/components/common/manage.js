@@ -106,6 +106,7 @@ const Manage = (props) => {
         text = "READY FOR PICKUP";
         break;
       case 4:
+      case 5:
         text = "COMPLETED";
         break;
       case -1:
