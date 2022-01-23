@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
+import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
@@ -31,8 +32,15 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { v4 as uuidv4 } from "uuid";
 import Fuse from "fuse.js";
+import Checkbox from "@mui/material/Checkbox";
+import Slider from "@mui/material/Slider";
+import MuiInput from "@mui/material/Input";
 
 const UsersList = (props) => {
+  const Input = styled(MuiInput)`
+    width: 42px;
+  `;
+
   const [users, setUsers] = useState([]);
   const [sortedUsers, setSortedUsers] = useState([]);
   const [sortName, setSortName] = useState(true);
@@ -50,7 +58,7 @@ const UsersList = (props) => {
   let SelectedFood = fuse.search(selectText);
   SelectedFood = SelectedFood.map((item) => item.item);
   if (!selectText) SelectedFood = Items;
-  console.log(SelectedFood);
+  // console.log(SelectedFood);
   // console.log(a_sels);
   useEffect(() => {
     axios
@@ -171,6 +179,48 @@ const UsersList = (props) => {
       a_sels.filter((i) => i.id != item_id || i.addon.name != addon.name)
     );
   };
+  const [value, setValue] = React.useState([20, 37]);
+
+  function valueLabelFormat(value) {
+    var hours = Math.floor(parseInt(value) / 60);
+    var minutes = Math.floor(parseInt(value) % 60);
+    if (parseInt(minutes) < 10) minutes = "0" + minutes;
+    if (hours == 12) {
+      return 12 + ":" + minutes + "PM";
+    }
+    let modHours = hours % 12;
+    if (parseInt(modHours) < 10) modHours = "0" + modHours;
+    return modHours + ":" + minutes + (hours > 11 ? " PM" : " AM");
+  }
+
+  function toTimeString(value) {
+    var hours = Math.floor(parseInt(value) / 60);
+    var minutes = Math.floor(parseInt(value) % 60);
+    if (parseInt(minutes) < 10) minutes = "0" + minutes;
+    if (parseInt(hours) < 10) hours = "0" + hours;
+    // console.log(hours + ":" + minutes);
+    return hours + ":" + minutes;
+  }
+
+  function FromTimeString(value) {
+    //  console.log(value);
+    let vals = value.split(":");
+    //  console.log(vals);
+    //  console.log(parseInt(vals[0]) * 60 + parseInt(vals[1]));
+    return parseInt(vals[0]) * 60 + parseInt(vals[1]);
+  }
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const OnSliderInputL = (event) => {
+    setValue([FromTimeString(event.target.value), value[1]]);
+  };
+
+  const OnSliderInputR = (event) => {
+    setValue([value[0], FromTimeString(event.target.value)]);
+  };
 
   return (
     <div>
@@ -209,40 +259,72 @@ const UsersList = (props) => {
           <List component="nav" aria-label="mailbox folders">
             <ListItem>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  Salary
+                <Grid item xs={3}>
+                  Type
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="standard-basic"
-                    label="Enter Min"
-                    fullWidth={true}
-                  />
+                <Grid item xs={3}>
+                  Veg
+                  <Checkbox label="Top" labelPlacement="top" defaultChecked />
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="standard-basic"
-                    label="Enter Max"
-                    fullWidth={true}
-                  />
+                <Grid item xs={5}>
+                  Non-Veg
+                  <Checkbox label="Top" labelPlacement="top" defaultChecked />
                 </Grid>
               </Grid>
             </ListItem>
             <Divider />
             <ListItem divider>
-              <Autocomplete
-                id="combo-box-demo"
-                options={users}
-                getOptionLabel={(option) => option.name}
-                fullWidth
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Select Names"
-                    variant="outlined"
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={12}>
+                  <Slider
+                    getAriaLabel={() => "Temperature range"}
+                    value={value}
+                    onChange={handleChange}
+                    min={0}
+                    max={1439}
+                    valueLabelFormat={valueLabelFormat}
+                    valueLabelDisplay="auto"
                   />
-                )}
-              />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-basic"
+                    label="Opening time"
+                    fullWidth={true}
+                    value={toTimeString(value[0])}
+                    type="time"
+                    onChange={OnSliderInputL}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <SearchIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standard-basic"
+                    label="Closing time"
+                    fullWidth={true}
+                    value={toTimeString(value[1])}
+                    type="time"
+                    onChange={OnSliderInputR}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment>
+                          <IconButton>
+                            <SearchIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </ListItem>
           </List>
           <Paper>
