@@ -10,6 +10,7 @@ var testAPIRouter = require("./routes/testAPI");
 var UserRouter = require("./routes/Users");
 var FoodRouter = require("./routes/Food");
 var OrderRouter = require("./routes/Order");
+var GeneralRouter = require("./routes/general");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -30,6 +31,7 @@ app.use("/testAPI", testAPIRouter);
 app.use("/user", UserRouter);
 app.use("/item", FoodRouter);
 app.use("/order", OrderRouter);
+app.use("/general", GeneralRouter);
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });

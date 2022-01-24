@@ -21,14 +21,24 @@ router.get("/", function (req, res) {
       }
     });
   } else {
-    Food.find().then((items) => {
-      if (!items) {
-        return res.status(400).send();
-      } else {
-        // console.log(items);
-        return res.json(items);
-      }
-    });
+    //var curTime = Date.now().getHours() * 60 + Date.now().getMinutes();
+    Food.aggregate([
+      {
+        $lookup: {
+          from: "vendors",
+          localField: "vendor_email",
+          foreignField: "email",
+          as: "ven_foo",
+        },
+      },
+    ])
+      .then((products) => {
+        console.log(products);
+        return res.status(200).json(products);
+      })
+      .catch((err) => {
+        return res.status(400).send("Failed");
+      });
   }
 });
 

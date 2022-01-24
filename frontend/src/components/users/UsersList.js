@@ -67,7 +67,7 @@ const UsersList = (props) => {
   const [a_sels, setasels] = useState([]);
 
   const [selectText, setSelect] = useState("");
-
+  const [curTime, setCurTime] = useState("");
   const [veg, setVeg] = useState(true);
   const [nveg, setNveg] = useState(true);
   const [value, setValue] = React.useState([0, 0]);
@@ -82,6 +82,22 @@ const UsersList = (props) => {
     includeScore: true,
   });
   const [SelectedFood, setself] = useState([]);
+  const [ClosedCan, setClosed] = useState([]);
+  function FromTimeString(value) {
+    let vals = value.split(":");
+
+    return parseInt(vals[0]) * 60 + parseInt(vals[1]);
+  }
+  function isBetween(valueI, first, lastI) {
+    let last = lastI;
+    let value = valueI;
+    if (last < first) {
+      last += 1440;
+      if (value < first) value += 1440;
+    }
+    return value >= first && value <= last;
+  }
+
   useEffect(() => {
     let temp;
     if (!selectText) temp = Items;
@@ -103,9 +119,25 @@ const UsersList = (props) => {
     temp = temp.filter((i) =>
       ShopNames.some((shop2check) => i.shop == shop2check)
     );
+    let closed = temp.filter(
+      (i) =>
+        !isBetween(
+          curTime,
+          parseInt(FromTimeString(i.ven_foo[0].can_open)),
+          parseInt(FromTimeString(i.ven_foo[0].can_close))
+        )
+    );
+    temp = temp.filter((i) =>
+      isBetween(
+        curTime,
+        parseInt(FromTimeString(i.ven_foo[0].can_open)),
+        parseInt(FromTimeString(i.ven_foo[0].can_close))
+      )
+    );
+    setClosed(closed);
     setself(temp);
-  }, [selectText, Items, veg, nveg, value, TagNames, ShopNames]);
-
+  }, [selectText, Items, veg, nveg, value, TagNames, ShopNames, curTime]);
+  console.log(curTime);
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
@@ -117,6 +149,11 @@ const UsersList = (props) => {
             params: { email: props.user },
           })
           .then((response2) => {
+            axios
+              .get("http://localhost:4000/general/getTime")
+              .then((respTime) => {
+                setCurTime(respTime.data);
+              });
             setItems(response.data);
             let t = response.data.sort((a, b) =>
               a.price < b.price ? 1 : -1
@@ -252,14 +289,6 @@ const UsersList = (props) => {
     return hours + ":" + minutes;
   }
 
-  function FromTimeString(value) {
-    //  console.log(value);
-    let vals = value.split(":");
-    //  console.log(vals);
-    //  console.log(parseInt(vals[0]) * 60 + parseInt(vals[1]));
-    return parseInt(vals[0]) * 60 + parseInt(vals[1]);
-  }
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -272,7 +301,7 @@ const UsersList = (props) => {
     setValue([value[0], event.target.value]);
   };
 
-  //console.log(SelectedFood);
+  console.log(SelectedFood);
 
   const PriceAsc = () => {
     const myData = []
@@ -330,7 +359,6 @@ const UsersList = (props) => {
       typeof value === "string" ? value.split(",") : value
     );
   };
-
   useEffect(() => {}, [veg, nveg, Items]);
 
   return (
@@ -588,23 +616,37 @@ const UsersList = (props) => {
                         <Typography variant="body2">
                           <h4>Addons:</h4>
 
-                          {item.addons.map((addon) =>
-                            a_sels.some(
-                              (i) => i.id == item.id && i.addon == addon
-                            ) ? (
-                              <Chip
-                                onClick={() => RemoveAddonBuy(item, addon)}
-                                color="success"
-                                label={addon.name + ", " + addon.price + "$"}
-                              />
-                            ) : (
-                              <Chip
-                                onClick={() => AddAddonBuy(item, addon)}
-                                color="primary"
-                                label={addon.name + ", " + addon.price + "$"}
-                              />
-                            )
-                          )}
+                          {isBetween(
+                            curTime,
+                            parseInt(FromTimeString(item.ven_foo[0].can_open)),
+                            parseInt(FromTimeString(item.ven_foo[0].can_close))
+                          )
+                            ? item.addons.map((addon) =>
+                                a_sels.some(
+                                  (i) => i.id == item.id && i.addon == addon
+                                ) ? (
+                                  <Chip
+                                    onClick={() => RemoveAddonBuy(item, addon)}
+                                    color="success"
+                                    label={
+                                      addon.name + ", " + addon.price + "$"
+                                    }
+                                  />
+                                ) : (
+                                  <Chip
+                                    onClick={() => AddAddonBuy(item, addon)}
+                                    color="primary"
+                                    label={
+                                      addon.name + ", " + addon.price + "$"
+                                    }
+                                  />
+                                )
+                              )
+                            : item.addons.map((addon) => (
+                                <Chip
+                                  label={addon.name + ", " + addon.price + "$"}
+                                />
+                              ))}
                         </Typography>
                         <br />
                         <Rating
@@ -625,10 +667,17 @@ const UsersList = (props) => {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        <Button size="small" onClick={() => Buy(item)}>
-                          Buy
-                        </Button>
-                        <Button size="small">Delete</Button>
+                        {isBetween(
+                          curTime,
+                          parseInt(FromTimeString(item.ven_foo[0].can_open)),
+                          parseInt(FromTimeString(item.ven_foo[0].can_close))
+                        ) ? (
+                          <Button size="small" onClick={() => Buy(item)}>
+                            Buy
+                          </Button>
+                        ) : (
+                          ""
+                        )}
                       </CardActions>
                     </React.Fragment>
                   </Card>
@@ -642,6 +691,7 @@ const UsersList = (props) => {
         <Grid item xs={12} md={9} lg={9}>
           <Paper>
             {" "}
+            <h2>Open</h2>
             {SelectedFood.map((item) => (
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
@@ -727,8 +777,93 @@ const UsersList = (props) => {
                       <Button size="small" onClick={() => Buy(item)}>
                         Buy
                       </Button>
-                      <Button size="small">Delete</Button>
                     </CardActions>
+                  </React.Fragment>
+                </Card>
+              </Box>
+            ))}
+            <h2>Closed</h2>
+            {ClosedCan.map((item) => (
+              <Box sx={{ minWidth: 275 }}>
+                <Card variant="outlined">
+                  <React.Fragment>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {favs.some((fav) => item.id == fav) ? (
+                          <IconButton
+                            onClick={() => onDelFav(item.id, item.vendor_email)}
+                            aria-label="delete"
+                            size="large"
+                          >
+                            <StarIcon />
+                          </IconButton>
+                        ) : (
+                          <IconButton
+                            onClick={() => onFav(item.id, item.vendor_email)}
+                            aria-label="delete"
+                            size="large"
+                          >
+                            <StarBorderIcon />
+                          </IconButton>
+                        )}
+
+                        {item.name}
+                      </Typography>
+                      <Typography sx={{ mb: 1.5 }} color="green">
+                        <em>{item.price}$</em>
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {item.shop}
+                      </Typography>
+                      <Typography
+                        sx={{ fontSize: 14 }}
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        {item.type}
+                      </Typography>
+                      <Typography variant="body2">
+                        <h4>Addons:</h4>
+
+                        {item.addons.map((addon) =>
+                          a_sels.some(
+                            (i) => i.id == item.id && i.addon == addon
+                          ) ? (
+                            <Chip
+                              onClick={() => RemoveAddonBuy(item, addon)}
+                              color="success"
+                              label={addon.name + ", " + addon.price + "$"}
+                            />
+                          ) : (
+                            <Chip
+                              onClick={() => AddAddonBuy(item, addon)}
+                              color="primary"
+                              label={addon.name + ", " + addon.price + "$"}
+                            />
+                          )
+                        )}
+                      </Typography>
+                      <br />
+                      <Rating
+                        name="read-only"
+                        precision={0.1}
+                        value={
+                          item.num_ratings ? item.rating / item.num_ratings : 0
+                        }
+                        readOnly
+                      />
+                      <Typography variant="body2">
+                        <h4>Tags:</h4>
+
+                        {item.tags.map((tag) => (
+                          <Chip label={tag} />
+                        ))}
+                      </Typography>
+                    </CardContent>
                   </React.Fragment>
                 </Card>
               </Box>
