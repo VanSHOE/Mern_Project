@@ -93,8 +93,18 @@ const UsersList = (props) => {
     );
 
     temp = temp.filter((i) => i.price >= value[0] && i.price <= value[1]);
+
+    temp = temp.filter((i) =>
+      i.tags.some((temp_item) =>
+        TagNames.some((tag2check) => temp_item == tag2check)
+      )
+    );
+
+    temp = temp.filter((i) =>
+      ShopNames.some((shop2check) => i.shop == shop2check)
+    );
     setself(temp);
-  }, [selectText, Items, veg, nveg, value]);
+  }, [selectText, Items, veg, nveg, value, TagNames, ShopNames]);
 
   useEffect(() => {
     axios
@@ -127,6 +137,9 @@ const UsersList = (props) => {
             let dist_allShops = new Set(allShops);
             allShops = [...dist_allShops];
             setAllS(allShops);
+
+            setShopName(allShops);
+            setTagName(allTags);
             //console.log(allTags);
           })
           .catch((error) => {
@@ -143,24 +156,7 @@ const UsersList = (props) => {
   //  console.log(Items);
   //  console.log(favs);
   // console.log(a_sels);
-  const sortChange = () => {
-    let usersTemp = users;
-    const flag = sortName;
-    usersTemp.sort((a, b) => {
-      if (a.date != undefined && b.date != undefined) {
-        return (1 - flag * 2) * (new Date(a.date) - new Date(b.date));
-      } else {
-        return 1;
-      }
-    });
-    setUsers(usersTemp);
-    setSortName(!sortName);
-  };
 
-  const customFunction = (event) => {
-    console.log(event.target.value);
-    setSearchText(event.target.value);
-  };
   const onFav = (id, ve) => {
     const fav_food = {
       email: props.user,
@@ -276,7 +272,7 @@ const UsersList = (props) => {
     setValue([value[0], event.target.value]);
   };
 
-  console.log(SelectedFood);
+  //console.log(SelectedFood);
 
   const PriceAsc = () => {
     const myData = []
@@ -398,60 +394,7 @@ const UsersList = (props) => {
               </Grid>
             </ListItem>
             <Divider />
-            {/* <ListItem divider>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item xs={12}>
-                  <Slider
-                    getAriaLabel={() => "Temperature range"}
-                    value={value}
-                    onChange={handleChange}
-                    min={0}
-                    max={1439}
-                    valueLabelFormat={valueLabelFormat}
-                    valueLabelDisplay="auto"
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="standard-basic"
-                    label="Opening time"
-                    fullWidth={true}
-                    value={toTimeString(value[0])}
-                    type="time"
-                    onChange={OnSliderInputL}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment>
-                          <IconButton>
-                            <SearchIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    id="standard-basic"
-                    label="Closing time"
-                    fullWidth={true}
-                    value={toTimeString(value[1])}
-                    type="time"
-                    onChange={OnSliderInputR}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment>
-                          <IconButton>
-                            <SearchIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <Divider /> */}
+
             <ListItem>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
@@ -499,7 +442,7 @@ const UsersList = (props) => {
                     >
                       {allS.map((name) => (
                         <MenuItem key={name} value={name}>
-                          <Checkbox checked={TagNames.indexOf(name) > -1} />
+                          <Checkbox checked={ShopNames.indexOf(name) > -1} />
                           <ListItemText primary={name} />
                         </MenuItem>
                       ))}
