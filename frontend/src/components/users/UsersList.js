@@ -82,7 +82,8 @@ const UsersList = (props) => {
 
   const [veg, setVeg] = useState(true);
   const [nveg, setNveg] = useState(true);
-
+  const [value, setValue] = React.useState([0, 0]);
+  const [maxPrice, setMaxP] = useState(0);
   const fuse = new Fuse(Items, {
     keys: ["name"],
     includeScore: true,
@@ -98,8 +99,9 @@ const UsersList = (props) => {
       (i) => (veg && i.type == "veg") || (nveg && i.type == "non_veg")
     );
 
+    temp = temp.filter((i) => i.price >= value[0] && i.price <= value[1]);
     setself(temp);
-  }, [selectText, Items, veg, nveg]);
+  }, [selectText, Items, veg, nveg, value]);
 
   useEffect(() => {
     axios
@@ -113,6 +115,11 @@ const UsersList = (props) => {
           })
           .then((response2) => {
             setItems(response.data);
+            let t = response.data.sort((a, b) =>
+              a.price < b.price ? 1 : -1
+            )[0].price;
+            setMaxP(t);
+            setValue([0, t]);
             setfavs(response2.data.favs);
           })
           .catch((error) => {
@@ -220,7 +227,6 @@ const UsersList = (props) => {
       a_sels.filter((i) => i.id != item_id || i.addon.name != addon.name)
     );
   };
-  const [value, setValue] = React.useState([20, 37]);
 
   function valueLabelFormat(value) {
     var hours = Math.floor(parseInt(value) / 60);
@@ -256,11 +262,11 @@ const UsersList = (props) => {
   };
 
   const OnSliderInputL = (event) => {
-    setValue([FromTimeString(event.target.value), value[1]]);
+    setValue([event.target.value, value[1]]);
   };
 
   const OnSliderInputR = (event) => {
-    setValue([value[0], FromTimeString(event.target.value)]);
+    setValue([value[0], event.target.value]);
   };
   const [personName, setPersonName] = React.useState([]);
   console.log(SelectedFood);
@@ -528,8 +534,7 @@ const UsersList = (props) => {
                     value={value}
                     onChange={handleChange}
                     min={0}
-                    max={1439}
-                    valueLabelFormat={valueLabelFormat}
+                    max={maxPrice}
                     valueLabelDisplay="auto"
                   />
                 </Grid>
