@@ -79,21 +79,28 @@ const UsersList = (props) => {
   const [a_sels, setasels] = useState([]);
 
   const [selectText, setSelect] = useState("");
+
+  const [veg, setVeg] = useState(true);
+  const [nveg, setNveg] = useState(true);
+
   const fuse = new Fuse(Items, {
     keys: ["name"],
     includeScore: true,
   });
   const [SelectedFood, setself] = useState([]);
   useEffect(() => {
-    console.log("huh");
-    if (!selectText) setself(Items);
+    let temp;
+    if (!selectText) temp = Items;
     else {
-      setself(fuse.search(selectText).map((item) => item.item));
+      temp = fuse.search(selectText).map((item) => item.item);
     }
-  }, [selectText]);
+    temp = temp.filter(
+      (i) => (veg && i.type == "veg") || (nveg && i.type == "non_veg")
+    );
 
-  // console.log(SelectedFood);
-  // console.log(a_sels);
+    setself(temp);
+  }, [selectText, Items, veg, nveg]);
+
   useEffect(() => {
     axios
       .get("http://localhost:4000/item", {
@@ -261,17 +268,40 @@ const UsersList = (props) => {
   const PriceAsc = () => {
     const myData = []
       .concat(SelectedFood)
-      .sort((a, b) => (a.itemM > b.itemM ? 1 : -1));
+      .sort((a, b) => (a.price > b.price ? 1 : -1));
     setself(myData);
   };
 
   const PriceDesc = () => {
     const myData = []
       .concat(SelectedFood)
-      .sort((a, b) => (a.itemM < b.itemM ? 1 : -1));
+      .sort((a, b) => (a.price < b.price ? 1 : -1));
     setself(myData);
   };
 
+  const RatAsc = () => {
+    const myData = []
+      .concat(SelectedFood)
+      .sort((a, b) =>
+        (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) >
+        (b.num_ratings ? (1.0 * b.rating) / b.num_ratings : -1)
+          ? 1
+          : -1
+      );
+    setself(myData);
+  };
+
+  const RatDesc = () => {
+    const myData = []
+      .concat(SelectedFood)
+      .sort((a, b) =>
+        (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) <
+        (b.num_ratings ? (1.0 * b.rating) / b.num_ratings : -1)
+          ? 1
+          : -1
+      );
+    setself(myData);
+  };
   const handleChangeShop = (event) => {
     const {
       target: { value },
@@ -281,6 +311,9 @@ const UsersList = (props) => {
       typeof value === "string" ? value.split(",") : value
     );
   };
+
+  useEffect(() => {}, [veg, nveg, Items]);
+
   return (
     <div>
       <Grid container>
@@ -323,16 +356,26 @@ const UsersList = (props) => {
                 </Grid>
                 <Grid item xs={3}>
                   Veg
-                  <Checkbox label="Top" labelPlacement="top" defaultChecked />
+                  <Checkbox
+                    onChange={() => setVeg(!veg)}
+                    label="Top"
+                    labelPlacement="top"
+                    checked={veg}
+                  />
                 </Grid>
                 <Grid item xs={5}>
                   Non-Veg
-                  <Checkbox label="Top" labelPlacement="top" defaultChecked />
+                  <Checkbox
+                    onChange={() => setNveg(!nveg)}
+                    label="Top"
+                    labelPlacement="top"
+                    checked={nveg}
+                  />
                 </Grid>
               </Grid>
             </ListItem>
             <Divider />
-            <ListItem divider>
+            {/* <ListItem divider>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
                   <Slider
@@ -385,7 +428,7 @@ const UsersList = (props) => {
                 </Grid>
               </Grid>
             </ListItem>
-            <Divider />
+            <Divider /> */}
             <ListItem>
               <Grid container spacing={2} alignItems="center">
                 <Grid item xs={12}>
@@ -465,12 +508,12 @@ const UsersList = (props) => {
                   <h2>Rating Sort</h2>
                 </Grid>
                 <Grid item xs={6}>
-                  <Button fullWidth variant="contained">
+                  <Button onClick={RatAsc} fullWidth variant="contained">
                     Ascending
                   </Button>
                 </Grid>
                 <Grid item xs={6}>
-                  <Button fullWidth variant="contained">
+                  <Button onClick={RatDesc} fullWidth variant="contained">
                     Descending
                   </Button>
                 </Grid>
