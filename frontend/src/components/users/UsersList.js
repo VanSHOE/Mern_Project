@@ -53,18 +53,6 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
 const UsersList = (props) => {
   const Input = styled(MuiInput)`
     width: 42px;
@@ -84,6 +72,11 @@ const UsersList = (props) => {
   const [nveg, setNveg] = useState(true);
   const [value, setValue] = React.useState([0, 0]);
   const [maxPrice, setMaxP] = useState(0);
+
+  const [allT, setAllT] = useState([]);
+  const [allS, setAllS] = useState([]);
+  const [TagNames, setTagName] = React.useState([]);
+  const [ShopNames, setShopName] = React.useState([]);
   const fuse = new Fuse(Items, {
     keys: ["name"],
     includeScore: true,
@@ -121,6 +114,20 @@ const UsersList = (props) => {
             setMaxP(t);
             setValue([0, t]);
             setfavs(response2.data.favs);
+            let allTags = [];
+            response.data.map((item) => (allTags = allTags.concat(item.tags)));
+            let dist_allTags = new Set(allTags);
+            allTags = [...dist_allTags];
+            setAllT(allTags);
+
+            let allShops = [];
+            response.data.map(
+              (item) => (allShops = allShops.concat(item.shop))
+            );
+            let dist_allShops = new Set(allShops);
+            allShops = [...dist_allShops];
+            setAllS(allShops);
+            //console.log(allTags);
           })
           .catch((error) => {
             console.log(error);
@@ -268,7 +275,7 @@ const UsersList = (props) => {
   const OnSliderInputR = (event) => {
     setValue([value[0], event.target.value]);
   };
-  const [personName, setPersonName] = React.useState([]);
+
   console.log(SelectedFood);
 
   const PriceAsc = () => {
@@ -312,7 +319,17 @@ const UsersList = (props) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
+    setShopName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
+  const handleChangeTag = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setTagName(
       // On autofill we get a stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -446,15 +463,15 @@ const UsersList = (props) => {
                       labelId="demo-multiple-checkbox-label"
                       id="demo-multiple-checkbox"
                       multiple
-                      value={personName}
-                      onChange={handleChangeShop}
+                      value={TagNames}
+                      onChange={handleChangeTag}
                       input={<OutlinedInput label="Tag" />}
                       renderValue={(selected) => selected.join(", ")}
                       MenuProps={MenuProps}
                     >
-                      {names.map((name) => (
+                      {allT.map((name) => (
                         <MenuItem key={name} value={name}>
-                          <Checkbox checked={personName.indexOf(name) > -1} />
+                          <Checkbox checked={TagNames.indexOf(name) > -1} />
                           <ListItemText primary={name} />
                         </MenuItem>
                       ))}
@@ -474,15 +491,15 @@ const UsersList = (props) => {
                       labelId="demo-multiple-checkbox-label"
                       id="demo-multiple-checkbox"
                       multiple
-                      value={personName}
+                      value={ShopNames}
                       onChange={handleChangeShop}
                       input={<OutlinedInput label="Tag" />}
                       renderValue={(selected) => selected.join(", ")}
                       MenuProps={MenuProps}
                     >
-                      {names.map((name) => (
+                      {allS.map((name) => (
                         <MenuItem key={name} value={name}>
-                          <Checkbox checked={personName.indexOf(name) > -1} />
+                          <Checkbox checked={TagNames.indexOf(name) > -1} />
                           <ListItemText primary={name} />
                         </MenuItem>
                       ))}
