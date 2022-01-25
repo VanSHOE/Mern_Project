@@ -47,7 +47,7 @@ router.get("/stats", function (req, res) {
 });
 
 router.get("/", function (req, res) {
-  console.log(req.query);
+  // console.log(req.query);
   const b_email = req.query.b_email;
   const v_email = req.query.v_email;
   if (b_email) {
@@ -71,8 +71,10 @@ router.get("/", function (req, res) {
           },
         ])
           .then((products) => {
-            console.log(products);
-            res.status(200).json(products);
+            //  console.log(products);
+            res
+              .status(200)
+              .json(products.filter((item) => item.b_email == b_email));
           })
           .catch((err) => {
             next(err);
@@ -99,8 +101,10 @@ router.get("/", function (req, res) {
           },
         ])
           .then((products) => {
-            console.log(products);
-            res.status(200).json(products);
+            // console.log(products);
+            res
+              .status(200)
+              .json(products.filter((item) => item.vendor_email == v_email));
           })
           .catch((err) => {
             next(err);

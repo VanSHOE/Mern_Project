@@ -26,20 +26,6 @@ transporter.verify((err, success) => {
     : console.log(`=== Server is ready to take messages: ${success} ===`);
 });
 
-let mailOptions = {
-  from: "test@gmail.com",
-  to: "spam.srijan@gmail.com",
-  subject: "Nodemailer API",
-  text: "SENT FROM MERN PROGRAM BROOO",
-};
-
-// transporter.sendMail(mailOptions, function (err, data) {
-//   if (err) {
-//     console.log("Error " + err);
-//   } else {
-//     console.log("Email sent successfully");
-//   }
-// });
 // GET request
 // Getting all the users
 router.get("/", function (req, res) {
@@ -110,35 +96,61 @@ router.post("/update", (req, res) => {
 
 router.post("/next", (req, res) => {
   let id = req.body.id;
-  console.log(req.body);
+  //  console.log(req.body);
   if (!id) return res.status(400).send("no");
 
   Order.findOne({ id: id }).then((order) => {
-    console.log(order);
+    // console.log(order);
 
     if (!order) return res.status(400).send("no");
+    //console.log(order.status);
     if (parseInt(order.status) == -1) {
       return res.status(400).send("Order has been rejected");
     }
     if (parseInt(order.status) < 4) {
       order.status = parseInt(order.status) + 1;
+      console.log(parseInt(order.status));
       if (parseInt(order.status) == 4) {
+        console.log("?");
         Food.findOne({ id: order.food_id }).then((food) => {
           food.sold = parseInt(food.sold) + 1;
           food.save().then((user) => {
             console.log("Food sold");
           });
         });
+      } else if (parseInt(order.status) == 1) {
+        console.log("?");
+        Food.findOne({ id: order.food_id }).then((food) => {
+          Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
+            console.log(vendor);
+            let mailOptions = {
+              from: "rahulgargofficial@gmail.com",
+              to: order.b_email,
+              subject: "Order #" + id + " Accepted",
+              text:
+                vendor.name +
+                " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
+            };
+
+            transporter.sendMail(mailOptions, function (err, data) {
+              if (err) {
+                console.log("Error " + err);
+              } else {
+                console.log("Email sent successfully");
+              }
+            });
+          });
+        });
       }
       order
         .save()
         .then((user) => {
-          return res.status(200).json(user);
+          res.status(200).json(user);
         })
         .catch((err) => {
-          return res.status(400).send(err);
+          res.status(400).send(err);
         });
-    } else return res.status(400).send("Order is already finished");
+    } else res.status(400).send("Order is already finished");
   });
 });
 
@@ -164,6 +176,25 @@ router.post("/reject", (req, res) => {
           buyer.wallet = parseInt(buyer.wallet) + parseInt(price);
           buyer.save().then((user) => {
             console.log("Refunded");
+          });
+
+          Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
+            let mailOptions = {
+              from: "rahulgargofficial@gmail.com",
+              to: order.b_email,
+              subject: "Order #" + id + " Rejected",
+              text:
+                vendor.name +
+                " has rejected your order. Your money has been refunded. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
+            };
+
+            transporter.sendMail(mailOptions, function (err, data) {
+              if (err) {
+                console.log("Error " + err);
+              } else {
+                console.log("Email sent successfully");
+              }
+            });
           });
         });
       });
