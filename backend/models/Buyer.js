@@ -10,6 +10,8 @@ const BuyerSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
+    dropDups: true,
   },
   contact: {
     type: String,

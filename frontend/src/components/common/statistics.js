@@ -27,6 +27,7 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 import Chip from "@mui/material/Chip";
+import Plot from "react-plotly.js";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { v4 as uuidv4 } from "uuid";
@@ -35,6 +36,11 @@ import Fuse from "fuse.js";
 const Stat = (props) => {
   const [users, setUsers] = useState([]);
   const [Items, setItems] = useState([]);
+
+  const [batchY, setBY] = useState([]);
+
+  const [ageX, setAX] = useState([]);
+  const [ageY, setAY] = useState([]);
 
   const [OP, setOP] = useState("");
   const [PO, setPO] = useState("");
@@ -52,17 +58,21 @@ const Stat = (props) => {
         setOP(response.data.num_orders);
         setPO(response.data.num_pen);
         setCO(response.data.num_comp);
+        setBY(response.data.batch_y);
+        setAX(response.data.age_x);
+        setAY(response.data.age_y);
       })
       .catch((error) => {
         console.log(":(");
         console.log(error);
       });
   }, []);
-  console.log(Items);
-  if (Items) {
+  //console.log(Items);
+  console.log(ageX);
+  if (Items && Items.sorted && Items.sorted.length) {
     return (
       <div>
-        <Grid container>
+        <Grid container alignItems="center" justifyItems="center">
           <Grid item xs={4}>
             <List component="nav" aria-label="mailbox folders">
               <TextField
@@ -98,6 +108,28 @@ const Stat = (props) => {
                 fullWidth
               />
             </List>
+          </Grid>
+          <Grid item xs={12}>
+            <Plot
+              data={[
+                {
+                  type: "bar",
+                  x: ["UG1", "UG2", "UG3", "UG4", "UG5"],
+                  y: batchY,
+                },
+              ]}
+              layout={{ title: "Batch-wise completed orders", autosize: true }}
+              useResizeHandler="true"
+              style={{ width: "100%", height: "100%" }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Plot
+              data={[{ type: "bar", x: ageX, y: ageY }]}
+              layout={{ title: "Age-wise completed orders", autosize: true }}
+              useResizeHandler="true"
+              style={{ width: "100%", height: "100%" }}
+            />
           </Grid>
         </Grid>
         <Grid container>
@@ -174,7 +206,7 @@ const Stat = (props) => {
         </Grid>
       </div>
     );
-  } else return "";
+  } else return "ss";
 };
 
 export default Stat;

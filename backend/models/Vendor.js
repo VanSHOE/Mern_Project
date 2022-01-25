@@ -10,6 +10,8 @@ const VendorSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
+    dropDups: true,
   },
   contact: {
     type: String,
@@ -18,6 +20,8 @@ const VendorSchema = new Schema({
   shop_name: {
     type: String,
     required: true,
+    unique: true,
+    dropDups: true,
   },
   can_open: {
     type: String,

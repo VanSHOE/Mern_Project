@@ -38,7 +38,45 @@ router.get("/stats", function (req, res) {
         .then((foods) => {
           result.sorted = foods;
           if (result.sorted.length > 5) result.sorted.length = 5;
-          return res.status(200).json(result);
+          result.batch_y = [0, 0, 0, 0, 0];
+          result.age_x = [];
+          result.age_y = [];
+          Order.aggregate([
+            {
+              $lookup: {
+                from: "buyers",
+                localField: "b_email",
+                foreignField: "email",
+                as: "buyers",
+              },
+            },
+          ])
+            .then((products) => {
+              for (var i = 0; i < products.length; i++) {
+                //if (products[i].status == 4)
+                result.batch_y[parseInt(products[i].buyers[0].batch) - 1]++;
+
+                if (
+                  !result.age_x.some((age) => age == products[i].buyers[0].age)
+                ) {
+                  result.age_x.push(products[i].buyers[0].age);
+                  result.age_y.push(0);
+                }
+                result.age_y[
+                  parseInt(
+                    result.age_x.findIndex(
+                      (age) => age == products[i].buyers[0].age
+                    )
+                  )
+                ]++;
+              }
+
+              return res.status(200).json(result);
+              //  console.log(products);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         });
     });
   } else {
