@@ -131,6 +131,7 @@ const Manage = (props) => {
           .then((response2) => {
             setItems(response2.data);
           });
+
         console.log(response.data);
       });
   };
@@ -138,18 +139,24 @@ const Manage = (props) => {
   const onMove = (item) => {
     let request = {
       id: item.id,
+      ve: props.user,
     };
     console.log(request);
-    axios.post("http://localhost:4000/item/next", request).then((response) => {
-      axios
-        .get("http://localhost:4000/order", {
-          params: { v_email: email_cur },
-        })
-        .then((response2) => {
-          setItems(response2.data);
-        });
-      console.log(response.data);
-    });
+    axios
+      .post("http://localhost:4000/item/next", request)
+      .then((response) => {
+        axios
+          .get("http://localhost:4000/order", {
+            params: { v_email: email_cur },
+          })
+          .then((response2) => {
+            setItems(response2.data);
+          });
+        console.log(response.data);
+      })
+      .catch((err) => {
+        alert("Too many pending items");
+      });
   };
 
   const navigate = useNavigate();

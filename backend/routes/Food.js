@@ -99,56 +99,67 @@ router.post("/next", (req, res) => {
   //  console.log(req.body);
   if (!id) return res.status(400).send("no");
 
-  Order.findOne({ id: id }).then((order) => {
-    // console.log(order);
+  Order.find({ vendor_email: req.body.ve, status: 1 }).then((ordersACC) => {
+    Order.find({ vendor_email: req.body.ve, status: 2 }).then((ordersCOOK) => {
+      Order.findOne({ id: id }).then((order) => {
+        // console.log(order);
 
-    if (!order) return res.status(400).send("no");
-    //console.log(order.status);
-    if (parseInt(order.status) == -1) {
-      return res.status(400).send("Order has been rejected");
-    }
-    if (parseInt(order.status) < 4) {
-      order.status = parseInt(order.status) + 1;
-      console.log(parseInt(order.status));
-      if (parseInt(order.status) == 4) {
-        Food.findOne({ id: order.food_id }).then((food) => {
-          food.sold = parseInt(food.sold) + 1;
-          food.save().then((user) => {
-            console.log("Food sold");
-          });
-        });
-      } else if (parseInt(order.status) == 1) {
-        Food.findOne({ id: order.food_id }).then((food) => {
-          Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
-            console.log(vendor);
-            let mailOptions = {
-              from: "rahulgargofficial@gmail.com",
-              to: order.b_email,
-              subject: "Order #" + id + " Accepted",
-              text:
-                vendor.name +
-                " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
-            };
+        if (!order) return res.status(400).send("no");
+        //console.log(order.status);
+        console.log(parseInt(ordersCOOK.length) + parseInt(ordersACC.length));
+        if (
+          parseInt(ordersCOOK.length) + parseInt(ordersACC.length) == 10 &&
+          order.status == 0
+        ) {
+          return res.status(400).json({ error: "Too many pending orders" });
+        }
+        if (parseInt(order.status) == -1) {
+          return res.status(400).send("Order has been rejected");
+        }
+        if (parseInt(order.status) < 4) {
+          order.status = parseInt(order.status) + 1;
+          console.log(parseInt(order.status));
+          if (parseInt(order.status) == 4) {
+            Food.findOne({ id: order.food_id }).then((food) => {
+              food.sold = parseInt(food.sold) + 1;
+              food.save().then((user) => {
+                console.log("Food sold");
+              });
+            });
+          } else if (parseInt(order.status) == 1) {
+            Food.findOne({ id: order.food_id }).then((food) => {
+              Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
+                console.log(vendor);
+                let mailOptions = {
+                  from: "rahulgargofficial@gmail.com",
+                  to: order.b_email,
+                  subject: "Order #" + id + " Accepted",
+                  text:
+                    vendor.name +
+                    " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
+                };
 
-            // transporter.sendMail(mailOptions, function (err, data) {
-            //   if (err) {
-            //     console.log("Error " + err);
-            //   } else {
-            //     console.log("Email sent successfully");
-            //   }
-            // });
-          });
-        });
-      }
-      order
-        .save()
-        .then((user) => {
-          res.status(200).json(user);
-        })
-        .catch((err) => {
-          res.status(400).send(err);
-        });
-    } else res.status(400).send("Order is already finished");
+                // transporter.sendMail(mailOptions, function (err, data) {
+                //   if (err) {
+                //     console.log("Error " + err);
+                //   } else {
+                //     console.log("Email sent successfully");
+                //   }
+                // });
+              });
+            });
+          }
+          order
+            .save()
+            .then((user) => {
+              res.status(200).json(user);
+            })
+            .catch((err) => {
+              res.status(400).send(err);
+            });
+        } else res.status(400).send("Order is already finished");
+      });
+    });
   });
 });
 

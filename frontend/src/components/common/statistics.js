@@ -50,7 +50,7 @@ const Stat = (props) => {
   useEffect(() => {
     axios
       .get("http://localhost:4000/order/stats", {
-        params: { v_email: "q" },
+        params: { v_email: props.user },
       })
       .then((response) => {
         console.log("test");
@@ -194,7 +194,7 @@ const Stat = (props) => {
                           color="text.primary"
                           gutterBottom
                         >
-                          Times sold:{item.sold}
+                          Times sold: {item.sold}
                         </Typography>
                       </CardContent>
                     </React.Fragment>
@@ -206,7 +206,7 @@ const Stat = (props) => {
         </Grid>
       </div>
     );
-  } else return "ss";
+  } else return "";
 };
 
 export default Stat;

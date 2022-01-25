@@ -23,6 +23,7 @@ router.get("/stats", function (req, res) {
       } else {
         result.num_orders = orders.length;
       }
+      console.log(orders);
       let completed_orders = orders.filter((order) => order.status == 4);
       result.num_comp = completed_orders.length;
 
@@ -70,8 +71,8 @@ router.get("/stats", function (req, res) {
                   )
                 ]++;
               }
-
-              return res.status(200).json(result);
+              //console.log(result);
+              res.status(200).json(result);
               //  console.log(products);
             })
             .catch((err) => {
@@ -80,7 +81,7 @@ router.get("/stats", function (req, res) {
         });
     });
   } else {
-    return res.status(400).send();
+    res.status(400).send();
   }
 });
 
