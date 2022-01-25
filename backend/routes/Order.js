@@ -54,22 +54,28 @@ router.get("/stats", function (req, res) {
           ])
             .then((products) => {
               for (var i = 0; i < products.length; i++) {
-                //if (products[i].status == 4)
-                result.batch_y[parseInt(products[i].buyers[0].batch) - 1]++;
-
                 if (
-                  !result.age_x.some((age) => age == products[i].buyers[0].age)
+                  products[i].status == 4 &&
+                  products[i].vendor_email == v_email
                 ) {
-                  result.age_x.push(products[i].buyers[0].age);
-                  result.age_y.push(0);
-                }
-                result.age_y[
-                  parseInt(
-                    result.age_x.findIndex(
+                  result.batch_y[parseInt(products[i].buyers[0].batch) - 1]++;
+
+                  if (
+                    !result.age_x.some(
                       (age) => age == products[i].buyers[0].age
                     )
-                  )
-                ]++;
+                  ) {
+                    result.age_x.push(products[i].buyers[0].age);
+                    result.age_y.push(0);
+                  }
+                  result.age_y[
+                    parseInt(
+                      result.age_x.findIndex(
+                        (age) => age == products[i].buyers[0].age
+                      )
+                    )
+                  ]++;
+                }
               }
               //console.log(result);
               res.status(200).json(result);
