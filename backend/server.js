@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 const path = require("path");
 if (process.env.NODE_ENV === "production") {
   app._router.use(express.static("client/build"));
