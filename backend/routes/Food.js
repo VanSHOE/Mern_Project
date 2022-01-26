@@ -9,9 +9,9 @@ const Vendor = require("../models/Vendor");
 const Food = require("../models/Food");
 const Order = require("../models/Order");
 const multer = require("multer");
-
+const fs = require("fs");
 const storageEngine = multer.diskStorage({
-  destination: "./public/",
+  destination: "./uploads/",
   filename: function (req, file, callback) {
     callback(
       null,
@@ -34,8 +34,9 @@ const upload = multer({
   fileFilter,
 });
 router.post("/upload", upload.single("uploadedFile"), (req, res) => {
-  console.log(req.file);
-  res.json(req.file).status(200);
+  //console.log(req.body);
+  //console.log(req.file);
+  res.status(200).json(req.file);
 });
 
 let transporter = nodemailer.createTransport({
@@ -105,6 +106,13 @@ router.post("/update", (req, res) => {
     if (req.body.type) food.type = req.body.type;
     if (req.body.addons) food.addons = req.body.addons;
     if (req.body.tags) food.tags = req.body.tags;
+    if (req.body.img) {
+      if (food.img) {
+        fs.unlinkSync("./" + food.img);
+        console.log(food.img);
+      }
+      food.img = req.body.img;
+    }
     food
       .save()
       .then((user) => {
@@ -267,6 +275,7 @@ router.post("/add", (req, res) => {
     vendor_email: req.body.vendor_email,
     shop: req.body.shop,
     id: req.body.id,
+    img: req.body.img,
   });
   newFood
     .save()

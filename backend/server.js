@@ -26,6 +26,8 @@ connection.once("open", function () {
   console.log("MongoDB database connection established successfully !");
 });
 
+app.use(express.static(__dirname + "/public"));
+app.use("/uploads", express.static("uploads"));
 // setup API endpoints
 app.use("/testAPI", testAPIRouter);
 app.use("/user", UserRouter);

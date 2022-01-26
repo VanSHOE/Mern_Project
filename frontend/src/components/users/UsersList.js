@@ -573,6 +573,16 @@ const UsersList = (props) => {
                   <Card variant="outlined">
                     <React.Fragment>
                       <CardContent>
+                        {item.img ? (
+                          <Grid item xs={12}>
+                            <img
+                              src={"http://localhost:4000/" + item.img}
+                              width="100"
+                            />
+                          </Grid>
+                        ) : (
+                          ""
+                        )}
                         <Typography variant="h5" component="div">
                           {favs.some((fav) => item.id == fav) ? (
                             <IconButton
@@ -697,6 +707,16 @@ const UsersList = (props) => {
                 <Card variant="outlined">
                   <React.Fragment>
                     <CardContent>
+                      {item.img ? (
+                        <Grid item xs={12}>
+                          <img
+                            src={"http://localhost:4000/" + item.img}
+                            width="100"
+                          />
+                        </Grid>
+                      ) : (
+                        ""
+                      )}
                       <Typography variant="h5" component="div">
                         {favs.some((fav) => item.id == fav) ? (
                           <IconButton
@@ -788,6 +808,16 @@ const UsersList = (props) => {
                 <Card variant="outlined">
                   <React.Fragment>
                     <CardContent>
+                      {item.img ? (
+                        <Grid item xs={12}>
+                          <img
+                            src={"http://localhost:4000/" + item.img}
+                            width="100"
+                          />
+                        </Grid>
+                      ) : (
+                        ""
+                      )}
                       <Typography variant="h5" component="div">
                         {favs.some((fav) => item.id == fav) ? (
                           <IconButton

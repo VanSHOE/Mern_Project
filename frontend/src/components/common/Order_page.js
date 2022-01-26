@@ -177,6 +177,16 @@ const Orders = (props) => {
               <Card variant="outlined">
                 <React.Fragment>
                   <CardContent>
+                    {item.img ? (
+                      <Grid item xs={12}>
+                        <img
+                          src={"http://localhost:4000/" + item.img}
+                          width="100"
+                        />
+                      </Grid>
+                    ) : (
+                      ""
+                    )}
                     <Typography
                       sx={{ fontSize: 14 }}
                       color="text.secondary"

@@ -34,7 +34,29 @@ const Home = (props) => {
   const [cur_tag, setCTag] = useState("");
   const [Tags, setTags] = useState([]);
   const [cur_addonP, setCAddonP] = useState("");
+  const [uploadedFile, setUploadedFile] = useState("");
+  const [fileTitle, setFileTitle] = useState("");
+  const [filePath, setFilePath] = useState("");
+  function handleFormSubmittion(e) {
+    e.preventDefault();
 
+    let form = document.getElementById("form");
+    let formData = new FormData(form);
+    console.log(form);
+    axios.post("http://localhost:4000/item/upload", formData).then((res) => {
+      console.log(res);
+      setFilePath(res.data.path);
+      console.log("Form submitted");
+    });
+  }
+
+  function handleFileTitle(e) {
+    setFileTitle(e.target.value);
+  }
+
+  function handleUploadedFile(e) {
+    setUploadedFile(e.target.value);
+  }
   const onChangeName = (event) => {
     setName(event.target.value);
   };
@@ -90,6 +112,8 @@ const Home = (props) => {
     setCTag("");
     setAddons([]);
     setTags([]);
+    setFilePath("");
+    setUploadedFile("");
   };
   const setInputs = (item) => {
     setName(item.name);
@@ -179,6 +203,7 @@ const Home = (props) => {
       tags: Tags,
       vendor: item.vendor,
       vendor_email: email_cur,
+      img: filePath,
     };
 
     axios
@@ -213,6 +238,25 @@ const Home = (props) => {
                   <React.Fragment>
                     <CardContent>
                       <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                          {" "}
+                          <form
+                            encType="multipart/form-data"
+                            onSubmit={handleFormSubmittion}
+                            id="form"
+                          >
+                            <input
+                              type="file"
+                              name="uploadedFile"
+                              value={uploadedFile}
+                              onChange={handleUploadedFile}
+                              required
+                            />
+                            <br />
+                            <br />
+                            <button type="submit">Submit Form</button>{" "}
+                          </form>
+                        </Grid>
                         <Grid item xs={12}>
                           <TextField
                             label="Name"
@@ -352,6 +396,16 @@ const Home = (props) => {
                 <Card variant="outlined">
                   <React.Fragment>
                     <CardContent>
+                      {item.img ? (
+                        <Grid item xs={12}>
+                          <img
+                            src={"http://localhost:4000/" + item.img}
+                            width="100"
+                          />
+                        </Grid>
+                      ) : (
+                        ""
+                      )}
                       <Typography
                         sx={{ fontSize: 14 }}
                         color="text.secondary"

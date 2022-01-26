@@ -204,6 +204,16 @@ const Manage = (props) => {
               <Card variant="outlined">
                 <React.Fragment>
                   <CardContent>
+                    {item.items[0].img ? (
+                      <Grid item xs={12}>
+                        <img
+                          src={"http://localhost:4000/" + item.items[0].img}
+                          width="100"
+                        />
+                      </Grid>
+                    ) : (
+                      ""
+                    )}
                     <Typography
                       sx={{ fontSize: 14 }}
                       color="text.secondary"

@@ -31,15 +31,18 @@ const AddFood = (props) => {
   const [Tags, setTags] = useState([]);
   const [uploadedFile, setUploadedFile] = useState("");
   const [fileTitle, setFileTitle] = useState("");
-
+  const [filePath, setFilePath] = useState("");
   function handleFormSubmittion(e) {
     e.preventDefault();
 
     let form = document.getElementById("form");
     let formData = new FormData(form);
-
-    axios.post("http://localhost:4000/item/upload", formData);
-    console.log("Form submitted");
+    console.log(form);
+    axios.post("http://localhost:4000/item/upload", formData).then((res) => {
+      console.log(res);
+      setFilePath(res.data.path);
+      console.log("Form submitted");
+    });
   }
 
   function handleFileTitle(e) {
@@ -130,6 +133,7 @@ const AddFood = (props) => {
           vendor: vendor_cur,
           vendor_email: email_cur,
           shop: shop_name,
+          img: filePath,
           id: uuidv4(),
         };
         console.log(newFood);
@@ -166,18 +170,6 @@ const AddFood = (props) => {
             name="uploadedFile"
             value={uploadedFile}
             onChange={handleUploadedFile}
-            required
-          />
-          <br />
-          <br />
-          <label>File title:</label>
-          <br />
-          <input
-            type="text"
-            placeholder="Enter file title"
-            name="fileTitle"
-            value={fileTitle}
-            onChange={handleFileTitle}
             required
           />
           <br />
