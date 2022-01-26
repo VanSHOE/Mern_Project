@@ -177,13 +177,13 @@ router.post("/next", (req, res) => {
                     " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
                 };
 
-                // transporter.sendMail(mailOptions, function (err, data) {
-                //   if (err) {
-                //     console.log("Error " + err);
-                //   } else {
-                //     console.log("Email sent successfully");
-                //   }
-                // });
+                transporter.sendMail(mailOptions, function (err, data) {
+                  if (err) {
+                    console.log("Error " + err);
+                  } else {
+                    console.log("Email sent successfully");
+                  }
+                });
               });
             });
           }
@@ -235,13 +235,13 @@ router.post("/reject", (req, res) => {
                 " has rejected your order. Your money has been refunded. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
             };
 
-            // transporter.sendMail(mailOptions, function (err, data) {
-            //   if (err) {
-            //     console.log("Error " + err);
-            //   } else {
-            //     console.log("Email sent successfully");
-            //   }
-            // });
+            transporter.sendMail(mailOptions, function (err, data) {
+              if (err) {
+                console.log("Error " + err);
+              } else {
+                console.log("Email sent successfully");
+              }
+            });
           });
         });
       });

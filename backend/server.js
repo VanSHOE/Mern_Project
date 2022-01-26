@@ -3,7 +3,14 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
+const path = require("path");
+if (process.env.NODE_ENV === "production") {
+  app._router.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 // routes
 var testAPIRouter = require("./routes/testAPI");

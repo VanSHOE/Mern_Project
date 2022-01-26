@@ -207,7 +207,7 @@ const Home = (props) => {
     };
 
     axios
-      .post("http://localhost:4000/item/update", newFood)
+      .post("http://localhost:3000/item/update", newFood)
       .then((response) => {
         //alert("Edit " + response.data.email);
         //console.log(response);
@@ -254,7 +254,7 @@ const Home = (props) => {
                             />
                             <br />
                             <br />
-                            <button type="submit">Submit Form</button>{" "}
+                            <button type="submit">Upload photo</button>{" "}
                           </form>
                         </Grid>
                         <Grid item xs={12}>

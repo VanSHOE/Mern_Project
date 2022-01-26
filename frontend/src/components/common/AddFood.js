@@ -174,7 +174,7 @@ const AddFood = (props) => {
           />
           <br />
           <br />
-          <button type="submit">Submit Form</button>{" "}
+          <button type="submit">Upload photo</button>{" "}
         </form>
       </Grid>
 
