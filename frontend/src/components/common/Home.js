@@ -207,7 +207,7 @@ const Home = (props) => {
     };
 
     axios
-      .post("http://localhost:3000/item/update", newFood)
+      .post("http://localhost:4000/item/update", newFood)
       .then((response) => {
         //alert("Edit " + response.data.email);
         //console.log(response);
