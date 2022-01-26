@@ -43,7 +43,7 @@ const Home = (props) => {
     let form = document.getElementById("form");
     let formData = new FormData(form);
     console.log(form);
-    axios.post("http://localhost:4000/item/upload", formData).then((res) => {
+    axios.post("/item/upload", formData).then((res) => {
       console.log(res);
       setFilePath(res.data.path);
       console.log("Form submitted");
@@ -137,7 +137,7 @@ const Home = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("http://localhost:4000/item", {
+      .get("/item", {
         params: { vendor_email: email_cur },
       })
       .then((response) => {
@@ -206,13 +206,11 @@ const Home = (props) => {
       img: filePath,
     };
 
-    axios
-      .post("http://localhost:3000/item/update", newFood)
-      .then((response) => {
-        //alert("Edit " + response.data.email);
-        //console.log(response);
-        setItems(response.data);
-      });
+    axios.post("/item/update", newFood).then((response) => {
+      //alert("Edit " + response.data.email);
+      //console.log(response);
+      setItems(response.data);
+    });
     onCancel();
   };
   console.log(EdN);
@@ -398,10 +396,7 @@ const Home = (props) => {
                     <CardContent>
                       {item.img ? (
                         <Grid item xs={12}>
-                          <img
-                            src={"http://localhost:4000/" + item.img}
-                            width="100"
-                          />
+                          <img src={item.img} width="100" />
                         </Grid>
                       ) : (
                         ""
