@@ -29,7 +29,26 @@ const AddFood = (props) => {
   const [Addons, setAddons] = useState([]);
   const [cur_tag, setCTag] = useState("");
   const [Tags, setTags] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState("");
+  const [fileTitle, setFileTitle] = useState("");
 
+  function handleFormSubmittion(e) {
+    e.preventDefault();
+
+    let form = document.getElementById("form");
+    let formData = new FormData(form);
+
+    axios.post("http://localhost:4000/item/upload", formData);
+    console.log("Form submitted");
+  }
+
+  function handleFileTitle(e) {
+    setFileTitle(e.target.value);
+  }
+
+  function handleUploadedFile(e) {
+    setUploadedFile(e.target.value);
+  }
   const onChangeName = (event) => {
     setName(event.target.value);
   };
@@ -135,6 +154,38 @@ const AddFood = (props) => {
   }));
   return (
     <Grid container justify="center" align={"center"} spacing={2}>
+      <Grid item xs={12}>
+        {" "}
+        <form
+          encType="multipart/form-data"
+          onSubmit={handleFormSubmittion}
+          id="form"
+        >
+          <input
+            type="file"
+            name="uploadedFile"
+            value={uploadedFile}
+            onChange={handleUploadedFile}
+            required
+          />
+          <br />
+          <br />
+          <label>File title:</label>
+          <br />
+          <input
+            type="text"
+            placeholder="Enter file title"
+            name="fileTitle"
+            value={fileTitle}
+            onChange={handleFileTitle}
+            required
+          />
+          <br />
+          <br />
+          <button type="submit">Submit Form</button>{" "}
+        </form>
+      </Grid>
+
       <Grid item xs={12}>
         <TextField
           label="Name"

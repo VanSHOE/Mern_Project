@@ -1,12 +1,42 @@
 var express = require("express");
 const nodemailer = require("nodemailer");
 var router = express.Router();
+const path = require("path");
 require("dotenv").config();
 // Load User model
 const Buyer = require("../models/Buyer");
 const Vendor = require("../models/Vendor");
 const Food = require("../models/Food");
 const Order = require("../models/Order");
+const multer = require("multer");
+
+const storageEngine = multer.diskStorage({
+  destination: "./public/",
+  filename: function (req, file, callback) {
+    callback(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const fileFilter = (req, file, callback) => {
+  let pattern = /jpg|png|svg/; // reqex
+
+  if (pattern.test(path.extname(file.originalname))) {
+    callback(null, true);
+  } else {
+    callback("Error: not a valid file");
+  }
+};
+const upload = multer({
+  storage: storageEngine,
+  fileFilter,
+});
+router.post("/upload", upload.single("uploadedFile"), (req, res) => {
+  console.log(req.file);
+  res.json(req.file).status(200);
+});
 
 let transporter = nodemailer.createTransport({
   service: "gmail",
