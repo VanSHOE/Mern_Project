@@ -9,6 +9,10 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { refType } from "@mui/utils";
+import { GoogleLogin } from "react-google-login";
+
+const clientId =
+  "726973691384-fu86sa2pavm3k430a3m0v30jkulsutc6.apps.googleusercontent.com";
 
 const Register = (props) => {
   const [name, setName] = useState("");
@@ -107,7 +111,14 @@ const Register = (props) => {
 
     resetInputs();
   };
-
+  const onRegSuccess = (res) => {
+    console.log("Reg Success:", res.profileObj);
+    setEmail(res.profileObj.email);
+    setName(res.profileObj.name);
+  };
+  const onRegFailure = (res) => {
+    console.log("Register Failed:", res);
+  };
   return (
     <Grid container align={"center"} spacing={2}>
       <Grid item xs={12}>
@@ -254,6 +265,17 @@ const Register = (props) => {
         <Button variant="contained" onClick={onSubmit}>
           Register
         </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <GoogleLogin
+          clientId={clientId}
+          buttonText="Sign In"
+          onSuccess={onRegSuccess}
+          onFailure={onRegFailure}
+          cookiePolicy={"none"}
+        >
+          Register
+        </GoogleLogin>
       </Grid>
     </Grid>
   );

@@ -8,15 +8,45 @@ import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import { GoogleLogin } from "react-google-login";
+
+const clientId =
+  "726973691384-fu86sa2pavm3k430a3m0v30jkulsutc6.apps.googleusercontent.com";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [showloginButton, setShowloginButton] = useState(true);
+  const [showlogoutButton, setShowlogoutButton] = useState(false);
   const onChangeEmail = (event) => {
     setEmail(event.target.value);
   };
+  const onLoginSuccess = (res) => {
+    console.log("Login Success:", res.profileObj);
+    const newUser = {
+      email: res.profileObj.email,
+      date: Date.now(),
+    };
 
+    axios
+      .post("http://localhost:4000/user/glogin", newUser)
+      .then((response) => {
+        alert("Logged as " + response.data.email);
+        props.onAuth(response.data.email);
+        props.onAuthT(response.data.type);
+
+        localStorage.setItem("Auth", response.data.email);
+        localStorage.setItem("AuthT", response.data.type);
+        if (response.data.type == "Buyer") {
+          props.onAuthW(response.data.wallet);
+          localStorage.setItem("Wallet", response.data.wallet);
+        }
+        console.log(response.data);
+      });
+  };
+  const onLoginFailure = (res) => {
+    console.log("Login Failed:", res);
+  };
   const onChangePass = (event) => {
     setPassword(event.target.value);
   };
@@ -74,6 +104,15 @@ const Login = (props) => {
         <Button variant="contained" onClick={onSubmit}>
           Login
         </Button>
+      </Grid>
+      <Grid item xs={12}>
+        <GoogleLogin
+          clientId={clientId}
+          buttonText="Sign In"
+          onSuccess={onLoginSuccess}
+          onFailure={onLoginFailure}
+          cookiePolicy={"none"}
+        />
       </Grid>
     </Grid>
   );

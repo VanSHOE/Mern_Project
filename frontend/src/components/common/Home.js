@@ -194,6 +194,7 @@ const Home = (props) => {
   console.log(EdV);
   let cur_user = props.user;
   let cur_user_type = props.userType;
+
   return props.user ? (
     props.userType == "Vendor" ? (
       <Stack spacing={2}>
@@ -203,7 +204,7 @@ const Home = (props) => {
           onClick={() => navigate("/item/add")}
         >
           Add Item
-        </Button>
+        </Button>{" "}
         {Items.map((item) => (
           <div>
             {EdN && EdN == item.name && EdV == item.vendor_email ? (
