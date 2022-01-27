@@ -120,10 +120,10 @@ const Manage = (props) => {
     };
     console.log(request);
     axios
-      .post("http://144.126.253.250:4000//item/reject", request)
+      .post("http://144.126.253.250:4000/item/reject", request)
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000//order", {
+          .get("http://144.126.253.250:4000/order", {
             params: { v_email: email_cur },
           })
           .then((response2) => {
@@ -141,10 +141,10 @@ const Manage = (props) => {
     };
     console.log(request);
     axios
-      .post("http://144.126.253.250:4000//item/next", request)
+      .post("http://144.126.253.250:4000/item/next", request)
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000//order", {
+          .get("http://144.126.253.250:4000/order", {
             params: { v_email: email_cur },
           })
           .then((response2) => {
@@ -165,7 +165,7 @@ const Manage = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("http://144.126.253.250:4000//order", {
+      .get("http://144.126.253.250:4000/order", {
         params: { v_email: email_cur },
       })
       .then((response) => {
@@ -204,7 +204,7 @@ const Manage = (props) => {
                       <Grid item xs={12}>
                         <img
                           src={
-                            "http://144.126.253.250:4000//" + item.items[0].img
+                            "http://144.126.253.250:4000/" + item.items[0].img
                           }
                           width="100"
                         />

@@ -44,7 +44,7 @@ const Home = (props) => {
     let formData = new FormData(form);
     console.log(form);
     axios
-      .post("http://144.126.253.250:4000//item/upload", formData)
+      .post("http://144.126.253.250:4000/item/upload", formData)
       .then((res) => {
         console.log(res);
         setFilePath(res.data.path);
@@ -139,7 +139,7 @@ const Home = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("http://144.126.253.250:4000//item", {
+      .get("http://144.126.253.250:4000/item", {
         params: { vendor_email: email_cur },
       })
       .then((response) => {
@@ -169,10 +169,10 @@ const Home = (props) => {
     };
     console.log(newFood);
     axios
-      .post("http://144.126.253.250:4000//item/del", newFood)
+      .post("http://144.126.253.250:4000/item/del", newFood)
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000//item", {
+          .get("http://144.126.253.250:4000/item", {
             params: { vendor_email: email_cur },
           })
           .then((response) => {
@@ -209,7 +209,7 @@ const Home = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000//item/update", newFood)
+      .post("http://144.126.253.250:4000/item/update", newFood)
       .then((response) => {
         //alert("Edit " + response.data.email);
         //console.log(response);
@@ -401,7 +401,7 @@ const Home = (props) => {
                       {item.img ? (
                         <Grid item xs={12}>
                           <img
-                            src={"http://144.126.253.250:4000//" + item.img}
+                            src={"http://144.126.253.250:4000/" + item.img}
                             width="100"
                           />
                         </Grid>

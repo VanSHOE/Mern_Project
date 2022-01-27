@@ -98,7 +98,7 @@ const Register = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000//user/register", newUser)
+      .post("http://144.126.253.250:4000/user/register", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
         props.onAuth(email);

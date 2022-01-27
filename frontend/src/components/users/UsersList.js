@@ -140,17 +140,17 @@ const UsersList = (props) => {
   console.log(curTime);
   useEffect(() => {
     axios
-      .get("http://144.126.253.250:4000//item", {
+      .get("http://144.126.253.250:4000/item", {
         params: {},
       })
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000//user/get_fav", {
+          .get("http://144.126.253.250:4000/user/get_fav", {
             params: { email: props.user },
           })
           .then((response2) => {
             axios
-              .get("http://144.126.253.250:4000//general/getTime")
+              .get("http://144.126.253.250:4000/general/getTime")
               .then((respTime) => {
                 setCurTime(respTime.data);
               });
@@ -200,7 +200,7 @@ const UsersList = (props) => {
       id: id,
     };
     axios
-      .post("http://144.126.253.250:4000//user/add_fav", fav_food)
+      .post("http://144.126.253.250:4000/user/add_fav", fav_food)
       .then((response) => {
         setfavs(response.data.favs);
         console.log(response);
@@ -213,7 +213,7 @@ const UsersList = (props) => {
       id: id,
     };
     axios
-      .post("http://144.126.253.250:4000//user/del_fav", fav_food)
+      .post("http://144.126.253.250:4000/user/del_fav", fav_food)
       .then((response) => {
         setfavs(response.data.favs);
         console.log(response);
@@ -239,11 +239,11 @@ const UsersList = (props) => {
       id: uuidv4(),
     };
     axios
-      .post("http://144.126.253.250:4000//order/add", order)
+      .post("http://144.126.253.250:4000/order/add", order)
       .then((response) => {
         setasels([]);
         axios
-          .get("http://144.126.253.250:4000//user/getWallet", {
+          .get("http://144.126.253.250:4000/user/getWallet", {
             params: { email: props.user },
           })
           .then((response1) => {
@@ -578,7 +578,7 @@ const UsersList = (props) => {
                         {item.img ? (
                           <Grid item xs={12}>
                             <img
-                              src={"http://144.126.253.250:4000//" + item.img}
+                              src={"http://144.126.253.250:4000/" + item.img}
                               width="100"
                             />
                           </Grid>
@@ -712,7 +712,7 @@ const UsersList = (props) => {
                       {item.img ? (
                         <Grid item xs={12}>
                           <img
-                            src={"http://144.126.253.250:4000//" + item.img}
+                            src={"http://144.126.253.250:4000/" + item.img}
                             width="100"
                           />
                         </Grid>
@@ -813,7 +813,7 @@ const UsersList = (props) => {
                       {item.img ? (
                         <Grid item xs={12}>
                           <img
-                            src={"http://144.126.253.250:4000//" + item.img}
+                            src={"http://144.126.253.250:4000/" + item.img}
                             width="100"
                           />
                         </Grid>
