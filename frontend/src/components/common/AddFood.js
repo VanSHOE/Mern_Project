@@ -38,11 +38,13 @@ const AddFood = (props) => {
     let form = document.getElementById("form");
     let formData = new FormData(form);
     console.log(form);
-    axios.post("http://localhost:4000/item/upload", formData).then((res) => {
-      console.log(res);
-      setFilePath(res.data.path);
-      console.log("Form submitted");
-    });
+    axios
+      .post("http://144.126.253.250:4000//item/upload", formData)
+      .then((res) => {
+        console.log(res);
+        setFilePath(res.data.path);
+        console.log("Form submitted");
+      });
   }
 
   function handleFileTitle(e) {
@@ -119,7 +121,7 @@ const AddFood = (props) => {
     let vendor_cur;
     let shop_name;
     axios
-      .post("http://localhost:4000/user/profile", { email: email_cur }) // unimplemented
+      .post("http://144.126.253.250:4000//user/profile", { email: email_cur }) // unimplemented
       .then((response) => {
         // console.log(response.data);
         vendor_cur = response.data.name;
@@ -138,7 +140,7 @@ const AddFood = (props) => {
         };
         console.log(newFood);
         axios
-          .post("http://localhost:4000/item/add", newFood)
+          .post("http://144.126.253.250:4000//item/add", newFood)
           .then((response) => {
             alert("Created item");
             //  console.log(response.data);
