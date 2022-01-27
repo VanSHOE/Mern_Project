@@ -21,8 +21,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 const Manage = (props) => {
-  const [EdN, setEDN] = useState("");
-  const [EdV, setEDV] = useState("");
   const [Name, setName] = useState("");
   const [Price, setPrice] = useState("");
   const [RatingT, setRating] = useState(0);
@@ -191,8 +189,6 @@ const Manage = (props) => {
     color: theme.palette.text.secondary,
   }));
 
-  console.log(EdN);
-  console.log(EdV);
   let cur_user = props.user;
   let cur_user_type = props.userType;
   return props.user ? (

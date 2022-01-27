@@ -21,8 +21,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 const Home = (props) => {
-  const [EdN, setEDN] = useState("");
-  const [EdV, setEDV] = useState("");
+  const [EdID, setEDID] = useState("");
+
   const [Name, setName] = useState("");
   const [Price, setPrice] = useState("");
   const [RatingT, setRating] = useState(0);
@@ -182,14 +182,12 @@ const Home = (props) => {
   };
   const onEdit = (item) => {
     setInputs(item);
-    setEDN(item.name);
-    setEDV(item.vendor_email);
+    setEDID(item.id);
   };
 
   const onCancel = () => {
     resetInputs();
-    setEDN("");
-    setEDV("");
+    setEDID("");
   };
 
   const onEditSubmit = (item) => {
@@ -215,8 +213,8 @@ const Home = (props) => {
       });
     onCancel();
   };
-  console.log(EdN);
-  console.log(EdV);
+  console.log(EdID);
+
   let cur_user = props.user;
   let cur_user_type = props.userType;
 
@@ -232,7 +230,7 @@ const Home = (props) => {
         </Button>{" "}
         {Items.map((item) => (
           <div>
-            {EdN && EdN == item.name && EdV == item.vendor_email ? (
+            {EdID == item.id ? (
               <Box sx={{ minWidth: 275 }}>
                 <Card variant="outlined">
                   <React.Fragment>

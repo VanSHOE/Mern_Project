@@ -21,8 +21,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 const Orders = (props) => {
-  const [EdN, setEDN] = useState("");
-  const [EdV, setEDV] = useState("");
   const [Name, setName] = useState("");
   const [Price, setPrice] = useState("");
   const [RatingT, setRating] = useState(0);
