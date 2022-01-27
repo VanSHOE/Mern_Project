@@ -125,6 +125,9 @@ const Profile = (props) => {
         //console.log(response.data);
         props.onAuthW(response.data.wallet);
         localStorage.setItem("Wallet", response.data.wallet);
+      })
+      .catch((err) => {
+        alert("Invalid money");
       });
     resetInputs();
   };
@@ -200,6 +203,7 @@ const Profile = (props) => {
             helperText="Age"
             label={details.age}
             variant="outlined"
+            type="Number"
             value={age}
             onChange={onChangeAge}
           />

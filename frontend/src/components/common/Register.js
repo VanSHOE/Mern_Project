@@ -107,6 +107,11 @@ const Register = (props) => {
         localStorage.setItem("AuthT", type);
         if (type == "Buyer") localStorage.setItem("Wallet", 0);
         console.log(response.data);
+      })
+      .catch((err) => {
+        alert(
+          "Please ensure all fields are properly filled (is the email format correct?)"
+        );
       });
 
     resetInputs();
@@ -177,6 +182,7 @@ const Register = (props) => {
           <TextField
             label="Age"
             variant="outlined"
+            type="Number"
             value={age}
             onChange={onChangeAge}
           />

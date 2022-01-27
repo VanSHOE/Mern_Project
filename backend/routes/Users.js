@@ -26,8 +26,31 @@ router.get("/", function (req, res) {
 
 // POST request
 // Add a user to db
+
+const validatePhone = (phone) => {
+  return String(phone)
+    .toLowerCase()
+    .match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im);
+};
+
+const validateEmail = (email) => {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+};
+
 router.post("/register", (req, res) => {
   console.log(req.body);
+  if (!validateEmail(req.body.email)) {
+    console.log("email wrong");
+    return res.status(400).send("Invalid email");
+  }
+  if (!validatePhone(req.body.phone)) {
+    console.log("contact wrong");
+    return res.status(400).send("Invalid phone");
+  }
   if (req.body.type == "Buyer") {
     const newUser = new Buyer({
       name: req.body.name,
@@ -44,7 +67,9 @@ router.post("/register", (req, res) => {
         res.status(200).json(user);
       })
       .catch((err) => {
-        res.status(400).send(err);
+        res.status(400).send({
+          message: "This is an error!",
+        });
       });
   } else if (req.body.type == "Vendor") {
     const newUser = new Vendor({
@@ -63,16 +88,22 @@ router.post("/register", (req, res) => {
         res.status(200).json(user);
       })
       .catch((err) => {
-        res.status(400).send(err);
+        res.status(400).send("no");
       });
   } else {
-    res.status(400).send("no");
+    res.status(401).send({
+      message: "This is an error!",
+    });
   }
 });
 
 router.post("/update", (req, res) => {
   let email = req.body.email;
   if (!email) return res.status(400).send("no");
+  if (!validatePhone(req.body.phone)) {
+    console.log("contact wrong");
+    return res.status(400).send("Invalid phone");
+  }
   console.log("Email is:" + email);
   if (req.body.type == "Buyer") {
     Buyer.findOne({ email }).then((buyer) => {
@@ -96,7 +127,6 @@ router.post("/update", (req, res) => {
       if (!vendor) return res.status(400).send("no");
 
       if (req.body.name) vendor.name = req.body.name;
-      if (req.body.email) vendor.email = req.body.email;
       if (req.body.phone) vendor.contact = req.body.phone;
       if (req.body.s_name) vendor.shop_name = req.body.s_name;
       if (req.body.start_time) vendor.can_open = req.body.start_time;
@@ -279,8 +309,9 @@ router.post("/deposit", (req, res) => {
   Buyer.findOne({ email }).then((buyer) => {
     // Check if user email exists
     if (!buyer) return res.status(400).send("no");
-    if (req.body.wallet)
+    if (req.body.wallet && parseInt(req.body.wallet) > 0)
       buyer.wallet = parseInt(buyer.wallet, 10) + parseInt(req.body.wallet, 10);
+    else return res.status(400).send("Invalid money");
     buyer
       .save()
       .then((user) => {
