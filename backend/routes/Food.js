@@ -132,6 +132,35 @@ router.post("/update", (req, res) => {
   });
 });
 
+router.post("/pickup", (req, res) => {
+  let id = req.body.id;
+  //  console.log(req.body);
+  if (!id) return res.status(400).send("no");
+
+  Order.findOne({ id: id }).then((order) => {
+    // console.log(order);
+    if (!order) return res.status(400).send("no");
+    //console.log(order.status);
+    if (parseInt(order.status) == 3) {
+      order.status = parseInt(order.status) + 1;
+      Food.findOne({ id: order.food_id }).then((food) => {
+        food.sold = parseInt(food.sold) + 1;
+        food.save().then((user) => {
+          console.log("Food sold");
+        });
+      });
+      order
+        .save()
+        .then((user) => {
+          res.status(200).json(user);
+        })
+        .catch((err) => {
+          res.status(400).send(err);
+        });
+    } else res.status(400).send("Order is already made");
+  });
+});
+
 router.post("/next", (req, res) => {
   let id = req.body.id;
   //  console.log(req.body);
@@ -154,17 +183,10 @@ router.post("/next", (req, res) => {
         if (parseInt(order.status) == -1) {
           return res.status(400).send("Order has been rejected");
         }
-        if (parseInt(order.status) < 4) {
+        if (parseInt(order.status) < 3) {
           order.status = parseInt(order.status) + 1;
           console.log(parseInt(order.status));
-          if (parseInt(order.status) == 4) {
-            Food.findOne({ id: order.food_id }).then((food) => {
-              food.sold = parseInt(food.sold) + 1;
-              food.save().then((user) => {
-                console.log("Food sold");
-              });
-            });
-          } else if (parseInt(order.status) == 1) {
+          if (parseInt(order.status) == 1) {
             Food.findOne({ id: order.food_id }).then((food) => {
               Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
                 console.log(vendor);
@@ -177,13 +199,13 @@ router.post("/next", (req, res) => {
                     " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
                 };
 
-                transporter.sendMail(mailOptions, function (err, data) {
-                  if (err) {
-                    console.log("Error " + err);
-                  } else {
-                    console.log("Email sent successfully");
-                  }
-                });
+                // transporter.sendMail(mailOptions, function (err, data) {
+                //   if (err) {
+                //     console.log("Error " + err);
+                //   } else {
+                //     console.log("Email sent successfully");
+                //   }
+                // });
               });
             });
           }
@@ -195,7 +217,7 @@ router.post("/next", (req, res) => {
             .catch((err) => {
               res.status(400).send(err);
             });
-        } else res.status(400).send("Order is already finished");
+        } else res.status(400).send("Order is already made");
       });
     });
   });
@@ -235,13 +257,13 @@ router.post("/reject", (req, res) => {
                 " has rejected your order. Your money has been refunded. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
             };
 
-            transporter.sendMail(mailOptions, function (err, data) {
-              if (err) {
-                console.log("Error " + err);
-              } else {
-                console.log("Email sent successfully");
-              }
-            });
+            // transporter.sendMail(mailOptions, function (err, data) {
+            //   if (err) {
+            //     console.log("Error " + err);
+            //   } else {
+            //     console.log("Email sent successfully");
+            //   }
+            // });
           });
         });
       });

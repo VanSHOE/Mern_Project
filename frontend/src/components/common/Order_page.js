@@ -166,6 +166,29 @@ const Orders = (props) => {
   let cur_user = props.user;
   let cur_user_type = props.userType;
 
+  const onPickup = (item) => {
+    //console.log(item);
+    let request = {
+      id: item.id,
+      ve: item.vendor_email,
+    };
+    console.log(request);
+    axios
+      .post("http://localhost:4000/item/pickup", request)
+      .then((response) => {
+        axios
+          .get("http://localhost:4000/order", {
+            params: { b_email: email_cur },
+          })
+          .then((response2) => {
+            setItems(response2.data);
+          });
+        console.log(response.data);
+      })
+      .catch((err) => {
+        alert("Some error occured while picking up the item");
+      });
+  };
   return props.user ? (
     props.userType == "Buyer" ? (
       <Stack spacing={2}>
@@ -240,6 +263,19 @@ const Orders = (props) => {
                       ""
                     )}
                   </CardContent>
+                  <CardActions>
+                    {item.status == 3 ? (
+                      <Button
+                        onClick={() => onPickup(item)}
+                        color="success"
+                        size="large"
+                      >
+                        Pick up
+                      </Button>
+                    ) : (
+                      ""
+                    )}
+                  </CardActions>
                 </React.Fragment>
               </Card>
             </Box>
