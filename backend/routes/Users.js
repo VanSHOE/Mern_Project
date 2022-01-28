@@ -100,7 +100,7 @@ router.post("/register", (req, res) => {
 router.post("/update", (req, res) => {
   let email = req.body.email;
   if (!email) return res.status(400).send("no");
-  if (!validatePhone(req.body.phone)) {
+  if (!validatePhone(req.body.phone) && req.body.phone) {
     console.log("contact wrong");
     return res.status(400).send("Invalid phone");
   }

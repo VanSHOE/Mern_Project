@@ -102,7 +102,7 @@ router.post("/update", (req, res) => {
   Food.findOne({ id: req.body.id }).then((food) => {
     if (!food) return res.status(400).send("no");
     if (req.body.name) food.name = req.body.name;
-    if (req.body.price) food.price = req.body.price;
+    if (parseInt(req.body.price) > 0) food.price = req.body.price;
     if (req.body.type) food.type = req.body.type;
     if (req.body.addons) food.addons = req.body.addons;
     if (req.body.tags) food.tags = req.body.tags;
@@ -199,13 +199,13 @@ router.post("/next", (req, res) => {
                     " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
                 };
 
-                 transporter.sendMail(mailOptions, function (err, data) {
-                   if (err) {
-                     console.log("Error " + err);
-                   } else {
-                     console.log("Email sent successfully");
-                   }
-                 });
+                transporter.sendMail(mailOptions, function (err, data) {
+                  if (err) {
+                    console.log("Error " + err);
+                  } else {
+                    console.log("Email sent successfully");
+                  }
+                });
               });
             });
           }
@@ -257,13 +257,13 @@ router.post("/reject", (req, res) => {
                 " has rejected your order. Your money has been refunded. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
             };
 
-             transporter.sendMail(mailOptions, function (err, data) {
-               if (err) {
-                 console.log("Error " + err);
-               } else {
-                 console.log("Email sent successfully");
-               }
-             });
+            transporter.sendMail(mailOptions, function (err, data) {
+              if (err) {
+                console.log("Error " + err);
+              } else {
+                console.log("Email sent successfully");
+              }
+            });
           });
         });
       });
@@ -286,7 +286,9 @@ router.post("/reject", (req, res) => {
 // Add a user to db
 router.post("/add", (req, res) => {
   console.log(req.body);
-
+  if (parseInt(req.body.price) < 0) {
+    return res.status(400).send("Negative price");
+  }
   const newFood = new Food({
     name: req.body.name,
     price: req.body.price,
