@@ -35,7 +35,7 @@ const upload = multer({
 });
 router.post("/upload", upload.single("uploadedFile"), (req, res) => {
   //console.log(req.body);
-  //console.log(req.file);
+  console.log(req.file);
   res.status(200).json(req.file);
 });
 
@@ -199,13 +199,13 @@ router.post("/next", (req, res) => {
                     " has accepted your order. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
                 };
 
-                // transporter.sendMail(mailOptions, function (err, data) {
-                //   if (err) {
-                //     console.log("Error " + err);
-                //   } else {
-                //     console.log("Email sent successfully");
-                //   }
-                // });
+                 transporter.sendMail(mailOptions, function (err, data) {
+                   if (err) {
+                     console.log("Error " + err);
+                   } else {
+                     console.log("Email sent successfully");
+                   }
+                 });
               });
             });
           }
@@ -257,13 +257,13 @@ router.post("/reject", (req, res) => {
                 " has rejected your order. Your money has been refunded. (This is a test email, if you are seeing this i probably entered the recieving email wrong, I apologize)",
             };
 
-            // transporter.sendMail(mailOptions, function (err, data) {
-            //   if (err) {
-            //     console.log("Error " + err);
-            //   } else {
-            //     console.log("Email sent successfully");
-            //   }
-            // });
+             transporter.sendMail(mailOptions, function (err, data) {
+               if (err) {
+                 console.log("Error " + err);
+               } else {
+                 console.log("Email sent successfully");
+               }
+             });
           });
         });
       });

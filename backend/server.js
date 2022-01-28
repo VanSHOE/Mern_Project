@@ -24,7 +24,10 @@ var FoodRouter = require("./routes/Food");
 var OrderRouter = require("./routes/Order");
 var GeneralRouter = require("./routes/general");
 
-app.use(cors());
+//app.use(cors());
+app.use(cors({
+    origin: '*'
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

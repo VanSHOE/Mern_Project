@@ -12,7 +12,7 @@ import { refType } from "@mui/utils";
 import { GoogleLogin } from "react-google-login";
 
 const clientId =
-  "726973691384-fu86sa2pavm3k430a3m0v30jkulsutc6.apps.googleusercontent.com";
+  "726973691384-q1qv7qeiqq2uqimid2ajotfmtea57gof.apps.googleusercontent.com";
 
 const Register = (props) => {
   const [name, setName] = useState("");

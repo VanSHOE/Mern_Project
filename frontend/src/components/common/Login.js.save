@@ -11,8 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { GoogleLogin } from "react-google-login";
 
 const clientId =
-  "726973691384-q1qv7qeiqq2uqimid2ajotfmtea57gof.apps.googleusercontent.com";
-
+  "72
 const Login = (props) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

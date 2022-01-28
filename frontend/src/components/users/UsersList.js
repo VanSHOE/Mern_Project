@@ -111,6 +111,8 @@ const UsersList = (props) => {
     temp = temp.filter((i) => i.price >= value[0] && i.price <= value[1]);
 
     temp = temp.filter((i) =>
+      	i.tags.length == 0 ||
+
       i.tags.some((temp_item) =>
         TagNames.some((tag2check) => temp_item == tag2check)
       )
