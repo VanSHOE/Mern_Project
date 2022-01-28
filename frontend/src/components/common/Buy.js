@@ -312,6 +312,11 @@ const BuyPage = (props) => {
       .concat(SelectedFood)
       .sort((a, b) => (a.price > b.price ? 1 : -1));
     setself(myData);
+
+    const myData = []
+      .concat(ClosedCan)
+      .sort((a, b) => (a.price > b.price ? 1 : -1));
+    setClosed(myData);
   };
 
   const PriceDesc = () => {
@@ -319,6 +324,11 @@ const BuyPage = (props) => {
       .concat(SelectedFood)
       .sort((a, b) => (a.price < b.price ? 1 : -1));
     setself(myData);
+
+    const myData = []
+      .concat(ClosedCan)
+      .sort((a, b) => (a.price < b.price ? 1 : -1));
+    setClosed(myData);
   };
 
   const RatAsc = () => {
@@ -331,6 +341,16 @@ const BuyPage = (props) => {
           : -1
       );
     setself(myData);
+
+    const myData = []
+      .concat(ClosedCan)
+      .sort((a, b) =>
+        (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) >
+        (b.num_ratings ? (1.0 * b.rating) / b.num_ratings : -1)
+          ? 1
+          : -1
+      );
+    setClosed(myData);
   };
 
   const RatDesc = () => {
@@ -343,6 +363,16 @@ const BuyPage = (props) => {
           : -1
       );
     setself(myData);
+
+    const myData = []
+      .concat(ClosedCan)
+      .sort((a, b) =>
+        (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) <
+        (b.num_ratings ? (1.0 * b.rating) / b.num_ratings : -1)
+          ? 1
+          : -1
+      );
+    setClosed(myData);
   };
   const handleChangeShop = (event) => {
     const {
