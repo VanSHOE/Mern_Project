@@ -24,7 +24,9 @@ const Profile = (props) => {
   let email_cur = localStorage.getItem("Auth");
   useEffect(() => {
     axios
-      .post("https://mernvendorbuyer.me:4000/user/profile", { email: email_cur }) // unimplemented
+      .post("https://mernvendorbuyer.me:4000/user/profile", {
+        email: email_cur,
+      }) // unimplemented
       .then((response) => {
         setDetails(response.data);
       })
@@ -152,7 +154,7 @@ const Profile = (props) => {
     axios
       .post("https://mernvendorbuyer.me:4000/user/update", newUser)
       .then((response) => {
-        alert("Created " + response.data.email);
+        alert("Edited " + response.data.email);
       });
     window.location.reload(true);
     resetInputs();
