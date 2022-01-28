@@ -48,7 +48,7 @@ function App() {
             <Layout user={Authed} userType={AuthedType} Wallet={Money} />
           }
         >
-          {Authed && AuthedType == "Vendor" ? (
+          {(Authed && AuthedType == "Vendor") || !Authed ? (
             <Route
               path="/"
               element={<Home user={Authed} userType={AuthedType} />}
