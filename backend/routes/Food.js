@@ -99,7 +99,7 @@ router.post("/update", (req, res) => {
   if (!email) return res.status(400).send("no");
   console.log("Email is:" + email);
 
-  Food.findOne({ name: name, vendor_email: email }).then((food) => {
+  Food.findOne({ id: req.body.id }).then((food) => {
     if (!food) return res.status(400).send("no");
     if (req.body.name) food.name = req.body.name;
     if (req.body.price) food.price = req.body.price;
