@@ -28,21 +28,19 @@ const Login = (props) => {
       date: Date.now(),
     };
 
-    axios
-      .post("http://144.126.253.250:4000/user/glogin", newUser)
-      .then((response) => {
-        alert("Logged as " + response.data.email);
-        props.onAuth(response.data.email);
-        props.onAuthT(response.data.type);
+    axios.post("/user/glogin", newUser).then((response) => {
+      alert("Logged as " + response.data.email);
+      props.onAuth(response.data.email);
+      props.onAuthT(response.data.type);
 
-        localStorage.setItem("Auth", response.data.email);
-        localStorage.setItem("AuthT", response.data.type);
-        if (response.data.type == "Buyer") {
-          props.onAuthW(response.data.wallet);
-          localStorage.setItem("Wallet", response.data.wallet);
-        }
-        console.log(response.data);
-      });
+      localStorage.setItem("Auth", response.data.email);
+      localStorage.setItem("AuthT", response.data.type);
+      if (response.data.type == "Buyer") {
+        props.onAuthW(response.data.wallet);
+        localStorage.setItem("Wallet", response.data.wallet);
+      }
+      console.log(response.data);
+    });
   };
   const onLoginFailure = (res) => {
     console.log("Login Failed:", res);
@@ -65,21 +63,19 @@ const Login = (props) => {
       date: Date.now(),
     };
 
-    axios
-      .post("http://144.126.253.250:4000/user/login", newUser)
-      .then((response) => {
-        alert("Logged as " + response.data.email);
-        props.onAuth(response.data.email);
-        props.onAuthT(response.data.type);
+    axios.post("/user/login", newUser).then((response) => {
+      alert("Logged as " + response.data.email);
+      props.onAuth(response.data.email);
+      props.onAuthT(response.data.type);
 
-        localStorage.setItem("Auth", response.data.email);
-        localStorage.setItem("AuthT", response.data.type);
-        if (response.data.type == "Buyer") {
-          props.onAuthW(response.data.wallet);
-          localStorage.setItem("Wallet", response.data.wallet);
-        }
-        console.log(response.data);
-      });
+      localStorage.setItem("Auth", response.data.email);
+      localStorage.setItem("AuthT", response.data.type);
+      if (response.data.type == "Buyer") {
+        props.onAuthW(response.data.wallet);
+        localStorage.setItem("Wallet", response.data.wallet);
+      }
+      console.log(response.data);
+    });
     resetInputs();
   };
 

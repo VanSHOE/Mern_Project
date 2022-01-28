@@ -121,7 +121,7 @@ const Orders = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("http://144.126.253.250:4000/order", {
+      .get("/order", {
         params: { b_email: email_cur },
       })
       .then((response) => {
@@ -143,17 +143,15 @@ const Orders = (props) => {
       rating: event.target.value,
       food_id: item.food_id,
     };
-    axios
-      .post("http://144.126.253.250:4000/order/rate", sendRateObj)
-      .then((response_outer) => {
-        axios
-          .get("http://144.126.253.250:4000/order", {
-            params: { b_email: email_cur },
-          })
-          .then((response) => {
-            setItems(response.data);
-          });
-      });
+    axios.post("/order/rate", sendRateObj).then((response_outer) => {
+      axios
+        .get("/order", {
+          params: { b_email: email_cur },
+        })
+        .then((response) => {
+          setItems(response.data);
+        });
+    });
   };
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -174,10 +172,10 @@ const Orders = (props) => {
     };
     console.log(request);
     axios
-      .post("http://144.126.253.250:4000/item/pickup", request)
+      .post("/item/pickup", request)
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000/order", {
+          .get("/order", {
             params: { b_email: email_cur },
           })
           .then((response2) => {
@@ -200,10 +198,7 @@ const Orders = (props) => {
                   <CardContent>
                     {item.img ? (
                       <Grid item xs={12}>
-                        <img
-                          src={"http://144.126.253.250:4000/" + item.img}
-                          width="100"
-                        />
+                        <img src={"/" + item.img} width="100" />
                       </Grid>
                     ) : (
                       ""

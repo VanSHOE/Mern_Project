@@ -140,20 +140,18 @@ const UsersList = (props) => {
   console.log(curTime);
   useEffect(() => {
     axios
-      .get("http://144.126.253.250:4000/item", {
+      .get("/item", {
         params: {},
       })
       .then((response) => {
         axios
-          .get("http://144.126.253.250:4000/user/get_fav", {
+          .get("/user/get_fav", {
             params: { email: props.user },
           })
           .then((response2) => {
-            axios
-              .get("http://144.126.253.250:4000/general/getTime")
-              .then((respTime) => {
-                setCurTime(respTime.data);
-              });
+            axios.get("/general/getTime").then((respTime) => {
+              setCurTime(respTime.data);
+            });
             setItems(response.data);
             let t = response.data.sort((a, b) =>
               a.price < b.price ? 1 : -1
@@ -199,12 +197,10 @@ const UsersList = (props) => {
       email: props.user,
       id: id,
     };
-    axios
-      .post("http://144.126.253.250:4000/user/add_fav", fav_food)
-      .then((response) => {
-        setfavs(response.data.favs);
-        console.log(response);
-      });
+    axios.post("/user/add_fav", fav_food).then((response) => {
+      setfavs(response.data.favs);
+      console.log(response);
+    });
   };
 
   const onDelFav = (id, ve) => {
@@ -212,12 +208,10 @@ const UsersList = (props) => {
       email: props.user,
       id: id,
     };
-    axios
-      .post("http://144.126.253.250:4000/user/del_fav", fav_food)
-      .then((response) => {
-        setfavs(response.data.favs);
-        console.log(response);
-      });
+    axios.post("/user/del_fav", fav_food).then((response) => {
+      setfavs(response.data.favs);
+      console.log(response);
+    });
   };
   const onChangeSel = (event) => {
     setSelect(event.target.value);
@@ -238,22 +232,20 @@ const UsersList = (props) => {
       vendor_email: item.vendor_email,
       id: uuidv4(),
     };
-    axios
-      .post("http://144.126.253.250:4000/order/add", order)
-      .then((response) => {
-        setasels([]);
-        axios
-          .get("http://144.126.253.250:4000/user/getWallet", {
-            params: { email: props.user },
-          })
-          .then((response1) => {
-            setasels([]);
-            console.log(response1);
-            props.onWalletChange(response1.data.money);
-            localStorage.setItem("Wallet", response1.data.money);
-            console.log(response);
-          });
-      });
+    axios.post("/order/add", order).then((response) => {
+      setasels([]);
+      axios
+        .get("/user/getWallet", {
+          params: { email: props.user },
+        })
+        .then((response1) => {
+          setasels([]);
+          console.log(response1);
+          props.onWalletChange(response1.data.money);
+          localStorage.setItem("Wallet", response1.data.money);
+          console.log(response);
+        });
+    });
   };
 
   const AddAddonBuy = (item, addon) => {
@@ -577,10 +569,7 @@ const UsersList = (props) => {
                       <CardContent>
                         {item.img ? (
                           <Grid item xs={12}>
-                            <img
-                              src={"http://144.126.253.250:4000/" + item.img}
-                              width="100"
-                            />
+                            <img src={"/" + item.img} width="100" />
                           </Grid>
                         ) : (
                           ""
@@ -711,10 +700,7 @@ const UsersList = (props) => {
                     <CardContent>
                       {item.img ? (
                         <Grid item xs={12}>
-                          <img
-                            src={"http://144.126.253.250:4000/" + item.img}
-                            width="100"
-                          />
+                          <img src={"/" + item.img} width="100" />
                         </Grid>
                       ) : (
                         ""
@@ -812,10 +798,7 @@ const UsersList = (props) => {
                     <CardContent>
                       {item.img ? (
                         <Grid item xs={12}>
-                          <img
-                            src={"http://144.126.253.250:4000/" + item.img}
-                            width="100"
-                          />
+                          <img src={"/" + item.img} width="100" />
                         </Grid>
                       ) : (
                         ""
