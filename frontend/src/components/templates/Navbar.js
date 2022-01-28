@@ -51,13 +51,6 @@ const Navbar = (props) => {
           ) : (
             ""
           )}
-          {props.userType == "Buyer" ? (
-            <Button color="inherit" onClick={() => navigate("/users")}>
-              Users
-            </Button>
-          ) : (
-            ""
-          )}
           {props.userType == "Vendor" ? (
             <Button color="inherit" onClick={() => navigate("/manage")}>
               Manage
