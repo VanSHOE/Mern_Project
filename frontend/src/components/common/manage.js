@@ -119,17 +119,19 @@ const Manage = (props) => {
       id: item.id,
     };
     console.log(request);
-    axios.post("/item/reject", request).then((response) => {
-      axios
-        .get("/order", {
-          params: { v_email: email_cur },
-        })
-        .then((response2) => {
-          setItems(response2.data);
-        });
+    axios
+      .post("http://144.126.253.250:4000/item/reject", request)
+      .then((response) => {
+        axios
+          .get("http://144.126.253.250:4000/order", {
+            params: { v_email: email_cur },
+          })
+          .then((response2) => {
+            setItems(response2.data);
+          });
 
-      console.log(response.data);
-    });
+        console.log(response.data);
+      });
   };
 
   const onMove = (item) => {
@@ -139,10 +141,10 @@ const Manage = (props) => {
     };
     console.log(request);
     axios
-      .post("/item/next", request)
+      .post("http://144.126.253.250:4000/item/next", request)
       .then((response) => {
         axios
-          .get("/order", {
+          .get("http://144.126.253.250:4000/order", {
             params: { v_email: email_cur },
           })
           .then((response2) => {
@@ -163,7 +165,7 @@ const Manage = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("/order", {
+      .get("http://144.126.253.250:4000/order", {
         params: { v_email: email_cur },
       })
       .then((response) => {
@@ -200,7 +202,12 @@ const Manage = (props) => {
                   <CardContent>
                     {item.items[0].img ? (
                       <Grid item xs={12}>
-                        <img src={"/" + item.items[0].img} width="100" />
+                        <img
+                          src={
+                            "http://144.126.253.250:4000/" + item.items[0].img
+                          }
+                          width="100"
+                        />
                       </Grid>
                     ) : (
                       ""

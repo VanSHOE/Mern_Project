@@ -43,11 +43,13 @@ const Home = (props) => {
     let form = document.getElementById("form");
     let formData = new FormData(form);
     console.log(form);
-    axios.post("/item/upload", formData).then((res) => {
-      console.log(res);
-      setFilePath(res.data.path);
-      console.log("Form submitted");
-    });
+    axios
+      .post("http://144.126.253.250:4000/item/upload", formData)
+      .then((res) => {
+        console.log(res);
+        setFilePath(res.data.path);
+        console.log("Form submitted");
+      });
   }
 
   function handleFileTitle(e) {
@@ -137,7 +139,7 @@ const Home = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("/item", {
+      .get("http://144.126.253.250:4000/item", {
         params: { vendor_email: email_cur },
       })
       .then((response) => {
@@ -166,16 +168,18 @@ const Home = (props) => {
       id: item.id,
     };
     console.log(newFood);
-    axios.post("/item/del", newFood).then((response) => {
-      axios
-        .get("/item", {
-          params: { vendor_email: email_cur },
-        })
-        .then((response) => {
-          setItems(response.data);
-        });
-      console.log("Deleted");
-    });
+    axios
+      .post("http://144.126.253.250:4000/item/del", newFood)
+      .then((response) => {
+        axios
+          .get("http://144.126.253.250:4000/item", {
+            params: { vendor_email: email_cur },
+          })
+          .then((response) => {
+            setItems(response.data);
+          });
+        console.log("Deleted");
+      });
   };
   const onChangeCAddonP = (event) => {
     setCAddonP(event.target.value);
@@ -204,11 +208,13 @@ const Home = (props) => {
       img: filePath,
     };
 
-    axios.post("/item/update", newFood).then((response) => {
-      //alert("Edit " + response.data.email);
-      //console.log(response);
-      setItems(response.data);
-    });
+    axios
+      .post("http://144.126.253.250:4000/item/update", newFood)
+      .then((response) => {
+        //alert("Edit " + response.data.email);
+        //console.log(response);
+        setItems(response.data);
+      });
     onCancel();
   };
   console.log(EdID);
@@ -394,7 +400,10 @@ const Home = (props) => {
                     <CardContent>
                       {item.img ? (
                         <Grid item xs={12}>
-                          <img src={"/" + item.img} width="100" />
+                          <img
+                            src={"http://144.126.253.250:4000/" + item.img}
+                            width="100"
+                          />
                         </Grid>
                       ) : (
                         ""
