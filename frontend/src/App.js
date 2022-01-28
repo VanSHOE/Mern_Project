@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./App.css";
 import { useState } from "react";
-import UsersList from "./components/users/UsersList";
+import BuyPage from "./components/common/Buy";
 import Home from "./components/common/Home";
 import Register from "./components/common/Register";
 import AddFood from "./components/common/AddFood";
@@ -48,14 +48,22 @@ function App() {
             <Layout user={Authed} userType={AuthedType} Wallet={Money} />
           }
         >
-          <Route
-            path="/"
-            element={<Home user={Authed} userType={AuthedType} />}
-          />
-          <Route
-            path="users"
-            element={<UsersList user={Authed} onWalletChange={setWallet} />}
-          />
+          {Authed && AuthedType == "Vendor" ? (
+            <Route
+              path="/"
+              element={<Home user={Authed} userType={AuthedType} />}
+            />
+          ) : (
+            <Route path="/" element={<Navigate to="/buy" />} />
+          )}
+          {Authed && AuthedType == "Buyer" ? (
+            <Route
+              path="buy"
+              element={<BuyPage user={Authed} onWalletChange={setWallet} />}
+            />
+          ) : (
+            <Route path="buy" element={<Navigate to="/" />} />
+          )}
           {Authed ? (
             <Route path="register" element={<Navigate to="/" />} />
           ) : (
