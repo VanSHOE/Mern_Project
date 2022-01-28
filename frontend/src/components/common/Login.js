@@ -29,7 +29,7 @@ const Login = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000/user/glogin", newUser)
+      .post("https://mernvendorbuyer.me:4000/user/glogin", newUser)
       .then((response) => {
         alert("Logged as " + response.data.email);
         props.onAuth(response.data.email);
@@ -66,7 +66,7 @@ const Login = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000/user/login", newUser)
+      .post("https://mernvendorbuyer.me:4000/user/login", newUser)
       .then((response) => {
         alert("Logged as " + response.data.email);
         props.onAuth(response.data.email);

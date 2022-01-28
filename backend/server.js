@@ -2,6 +2,11 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/ssl/private/nginx-selfsigned.key', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/certs/nginx-selfsigned.crt', 'utf8');
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 4000;
 const path = require("path");
@@ -11,7 +16,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
 }
-
+var credentials = {key: privateKey, cert: certificate};
 // routes
 var testAPIRouter = require("./routes/testAPI");
 var UserRouter = require("./routes/Users");
@@ -41,6 +46,11 @@ app.use("/user", UserRouter);
 app.use("/item", FoodRouter);
 app.use("/order", OrderRouter);
 app.use("/general", GeneralRouter);
-app.listen(PORT, function () {
-  console.log("Server is running on Port: " + PORT);
-});
+//app.listen(PORT, function () {
+  //console.log("Server is running on Port: " + PORT);
+//});
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(8080);
+httpsServer.listen(4000);

@@ -24,7 +24,7 @@ const Profile = (props) => {
   let email_cur = localStorage.getItem("Auth");
   useEffect(() => {
     axios
-      .post("http://144.126.253.250:4000/user/profile", { email: email_cur }) // unimplemented
+      .post("https://mernvendorbuyer.me:4000/user/profile", { email: email_cur }) // unimplemented
       .then((response) => {
         setDetails(response.data);
       })
@@ -119,7 +119,7 @@ const Profile = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000/user/deposit", newUser)
+      .post("https://mernvendorbuyer.me:4000/user/deposit", newUser)
       .then((response) => {
         if (money_in) alert("Added " + money_in);
         //console.log(response.data);
@@ -150,7 +150,7 @@ const Profile = (props) => {
     };
 
     axios
-      .post("http://144.126.253.250:4000/user/update", newUser)
+      .post("https://mernvendorbuyer.me:4000/user/update", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
       });
