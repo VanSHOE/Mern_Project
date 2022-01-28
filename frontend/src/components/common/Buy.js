@@ -313,10 +313,10 @@ const BuyPage = (props) => {
       .sort((a, b) => (a.price > b.price ? 1 : -1));
     setself(myData);
 
-    const myData = []
+    const myData2 = []
       .concat(ClosedCan)
       .sort((a, b) => (a.price > b.price ? 1 : -1));
-    setClosed(myData);
+    setClosed(myData2);
   };
 
   const PriceDesc = () => {
@@ -325,10 +325,10 @@ const BuyPage = (props) => {
       .sort((a, b) => (a.price < b.price ? 1 : -1));
     setself(myData);
 
-    const myData = []
+    const myData2 = []
       .concat(ClosedCan)
       .sort((a, b) => (a.price < b.price ? 1 : -1));
-    setClosed(myData);
+    setClosed(myData2);
   };
 
   const RatAsc = () => {
@@ -342,7 +342,7 @@ const BuyPage = (props) => {
       );
     setself(myData);
 
-    const myData = []
+    const myData2 = []
       .concat(ClosedCan)
       .sort((a, b) =>
         (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) >
@@ -350,7 +350,7 @@ const BuyPage = (props) => {
           ? 1
           : -1
       );
-    setClosed(myData);
+    setClosed(myData2);
   };
 
   const RatDesc = () => {
@@ -364,7 +364,7 @@ const BuyPage = (props) => {
       );
     setself(myData);
 
-    const myData = []
+    const myData2 = []
       .concat(ClosedCan)
       .sort((a, b) =>
         (a.num_ratings ? (1.0 * a.rating) / a.num_ratings : -1) <
@@ -372,7 +372,7 @@ const BuyPage = (props) => {
           ? 1
           : -1
       );
-    setClosed(myData);
+    setClosed(myData2);
   };
   const handleChangeShop = (event) => {
     const {
