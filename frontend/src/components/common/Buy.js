@@ -228,7 +228,7 @@ const BuyPage = (props) => {
   const Buy = (item) => {
     let qty = parseInt(+prompt("Please enter the quantity"));
     console.log(qty);
-
+    if (parseInt(qty) == 0) return;
     let add = a_sels.filter((i) => i.id == item.id);
     add = add.map((el) => el.addon);
     console.log(add);
