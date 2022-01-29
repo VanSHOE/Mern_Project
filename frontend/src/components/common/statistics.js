@@ -53,7 +53,7 @@ const Stat = (props) => {
         params: { v_email: props.user },
       })
       .then((response) => {
-        console.log("test");
+        console.log(response.data);
         setItems(response.data);
         setOP(response.data.num_orders);
         setPO(response.data.num_pen);
@@ -206,7 +206,49 @@ const Stat = (props) => {
         </Grid>
       </div>
     );
-  } else return "";
+  } else
+    return (
+      <div>
+        <Grid container alignItems="center" justifyItems="center">
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Orders Placed"
+                variant="filled"
+                value={OP}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Pending Orders"
+                variant="filled"
+                value={PO}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+          <Grid item xs={4}>
+            <List component="nav" aria-label="mailbox folders">
+              <TextField
+                id="filled-basic"
+                label="Completed Orders"
+                variant="filled"
+                value={CO}
+                disabled
+                fullWidth
+              />
+            </List>
+          </Grid>
+        </Grid>
+      </div>
+    );
 };
 
 export default Stat;

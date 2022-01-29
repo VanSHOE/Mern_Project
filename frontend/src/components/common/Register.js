@@ -110,7 +110,7 @@ const Register = (props) => {
       })
       .catch((err) => {
         alert(
-          "Please ensure all fields are properly filled (is the email format correct?)"
+          "Could not register user. Please ensure all fields are properly filled (is the email and phone format correct or the user is already registered)"
         );
       });
 

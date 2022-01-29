@@ -13,7 +13,7 @@ const Order = require("../models/Order");
 // POST request
 // Add a user to db
 router.get("/stats", function (req, res) {
-  console.log(req.query);
+  //console.log(req.query);
   const v_email = req.query.v_email;
   let result = {};
   if (v_email) {
@@ -23,8 +23,8 @@ router.get("/stats", function (req, res) {
       } else {
         result.num_orders = orders.length;
       }
-      console.log(orders);
-      let completed_orders = orders.filter((order) => order.status == 4);
+      // console.log(orders);
+      let completed_orders = orders.filter((order) => order.status >= 4);
       result.num_comp = completed_orders.length;
 
       let rejected_orders = orders.filter((order) => order.status == -1);
@@ -37,6 +37,7 @@ router.get("/stats", function (req, res) {
       Food.find({ vendor_email: v_email })
         .sort({ sold: -1 })
         .then((foods) => {
+          console.log("hi");
           result.sorted = foods;
           if (result.sorted.length > 5) result.sorted.length = 5;
           result.batch_y = [0, 0, 0, 0, 0];
@@ -55,7 +56,7 @@ router.get("/stats", function (req, res) {
             .then((products) => {
               for (var i = 0; i < products.length; i++) {
                 if (
-                  products[i].status == 4 &&
+                  products[i].status >= 4 &&
                   products[i].vendor_email == v_email
                 ) {
                   result.batch_y[parseInt(products[i].buyers[0].batch) - 1]++;
@@ -77,7 +78,7 @@ router.get("/stats", function (req, res) {
                   ]++;
                 }
               }
-              //console.log(result);
+              console.log(result);
               res.status(200).json(result);
               //  console.log(products);
             })

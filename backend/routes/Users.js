@@ -51,50 +51,69 @@ router.post("/register", (req, res) => {
     console.log("contact wrong");
     return res.status(400).send("Invalid phone");
   }
-  if (req.body.type == "Buyer") {
-    const newUser = new Buyer({
-      name: req.body.name,
-      email: req.body.email,
-      contact: req.body.phone,
-      age: req.body.age,
-      batch: req.body.batch,
-      password: req.body.password,
-    });
 
-    newUser
-      .save()
-      .then((user) => {
-        res.status(200).json(user);
-      })
-      .catch((err) => {
-        res.status(400).send({
-          message: "This is an error!",
-        });
-      });
-  } else if (req.body.type == "Vendor") {
-    const newUser = new Vendor({
-      name: req.body.name,
-      email: req.body.email,
-      contact: req.body.phone,
-      shop_name: req.body.s_name,
-      can_open: req.body.start_time,
-      can_close: req.body.end_time,
-      password: req.body.password,
-    });
+  const email = req.body.email;
+  // Find user by email
+  Buyer.findOne({ email }).then((buyer) => {
+    // Check if user email exists
+    if (!buyer) {
+      Vendor.findOne({ email }).then((vendor) => {
+        // Check if user email exists
+        if (!vendor) {
+          if (req.body.type == "Buyer") {
+            const newUser = new Buyer({
+              name: req.body.name,
+              email: req.body.email,
+              contact: req.body.phone,
+              age: req.body.age,
+              batch: req.body.batch,
+              password: req.body.password,
+            });
 
-    newUser
-      .save()
-      .then((user) => {
-        res.status(200).json(user);
-      })
-      .catch((err) => {
-        res.status(400).send("no");
+            newUser
+              .save()
+              .then((user) => {
+                res.status(200).json(user);
+              })
+              .catch((err) => {
+                res.status(400).send({
+                  message: "This is an error!",
+                });
+              });
+          } else if (req.body.type == "Vendor") {
+            const newUser = new Vendor({
+              name: req.body.name,
+              email: req.body.email,
+              contact: req.body.phone,
+              shop_name: req.body.s_name,
+              can_open: req.body.start_time,
+              can_close: req.body.end_time,
+              password: req.body.password,
+            });
+
+            newUser
+              .save()
+              .then((user) => {
+                res.status(200).json(user);
+              })
+              .catch((err) => {
+                res.status(400).send("no");
+              });
+          } else {
+            return res.status(401).send({
+              message: "This is an error!",
+            });
+          }
+        } else {
+          console.log("email exists");
+          return res.status(400).send("Email already exists");
+        }
       });
-  } else {
-    res.status(401).send({
-      message: "This is an error!",
-    });
-  }
+    } else {
+      console.log("email exists");
+      return res.status(400).send("Email already exists");
+    }
+  });
 });
 
 router.post("/update", (req, res) => {

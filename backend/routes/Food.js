@@ -191,7 +191,7 @@ router.post("/next", (req, res) => {
               Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
                 console.log(vendor);
                 let mailOptions = {
-                  from: "rahulgargofficial@gmail.com",
+                  from: "mern.vendor.response@gmail.com",
                   to: order.b_email,
                   subject: "Order #" + id + " Accepted",
                   text:
@@ -249,7 +249,7 @@ router.post("/reject", (req, res) => {
 
           Vendor.findOne({ email: food.vendor_email }).then((vendor) => {
             let mailOptions = {
-              from: "rahulgargofficial@gmail.com",
+              from: "mern.vendor.response@gmail.com",
               to: order.b_email,
               subject: "Order #" + id + " Rejected",
               text:
