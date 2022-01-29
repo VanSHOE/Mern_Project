@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { GoogleLogin } from "react-google-login";
 
 const clientId =
-  "726973691384-q1qv7qeiqq2uqimid2ajotfmtea57gof.apps.googleusercontent.com";
+  "726973691384-r9snqtv138gipmko9p6ue5mhmtnia7c4.apps.googleusercontent.com";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -29,7 +29,7 @@ const Login = (props) => {
     };
 
     axios
-      .post("https://mernvendorbuyer.me:4000/user/glogin", newUser)
+      .post("http://localhost:4000/user/glogin", newUser)
       .then((response) => {
         alert("Logged as " + response.data.email);
         props.onAuth(response.data.email);
@@ -65,21 +65,19 @@ const Login = (props) => {
       date: Date.now(),
     };
 
-    axios
-      .post("https://mernvendorbuyer.me:4000/user/login", newUser)
-      .then((response) => {
-        alert("Logged as " + response.data.email);
-        props.onAuth(response.data.email);
-        props.onAuthT(response.data.type);
+    axios.post("http://localhost:4000/user/login", newUser).then((response) => {
+      alert("Logged as " + response.data.email);
+      props.onAuth(response.data.email);
+      props.onAuthT(response.data.type);
 
-        localStorage.setItem("Auth", response.data.email);
-        localStorage.setItem("AuthT", response.data.type);
-        if (response.data.type == "Buyer") {
-          props.onAuthW(response.data.wallet);
-          localStorage.setItem("Wallet", response.data.wallet);
-        }
-        console.log(response.data);
-      });
+      localStorage.setItem("Auth", response.data.email);
+      localStorage.setItem("AuthT", response.data.type);
+      if (response.data.type == "Buyer") {
+        props.onAuthW(response.data.wallet);
+        localStorage.setItem("Wallet", response.data.wallet);
+      }
+      console.log(response.data);
+    });
     resetInputs();
   };
 

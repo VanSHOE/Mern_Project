@@ -142,17 +142,17 @@ const BuyPage = (props) => {
   console.log(curTime);
   useEffect(() => {
     axios
-      .get("https://mernvendorbuyer.me:4000/item", {
+      .get("http://localhost:4000/item", {
         params: {},
       })
       .then((response) => {
         axios
-          .get("https://mernvendorbuyer.me:4000/user/get_fav", {
+          .get("http://localhost:4000/user/get_fav", {
             params: { email: props.user },
           })
           .then((response2) => {
             axios
-              .get("https://mernvendorbuyer.me:4000/general/getTime")
+              .get("http://localhost:4000/general/getTime")
               .then((respTime) => {
                 setCurTime(respTime.data);
               });
@@ -202,7 +202,7 @@ const BuyPage = (props) => {
       id: id,
     };
     axios
-      .post("https://mernvendorbuyer.me:4000/user/add_fav", fav_food)
+      .post("http://localhost:4000/user/add_fav", fav_food)
       .then((response) => {
         setfavs(response.data.favs);
         console.log(response);
@@ -215,7 +215,7 @@ const BuyPage = (props) => {
       id: id,
     };
     axios
-      .post("https://mernvendorbuyer.me:4000/user/del_fav", fav_food)
+      .post("http://localhost:4000/user/del_fav", fav_food)
       .then((response) => {
         setfavs(response.data.favs);
         console.log(response);
@@ -240,22 +240,20 @@ const BuyPage = (props) => {
       vendor_email: item.vendor_email,
       id: uuidv4(),
     };
-    axios
-      .post("https://mernvendorbuyer.me:4000/order/add", order)
-      .then((response) => {
-        setasels([]);
-        axios
-          .get("https://mernvendorbuyer.me:4000/user/getWallet", {
-            params: { email: props.user },
-          })
-          .then((response1) => {
-            setasels([]);
-            console.log(response1);
-            props.onWalletChange(response1.data.money);
-            localStorage.setItem("Wallet", response1.data.money);
-            console.log(response);
-          });
-      });
+    axios.post("http://localhost:4000/order/add", order).then((response) => {
+      setasels([]);
+      axios
+        .get("http://localhost:4000/user/getWallet", {
+          params: { email: props.user },
+        })
+        .then((response1) => {
+          setasels([]);
+          console.log(response1);
+          props.onWalletChange(response1.data.money);
+          localStorage.setItem("Wallet", response1.data.money);
+          console.log(response);
+        });
+    });
   };
 
   const AddAddonBuy = (item, addon) => {
@@ -610,9 +608,7 @@ const BuyPage = (props) => {
                         {item.img ? (
                           <Grid item xs={12}>
                             <img
-                              src={
-                                "https://mernvendorbuyer.me:4000/" + item.img
-                              }
+                              src={"http://localhost:4000/" + item.img}
                               width="100"
                             />
                           </Grid>
@@ -746,7 +742,7 @@ const BuyPage = (props) => {
                       {item.img ? (
                         <Grid item xs={12}>
                           <img
-                            src={"https://mernvendorbuyer.me:4000/" + item.img}
+                            src={"http://localhost:4000/" + item.img}
                             width="100"
                           />
                         </Grid>
@@ -847,7 +843,7 @@ const BuyPage = (props) => {
                       {item.img ? (
                         <Grid item xs={12}>
                           <img
-                            src={"https://mernvendorbuyer.me:4000/" + item.img}
+                            src={"http://localhost:4000/" + item.img}
                             width="100"
                           />
                         </Grid>

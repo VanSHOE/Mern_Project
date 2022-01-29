@@ -12,7 +12,7 @@ import { refType } from "@mui/utils";
 import { GoogleLogin } from "react-google-login";
 
 const clientId =
-  "726973691384-q1qv7qeiqq2uqimid2ajotfmtea57gof.apps.googleusercontent.com";
+  "726973691384-r9snqtv138gipmko9p6ue5mhmtnia7c4.apps.googleusercontent.com";
 
 const Register = (props) => {
   const [name, setName] = useState("");
@@ -98,7 +98,7 @@ const Register = (props) => {
     };
 
     axios
-      .post("https://mernvendorbuyer.me:4000/user/register", newUser)
+      .post("http://localhost:4000/user/register", newUser)
       .then((response) => {
         alert("Created " + response.data.email);
         props.onAuth(email);

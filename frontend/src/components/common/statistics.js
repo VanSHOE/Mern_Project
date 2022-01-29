@@ -49,7 +49,7 @@ const Stat = (props) => {
   //console.log(props.user);
   useEffect(() => {
     axios
-      .get("https://mernvendorbuyer.me:4000/order/stats", {
+      .get("http://localhost:4000/order/stats", {
         params: { v_email: props.user },
       })
       .then((response) => {

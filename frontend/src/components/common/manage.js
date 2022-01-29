@@ -120,10 +120,10 @@ const Manage = (props) => {
     };
     console.log(request);
     axios
-      .post("https://mernvendorbuyer.me:4000/item/reject", request)
+      .post("http://localhost:4000/item/reject", request)
       .then((response) => {
         axios
-          .get("https://mernvendorbuyer.me:4000/order", {
+          .get("http://localhost:4000/order", {
             params: { v_email: email_cur },
           })
           .then((response2) => {
@@ -141,10 +141,10 @@ const Manage = (props) => {
     };
     console.log(request);
     axios
-      .post("https://mernvendorbuyer.me:4000/item/next", request)
+      .post("http://localhost:4000/item/next", request)
       .then((response) => {
         axios
-          .get("https://mernvendorbuyer.me:4000/order", {
+          .get("http://localhost:4000/order", {
             params: { v_email: email_cur },
           })
           .then((response2) => {
@@ -165,7 +165,7 @@ const Manage = (props) => {
   let email_cur = props.user;
   useEffect(() => {
     axios
-      .get("https://mernvendorbuyer.me:4000/order", {
+      .get("http://localhost:4000/order", {
         params: { v_email: email_cur },
       })
       .then((response) => {
@@ -203,9 +203,7 @@ const Manage = (props) => {
                     {item.items[0].img ? (
                       <Grid item xs={12}>
                         <img
-                          src={
-                            "https://mernvendorbuyer.me:4000/" + item.items[0].img
-                          }
+                          src={"http://localhost:4000/" + item.items[0].img}
                           width="100"
                         />
                       </Grid>

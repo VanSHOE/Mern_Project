@@ -24,7 +24,7 @@ const Profile = (props) => {
   let email_cur = localStorage.getItem("Auth");
   useEffect(() => {
     axios
-      .post("https://mernvendorbuyer.me:4000/user/profile", {
+      .post("http://localhost:4000/user/profile", {
         email: email_cur,
       }) // unimplemented
       .then((response) => {
@@ -121,7 +121,7 @@ const Profile = (props) => {
     };
 
     axios
-      .post("https://mernvendorbuyer.me:4000/user/deposit", newUser)
+      .post("http://localhost:4000/user/deposit", newUser)
       .then((response) => {
         if (money_in) alert("Added " + money_in);
         //console.log(response.data);
@@ -152,7 +152,7 @@ const Profile = (props) => {
     };
 
     axios
-      .post("https://mernvendorbuyer.me:4000/user/update", newUser)
+      .post("http://localhost:4000/user/update", newUser)
       .then((response) => {
         alert("Edited " + response.data.email);
       });
